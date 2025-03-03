@@ -1,0 +1,5 @@
+"""
+Box model for MongoDB.
+"""
+
+
