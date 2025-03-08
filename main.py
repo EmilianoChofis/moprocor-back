@@ -1,7 +1,14 @@
+#Import the required services
 from fastapi import FastAPI
 import uvicorn
+from config.mongodb import init_db
 
 app = FastAPI(title="Boxes API", description="Backend with MongoDB and AWS services")
+
+#Initialize the database
+@app.on_event("startup")
+async def on_startup():
+    await init_db()
 
 
 @app.get("/", tags=["Health"])
