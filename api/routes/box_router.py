@@ -5,15 +5,13 @@ Routes for box operations using MongoDB.
 from typing import List
 from fastapi import APIRouter, HTTPException, status
 
-# Import the box model
 from models.box import Box
 from services.box_service import BoxService
 
-# Create a router
 router = APIRouter()
 
 
-@router.get("/boxes", response_model=List[Box])
+@router.get("/getAll", response_model=List[Box])
 async def get_boxes():
     """Define the get_boxes function"""
     try:
@@ -25,7 +23,7 @@ async def get_boxes():
         ) from e
 
 
-@router.get("/boxes/{symbol}", response_model=Box)
+@router.get("/getBySymbol/{symbol}", response_model=Box)
 async def get_box_by_symbol(symbol: str):
     """Define the get_box_by_symbol function"""
     box = await BoxService.get_box_by_symbol(symbol)
@@ -37,7 +35,7 @@ async def get_box_by_symbol(symbol: str):
     return box
 
 
-@router.post("/boxes", response_model=Box, status_code=status.HTTP_201_CREATED)
+@router.post("/create", response_model=Box, status_code=status.HTTP_201_CREATED)
 async def create_box(box: Box):
     """Define the create_box function"""
     try:
