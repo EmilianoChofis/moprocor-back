@@ -1,5 +1,6 @@
 # Import the required services
 from contextlib import asynccontextmanager
+from config.logging import logger, log_config
 from fastapi import FastAPI
 import uvicorn
 from config.mongodb import init_db
@@ -25,5 +26,9 @@ async def root():
 app.include_router(router=box_router, prefix="/api", tags=["Boxes"])
 app.include_router(router=sheet_router, prefix="/api", tags=["Sheets"])
 
+
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    logger.info("Starting app...")
+    uvicorn.run(
+        "main:app", host="0.0.0.0", port=8000, reload=True, log_config=log_config
+    )
