@@ -33,8 +33,9 @@ class Sheet(Document):
                 "p1": 110,
                 "p2": 110,
                 "p3": 110,
-                "ect": 19,
+                "ect": [19],
                 "grams": 389,
+                "description": "This is a description",
                 "boxes": [
                     {"symbol": "box_001"},
                 ],
