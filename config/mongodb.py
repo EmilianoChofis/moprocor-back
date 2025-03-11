@@ -10,6 +10,7 @@ from config.logging import logger
 
 # Import the required models
 from models.box import Box
+from models.sheet import Sheet
 
 
 # Connect to the MongoDB
@@ -24,7 +25,7 @@ async def init_db():
         logger.info("MongoDB connection successful")
 
         db = client["moprocor"]
-        await init_beanie(database=db, document_models=[Box])
+        await init_beanie(database=db, document_models=[Box,Sheet])
         logger.info("Database initialization complete.")
     except Exception as e:
         logger.error("An error occurred while initializing the database %e", e)
