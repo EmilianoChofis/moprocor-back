@@ -52,6 +52,11 @@ class Box(Document):
                 "flute": "c",
                 "treatment": 0,
                 "client": "degasa",
+                "creases": {
+                    "r1": 10,
+                    "r2": 10,
+                    "r3": 10,
+                },
                 "status": "approved",
                 "type": "CRR",
                 "pdf_link": "DEG_CR_CE-10.pdf",
