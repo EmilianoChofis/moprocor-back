@@ -2,7 +2,6 @@
 Box repository for MongoDB.
 """
 
-# Imports
 from typing import List, Optional
 from models.box import Box
 
@@ -43,4 +42,3 @@ class BoxRepository:
         :rtype: Box
         """
         return await Box.insert_one(box)
-

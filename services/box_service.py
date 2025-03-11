@@ -18,6 +18,9 @@ class BoxService:
     @staticmethod
     async def get_box_by_symbol(symbol: str) -> Optional[Box]:
         """Get a box by its symbol"""
+        box = await BoxRepository.get_by_symbol(symbol)
+        if not box:
+            raise HTTPException(status_code=404, detail="Box not found")
         return await BoxRepository.get_by_symbol(symbol)
 
     @staticmethod

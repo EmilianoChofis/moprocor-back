@@ -4,6 +4,7 @@ from fastapi import FastAPI
 import uvicorn
 from config.mongodb import init_db
 from api.routes.box_router import router as box_router
+from api.routes.sheet_router import router as sheet_router
 
 
 @asynccontextmanager
@@ -22,6 +23,7 @@ async def root():
 
 # Include the routers
 app.include_router(router=box_router, prefix="/api", tags=["Boxes"])
+app.include_router(router=sheet_router, prefix="/api", tags=["Sheets"])
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
