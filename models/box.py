@@ -1,58 +1,59 @@
 """
 Box model for MongoDB.
 """
-"""
-{
-    "id": "03990343", //mongo ObjectID
-    "symbol": "ecg-04", // no mongo ObjectID
-    "ect": 19,
-    "liner": "kraft",
-    "width": 90,
-    "length": 50,
-    "flute": "c",
-    "treatment": 0, // Anti-humidity treatment, 0 for NO, 1 for YES
-    "client": "degasa",
-    "creases": [ // Box folds
-        {"r1": 8.7},
-        {"r2": 18},
-        {"r3": 15.2}
-    ],
-    "status": "approved", // approved | review | outdated
-    "extra": {"type": "CRR", "machine": "flexo"}
-    "pdf_link": ""
-}
-"""
 
-import asyncio
 from typing import Optional
-
-from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel
+from beanie import Document, Indexed
 
-from beanie import Document, Indexed, init_beanie
 
+# pylint: disable=too-many-ancestors
 class Crease(BaseModel):
-    r1: Optional[float]
-    r2: Optional[float]
-    r3: Optional[float]
+    """Crease model representing the crease dimensions of a box."""
 
-class Extra(BaseModel):
-    type: str
-    machine: str
+    r1: Optional[float] = None  # Radius 1 of the crease
+    r2: Optional[float] = None  # Radius 2 of the crease
+    r3: Optional[float] = None  # Radius 3 of the crease
+
 
 class Box(Document):
-    symbol: str = Indexed()
-    ect: int
-    liner: str
-    width: int
-    length: int
-    flute: str
-    treatment: int
-    client: str
-    creases: Crease
-    status: str
-    extra: Extra
-    pdf_link: str
+    """Box model representing a box document in MongoDB."""
 
-class Settings:
-    collection = "boxes"
+    symbol: str = Indexed()  # Symbol of the box, indexed for faster queries
+    ect: int  # Edge Crush Test value of the box
+    liner: str  # Liner material of the box
+    width: float  # Width of the box
+    length: float  # Length of the box
+    flute: str  # Flute type of the box
+    treatment: int  # Treatment type of the box
+    client: str  # Client associated with the box
+    creases: Crease  # Crease dimensions of the box
+    status: str  # Status of the box
+    type: str  # Type of the extra information
+    pdf_link: str  # Link to the PDF document of the box
+
+    # pylint: disable=too-few-public-methods
+    class Settings:
+        """Settings for the Box model."""
+
+        name = "boxes"  # Collection name in MongoDB
+
+    # pylint: disable=too-few-public-methods
+    class Config:
+        """Configuration for the Box model."""
+
+        json_schema_extra = {
+            "example": {
+                "symbol": "DEG CR CE-10",
+                "ect": 21,
+                "liner": "kraft",
+                "width": 55.8,
+                "length": 150.3,
+                "flute": "c",
+                "treatment": 0,
+                "client": "degasa",
+                "status": "approved",
+                "type": "CRR",
+                "pdf_link": "DEG_CR_CE-10.pdf",
+            }
+        }
