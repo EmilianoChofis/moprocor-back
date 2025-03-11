@@ -1,4 +1,4 @@
-"""Box service for MongoDB using Beanie ORM functions."""
+"""Box service module for interacting with the box repository."""
 
 # Import the required libraries
 from typing import List, Optional

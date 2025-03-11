@@ -2,6 +2,7 @@
 Routes for sheet operations using MongoDB.
 """
 
+import logging
 from typing import List
 
 from fastapi import APIRouter, HTTPException, status
@@ -18,6 +19,7 @@ async def get_sheets():
     try:
         return await SheetService.get_all_sheets()
     except Exception as e:
+        logging.exception("Failed to retrieve sheets: %s", e)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to retrieve sheets: {str(e)}",
@@ -35,6 +37,7 @@ async def get_sheet_by_id(sheet_id: str):
         )
     return sheet
 
+
 @router.post("/sheets", response_model=Sheet, status_code=status.HTTP_201_CREATED)
 async def create_sheet(sheet: Sheet):
     """Define the create_sheet function"""
@@ -45,4 +48,3 @@ async def create_sheet(sheet: Sheet):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to create sheet: {str(e)}",
         ) from e
-

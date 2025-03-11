@@ -3,8 +3,8 @@ AWS Bedrock service configuration.
 This file contains configuration for AWS Bedrock service.
 """
 
-import boto3
 import os
+import boto3
 from dotenv import load_dotenv
 
 # Load environment variables
