@@ -7,8 +7,6 @@ from beanie import Document
 
 class Purchase(Document):
     """Purchase model representing a purchase document in MongoDB."""
-
-    id: Optional[str]
     receipt_date: datetime
     order_number: str
     client: str
