@@ -4,7 +4,7 @@ import shutil
 
 import dotenv
 # Import the required libraries
-from typing import List, Optional
+from typing import List, Optional, Dict
 from fastapi import HTTPException, UploadFile, File
 from models.box import Box
 from repositories.box_repository import BoxRepository
@@ -83,3 +83,21 @@ class BoxService:
         """Delete a box."""
         # Implementation for deleting a box
         pass
+
+    @staticmethod
+    async def get_filtered_boxes(query: str, page: int, items_per_page: int) -> Dict[str, List[Box]]:
+        """Obtiene las cajas con paginación"""
+
+        # Calcula el offset
+        offset = (page - 1) * items_per_page
+
+        # Obtiene las cajas paginadas y el total
+        return await BoxRepository.get_filtered_boxes(query, offset, items_per_page)
+
+    @staticmethod
+    async def get_pages(query: str, items_per_page: int) -> int:
+        """Obtiene el total de páginas"""
+        total_items = await BoxRepository.get_total_count(query)
+        total_pages = (total_items + items_per_page - 1) // items_per_page  # Redondeo hacia arriba
+        return total_pages
+

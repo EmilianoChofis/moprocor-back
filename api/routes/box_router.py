@@ -1,15 +1,16 @@
 """
 Routes for box operations using MongoDB.
 """
+
 import json
-from typing import List
-from fastapi import APIRouter, HTTPException, status, UploadFile, File, Form
+from typing import List, Dict, Union
+from fastapi import APIRouter, HTTPException, status, UploadFile, File, Form, Query
 
 from models.box import Box
 from services.box_service import BoxService
 
 router = APIRouter()
-
+ITEMS_PER_PAGE=6
 
 @router.get("/getAll", response_model=List[Box])
 async def get_boxes():
@@ -53,3 +54,38 @@ async def create_box(box_json: str = Form(...), file: UploadFile = File(...)):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to create box: {str(e)}",
         ) from e
+
+@router.get("/getFilteredBoxes", response_model=List[Box])
+async def get_filtered_boxes(
+    query: str = Query("", description="Filtro de búsqueda"),
+    page: int = Query(1, description="Número de página")
+):
+    """Obtiene las cajas con paginación"""
+    if page < 1:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="El número de página debe ser mayor a 0"
+        )
+
+    try:
+        result = await BoxService.get_filtered_boxes(query, page, ITEMS_PER_PAGE)
+        return result
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to retrieve boxes: {str(e)}"
+        )
+
+@router.get("/getPages", response_model=Dict[str, int])
+async def get_pages(
+        query: str = Query("", description="Filtro de búsqueda")
+):
+    """Obtiene el total de páginas"""
+    try:
+        total_pages = await BoxService.get_pages(query, ITEMS_PER_PAGE)
+        return {"total_pages": total_pages}
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to retrieve total pages: {str(e)}"
+        )
