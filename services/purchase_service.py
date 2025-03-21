@@ -1,6 +1,9 @@
 """
 This module contains the PurchaseService class, which is responsible for interacting with the purchase repository.
 """
+import json
+from datetime import datetime
+
 from repositories.purchase_repository import PurchaseRepository
 
 
@@ -14,12 +17,62 @@ class PurchaseService:
 
     @staticmethod
     async def create_bundle(purchases):
-        """ Create a new list of purchases in the database. """
+        """
+        Create a new list of purchases in the database and execute the full pipeline.
+
+        Pipeline steps:
+        1. Save purchases to MongoDB
+        2. Get filtered boxes based on purchase symbols
+        3. Get filtered sheets compatible with those boxes
+        4. Transform all three data sets to JSON strings
+
+        Returns:
+            Tuple containing:
+            - Number of inserted documents
+            - JSON string of purchases
+            - JSON string of filtered boxes
+            - JSON string of filtered sheets
+        """
         # First insert the documents
         result = await PurchaseRepository.create_bundle(purchases)
+        inserted_count = 0
 
-        # Then retrieve and return the newly created documents
+        json_purchases = ""
+        json_boxes = ""
+        json_sheets = ""
+
         if result.acknowledged:
-            return len(result.inserted_ids)
+            inserted_count = len(result.inserted_ids)
 
-        return 0
+            # Extract symbols from purchases for filtering boxes
+            purchase_symbols = [purchase.symbol for purchase in purchases]
+
+            # Get filtered boxes based on purchase symbols
+            filtered_boxes = await PurchaseRepository.get_filtered_boxes(purchase_symbols)
+
+            # Get compatible sheets based on filtered boxes
+            filtered_sheets = await PurchaseRepository.get_filtered_sheets(filtered_boxes)
+
+            # Define a custom JSON encoder to handle datetime objects
+            class DateTimeEncoder(json.JSONEncoder):
+                def default(self, obj):
+                    from bson import ObjectId
+
+                    if isinstance(obj, datetime):
+                        return obj.isoformat()
+                    # Handle MongoDB ObjectId and PydanticObjectId
+                    if isinstance(obj, ObjectId) or str(type(obj)) == "<class 'bson.objectid.ObjectId'>":
+                        return str(obj)
+                    try:
+                        # This handles other non-serializable types
+                        return super().default(obj)
+                    except TypeError:
+                        return str(obj)  # Fall back to string representation
+
+            # Convert all three data sets to JSON strings
+            json_purchases = json.dumps([p.model_dump() for p in purchases], cls=DateTimeEncoder)
+            json_boxes = json.dumps([b.model_dump() for b in filtered_boxes], cls=DateTimeEncoder)
+            json_sheets = json.dumps([s.model_dump() for s in filtered_sheets],  cls=DateTimeEncoder)
+
+        print(json_purchases,  json_boxes, json_sheets)
+        return inserted_count, json_purchases, json_boxes, json_sheets
