@@ -3,7 +3,7 @@ Routes for box operations using MongoDB.
 """
 
 from typing import List
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, UploadFile, File
 
 from models.box import Box
 from services.box_service import BoxService
@@ -36,10 +36,10 @@ async def get_box_by_symbol(symbol: str):
 
 
 @router.post("/create", response_model=Box, status_code=status.HTTP_201_CREATED)
-async def create_box(box: Box):
+async def create_box(box: Box, pdf_file: UploadFile = File(...)):
     """Define the create_box function"""
     try:
-        return await BoxService.create_box(box)
+        return await BoxService.create_box(box,  pdf_file)
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

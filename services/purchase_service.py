@@ -15,4 +15,11 @@ class PurchaseService:
     @staticmethod
     async def create_bundle(purchases):
         """ Create a new list of purchases in the database. """
-        return await PurchaseRepository.create_bundle(purchases)
+        # First insert the documents
+        result = await PurchaseRepository.create_bundle(purchases)
+
+        # Then retrieve and return the newly created documents
+        if result.acknowledged:
+            return len(result.inserted_ids)
+
+        return 0

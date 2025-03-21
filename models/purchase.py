@@ -25,13 +25,13 @@ class Purchase(Document):
     total_invoice: float
     weight: float
     total_kilograms: float
-    delivered_quantity: Optional[int]
-    initial_shipping_date: Optional[datetime]
-    final_shipping_date: Optional[datetime]
-    delivery_dates: Optional[List[datetime]]
+    delivered_quantity: Optional[int] = 0
+    initial_shipping_date: Optional[datetime] = None
+    final_shipping_date: Optional[datetime] = None
+    delivery_dates: Optional[List[datetime]] = None
     missing_quantity: int
     status: str
-    comments: Optional[str]
+    comments: Optional[str] = None
     pending_kilograms: float
     delivery_delay_days: int
     real_delivery_period: int

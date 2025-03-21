@@ -8,6 +8,7 @@ from services.purchase_service import PurchaseService
 
 router = APIRouter()
 
+
 @router.get("/getAll", response_model=List[Purchase])
 async def get_purchases():
     """Define the get_purchases function"""
@@ -19,11 +20,13 @@ async def get_purchases():
             detail=f"Failed to retrieve : {str(e)}",
         ) from e
 
-@router.post("/createBundle", response_model=List[Purchase], status_code=status.HTTP_201_CREATED)
+
+@router.post("/createBundle", status_code=status.HTTP_201_CREATED)
 async def create_bundle(purchases: List[Purchase]):
     """Define the create_bundle function"""
     try:
-        return await PurchaseService.create_bundle(purchases)
+        result = await PurchaseService.create_bundle(purchases)
+        return {"message": "Purchases created successfully", "count": result}
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
