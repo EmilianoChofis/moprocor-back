@@ -35,6 +35,7 @@ class Purchase(Document):
     pending_kilograms: float
     delivery_delay_days: int
     real_delivery_period: int
+    created_at: datetime = datetime.now()
 
     class Settings:
         """Settings for the Purchase model."""
