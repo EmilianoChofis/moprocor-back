@@ -30,7 +30,7 @@ class Box(Document):
     creases: Crease  # Crease dimensions of the box
     status: str  # Status of the box
     type: str  # Type of the extra information
-    pdf_link: str  # Link to the PDF document of the box
+    pdf_link: str = ""  # Link to the PDF document of the box
 
     # pylint: disable=too-few-public-methods
     class Settings:

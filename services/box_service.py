@@ -1,5 +1,7 @@
 """Box service module for interacting with the box repository."""
 import os
+import shutil
+
 import dotenv
 # Import the required libraries
 from typing import List, Optional
@@ -9,7 +11,10 @@ from repositories.box_repository import BoxRepository
 
 dotenv.load_dotenv()
 
-FILES_PATH = os.getenv("FILES_PATH")
+FILES_PATH = os.getenv("FILES_PATH", "../files")
+
+if not os.path.exists(FILES_PATH):
+    os.makedirs(FILES_PATH,  exist_ok=True)
 
 
 class BoxService:
@@ -29,19 +34,41 @@ class BoxService:
         return await BoxRepository.get_by_symbol(symbol)
 
     @staticmethod
-    async def create_box(box: Box, pdf_file: UploadFile = File(...)) -> Box:
-        """Create a box."""
-        # Validate box data if needed
+    async def create_box(box: Box, pdf_file: UploadFile) -> Box:
+        """Create a box with an uploaded PDF file."""
+        # Validate box data
         existing_box = await BoxRepository.get_by_symbol(box.symbol)
         if existing_box:
             raise HTTPException(
                 status_code=400, detail=f"Box with symbol {box.symbol} already exists"
             )
-        # Save the PDF file to the server
-        pdf_path = f"../{FILES_PATH}/{box.symbol}.pdf"
-        with open(pdf_path, "wb") as pdf_file_obj:
-            pdf_file_obj.write(pdf_file.file.read())
-            box.pdf_link = pdf_path
+
+        # Validate file type
+        if not pdf_file.content_type == "application/pdf":
+            raise HTTPException(
+                status_code=400,
+                detail="File must be a PDF"
+            )
+
+        # If pdf_link is empty, use the original filename or create one from the symbol
+        if not box.pdf_link:
+            box.pdf_link = f"{box.symbol.replace(' ', '_')}.pdf"
+
+        # Ensure the directory exists
+        os.makedirs(FILES_PATH, exist_ok=True)
+
+        # Save the PDF file
+        file_path = os.path.join(FILES_PATH, box.pdf_link)
+
+        # Create the file with proper exception handling
+        try:
+            with open(file_path, "wb") as buffer:
+                shutil.copyfileobj(pdf_file.file, buffer)
+        except Exception as e:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Failed to save PDF file: {str(e)}"
+            )
 
         return await BoxRepository.create(box)
 

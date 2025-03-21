@@ -1,9 +1,9 @@
 """
 Routes for box operations using MongoDB.
 """
-
+import json
 from typing import List
-from fastapi import APIRouter, HTTPException, status, UploadFile, File
+from fastapi import APIRouter, HTTPException, status, UploadFile, File, Form
 
 from models.box import Box
 from services.box_service import BoxService
@@ -36,10 +36,18 @@ async def get_box_by_symbol(symbol: str):
 
 
 @router.post("/create", response_model=Box, status_code=status.HTTP_201_CREATED)
-async def create_box(box: Box, pdf_file: UploadFile = File(...)):
+async def create_box(box_json: str = Form(...), file: UploadFile = File(...)):
     """Define the create_box function"""
     try:
-        return await BoxService.create_box(box,  pdf_file)
+        print(box_json)
+        box_data = json.loads(box_json)
+        box = Box(**box_data)
+        return await BoxService.create_box(box, file)
+    except json.JSONDecodeError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid JSON format for box data",
+        )
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
