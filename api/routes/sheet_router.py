@@ -4,13 +4,13 @@ Routes for sheet operations using MongoDB.
 
 from typing import List
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Query
 
 from models.sheet import Sheet
 from services.sheet_service import SheetService
 
 router = APIRouter()
-
+ITEMS_PER_PAGE=6
 
 @router.get("/getAll", response_model=List[Sheet])
 async def get_sheets():
@@ -45,4 +45,37 @@ async def create_sheet(sheet: Sheet):
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to create sheet: {str(e)}",
+        ) from e
+
+@router.get("/getFilteredSheets", response_model=List[Sheet])
+async def get_filtered_sheets(
+    query: str = Query("", description="Filtro de búsqueda"),
+    page: int = Query(1, description="Número de página")
+):
+    if page < 1:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="El número de página debe ser mayor a 0"
+        )
+    """Define the get_filtered_sheets function"""
+    try:
+        result = await SheetService.get_filtered_sheets(query, page, ITEMS_PER_PAGE)
+        return result
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to retrieve sheets: {str(e)}",
+        ) from e
+
+@router.get("/getPages", response_model=int)
+async def get_pages(
+    query: str = Query("", description="Filtro de búsqueda")
+):
+    """Define the get_pages function"""
+    try:
+        return await SheetService.get_pages(query, ITEMS_PER_PAGE)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to retrieve sheets: {str(e)}",
         ) from e

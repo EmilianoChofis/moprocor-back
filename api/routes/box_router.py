@@ -76,16 +76,15 @@ async def get_filtered_boxes(
             detail=f"Failed to retrieve boxes: {str(e)}"
         )
 
-@router.get("/getPages", response_model=Dict[str, int])
+@router.get("/getPages", response_model=int)
 async def get_pages(
         query: str = Query("", description="Filtro de búsqueda")
 ):
     """Obtiene el total de páginas"""
     try:
-        total_pages = await BoxService.get_pages(query, ITEMS_PER_PAGE)
-        return {"total_pages": total_pages}
+        return await BoxService.get_pages(query, ITEMS_PER_PAGE)
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to retrieve total pages: {str(e)}"
-        )
+        ) from e

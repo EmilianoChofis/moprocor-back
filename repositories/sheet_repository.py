@@ -2,7 +2,7 @@
 Sheet repository for interacting with the sheets collection in MongoDB.
 """
 
-from typing import List, Optional
+from typing import List, Optional, Dict
 
 from models.sheet import Sheet
 
@@ -43,3 +43,44 @@ class SheetRepository:
         :rtype: Sheet
         """
         return await Sheet.insert_one(sheet)
+
+    @staticmethod
+    async def get_filtered_sheets(query: str, offset: int, limit: int) -> Dict[str, list[Sheet]]:
+        """Obtiene todas las hojas con paginación y total"""
+
+        # Filtro de búsqueda
+        filters = {
+            "$or": [
+                {"grams": {"$in": [int(query)]}} if query.isdigit() else {},
+                {"ect": {"$in": [int(query)]}} if query.isdigit() else {},
+                {"roll_width": {"$in": [int(query)]}} if query.isdigit() else {},
+                {"p1": {"$in": [int(query)]}} if query.isdigit() else {},
+                {"p2": {"$in": [int(query)]}} if query.isdigit() else {},
+                {"p3": {"$in": [int(query)]}} if query.isdigit() else {},
+                {"description": {"$regex": query, "$options": "i"}}
+            ]
+        }
+
+        # Obtener las hojas con paginación
+        sheets = await Sheet.find(filters).skip(offset).limit(limit).to_list()
+
+        return sheets
+
+    @staticmethod
+    async def get_total_count(query: str) -> int:
+        """Obtiene el total de hojas filtradas"""
+
+        filters = {
+            "$or": [
+                {"grams": {"$in": [int(query)]}} if query.isdigit() else {},
+                {"ect": {"$in": [int(query)]}} if query.isdigit() else {},
+                {"roll_width": {"$in": [int(query)]}} if query.isdigit() else {},
+                {"p1": {"$in": [int(query)]}} if query.isdigit() else {},
+                {"p2": {"$in": [int(query)]}} if query.isdigit() else {},
+                {"p3": {"$in": [int(query)]}} if query.isdigit() else {},
+                {"description": {"$regex": query, "$options": "i"}}
+            ]
+        }
+
+        total_count = await Sheet.find(filters).count()
+        return total_count
