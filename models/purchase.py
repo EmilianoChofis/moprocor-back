@@ -20,10 +20,10 @@ class Purchase(Document):
     quantity: int
     estimated_delivery_date: datetime
     unit_cost: float
-    arapack_lot: int
+    arapack_lot: str
     subtotal: float
     total_invoice: float
-    weight: float
+    weight: Optional[float] =  0.0
     total_kilograms: float
     delivered_quantity: Optional[int] = 0
     initial_shipping_date: Optional[datetime] = None
@@ -60,7 +60,7 @@ class Purchase(Document):
                 "quantity": 10000,
                 "estimated_delivery_date": "2025-01-07T00:00:00",
                 "unit_cost": 6.43,
-                "arapack_lot": 25055,
+                "arapack_lot": "25055",
                 "subtotal": 64300.00,
                 "total_invoice": 74588.00,
                 "weight": 0.222,

@@ -17,60 +17,6 @@
     "type": "CRR",
     "pdf_link": "DEG_CR_CE-10.pdf"
   },
-    {
-        "symbol": "IDE CR J-CH",
-        "ect": 21,
-        "liner": "KRAFT",
-        "width": 32.9,
-        "length":  78.9,
-        "flute": "C",
-        "treatment": 0,
-        "client": "LA IDEAL",
-        "creases": {
-        "r1": 9,
-        "r2": 14.9,
-        "r3": 9
-        },
-        "status": "approved",
-        "type": "CRR",
-        "pdf_link": ""
-    },
-  {
-    "symbol": "IDE CR J-CH",
-    "ect": 21,
-    "liner": "KRAFT",
-    "width": 32.9,
-    "length":  78.9,
-    "flute": "C",
-    "treatment": 0,
-    "client": "LA IDEAL",
-    "creases": {
-      "r1": 9,
-      "r2": 14.9,
-      "r3": 9
-    },
-    "status": "approved",
-    "type": "CRR",
-    "pdf_link": ""
-  },
-  {
-    "symbol": "IDE CR J-CH",
-    "ect": 21,
-    "liner": "KRAFT",
-    "width": 32.9,
-    "length":  78.9,
-    "flute": "C",
-    "treatment": 0,
-    "client": "LA IDEAL",
-    "creases": {
-      "r1": 9,
-      "r2": 14.9,
-      "r3": 9
-    },
-    "status": "approved",
-    "type": "CRR",
-    "pdf_link": ""
-  },
   {
     "symbol": "IDE CR J-CH",
     "ect": 21,
