@@ -6,7 +6,7 @@ import json
 from typing import List, Dict, Union
 from fastapi import APIRouter, HTTPException, status, UploadFile, File, Form, Query
 
-from models.box import Box
+from models.box import Box, Crease
 from services.box_service import BoxService
 
 router = APIRouter()
@@ -37,12 +37,27 @@ async def get_box_by_symbol(symbol: str):
 
 
 @router.post("/create", response_model=Box, status_code=status.HTTP_201_CREATED)
-async def create_box(box_json: str = Form(...), file: UploadFile = File(...)):
+async def create_box(symbol: str = Form(...), ect: int = Form(), liner: str = Form(), width: float = Form(), length: float = Form(), flute: str = Form(), treatment: int = Form(), client: str = Form(), crease1:  float = Form(), crease2: float = Form(), crease3: float = Form(), box_type: str = Form(), file: UploadFile = File(...)):
     """Define the create_box function"""
     try:
-        print(box_json)
-        box_data = json.loads(box_json)
-        box = Box(**box_data)
+        creases = {
+            "r1": crease1,
+            "r2": crease2,
+            "r3": crease3,
+        }
+        box = Box(
+            symbol=symbol,
+            ect=ect,
+            liner=liner,
+            width=width,
+            length=length,
+            flute=flute,
+            treatment=treatment,
+            client=client,
+            creases=Crease(**creases),
+            type=box_type,
+            pdf_link=file.filename
+        )
         return await BoxService.create_box(box, file)
     except json.JSONDecodeError:
         raise HTTPException(
