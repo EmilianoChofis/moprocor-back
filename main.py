@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 import logging
 from fastapi import FastAPI
 import uvicorn
-
+from starlette.middleware.cors import CORSMiddleware
 
 from config.logging import logger, log_config
 from config.mongodb import init_db
@@ -39,6 +39,15 @@ def create_application() -> FastAPI:
         description="Backend API for Moprocor service",
         version="1.0.0",
         lifespan=lifespan,
+    )
+
+    # Configure CORS
+    application.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],  # Allows all origins
+        allow_credentials=True,
+        allow_methods=["*"],  # Allows all methods
+        allow_headers=["*"],  # Allows all headers
     )
 
     # Root endpoint
