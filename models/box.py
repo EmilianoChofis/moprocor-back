@@ -28,7 +28,7 @@ class Box(Document):
     treatment: int  # Treatment type of the box
     client: str  # Client associated with the box
     creases: Crease  # Crease dimensions of the box
-    status: str = "approved" # Status of the box
+    status: str  # Status of the box
     type: str  # Type of the extra information
     pdf_link: str = ""  # Link to the PDF document of the box
 
