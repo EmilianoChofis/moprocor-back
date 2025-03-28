@@ -37,7 +37,7 @@ async def get_box_by_symbol(symbol: str):
 
 
 @router.post("/create", response_model=Box, status_code=status.HTTP_201_CREATED)
-async def create_box(symbol: str = Form(...), ect: int = Form(), liner: str = Form(), width: float = Form(), length: float = Form(), flute: str = Form(), treatment: int = Form(), client: str = Form(), crease1:  float = Form(), crease2: float = Form(), crease3: float = Form(), box_type: str = Form(), file: UploadFile = File(...)):
+async def create_box(symbol: str = Form(...), ect: int = Form(...), liner: str = Form(...), width: float = Form(...), length: float = Form(...), flute: str = Form(...), treatment: int = Form(...), client: str = Form(...), crease1:  float = Form(...), crease2: float = Form(...), crease3: float = Form(...), box_type: str = Form(...), file: UploadFile = File(...)):
     """Define the create_box function"""
     try:
         creases = {
