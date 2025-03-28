@@ -10,7 +10,7 @@ from models.sheet import Sheet
 from services.sheet_service import SheetService
 
 router = APIRouter()
-ITEMS_PER_PAGE=6
+ITEMS_PER_PAGE=10
 
 @router.get("/getAll", response_model=List[Sheet])
 async def get_sheets():
