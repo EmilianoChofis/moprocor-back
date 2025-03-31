@@ -41,8 +41,10 @@ class PurchaseRepository:
         :rtype: List[Box]
         """
         # Filter boxes by symbol in purchase_bundle
-        boxes = await Box.find({"symbol": {"$in": purchase_bundle}}).to_list()
-        return boxes
+        collection = Box.get_motor_collection()
+        cursor = collection.find({"symbol": {"$in": purchase_bundle}, "ect": 1, "liner": 1, "flute": 1, "weight": 1, "length": 1, "width": 1, "treatment": 1})
+        result = await cursor.to_list(length=None)
+        return result
 
     @staticmethod
     async def get_filtered_sheets(filtered_boxes: List[Box]):
@@ -62,10 +64,12 @@ class PurchaseRepository:
         filter_sheets = {
             "$or": [
                 {"ect": {"$in": ects}},
-                {"boxes": {"$in": symbols}}  # Láminas que incluyen los símbolos de las cajas
+                {"boxes": {"$in": symbols}}
             ]
         }
-
-        # Obtener las láminas compatibles
-        compatible_sheets = await Sheet.find(filter_sheets).to_list()
+        collection = Sheet.get_motor_collection()
+        cursor = collection.find(filter_sheets,  {"_id": 0, "description": 0, "p1":0, "p2":0, "p3":0})
+        compatible_sheets = await cursor.to_list(length=None)
         return compatible_sheets
+
+
