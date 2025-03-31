@@ -4,6 +4,8 @@ Sheet repository for interacting with the sheets collection in MongoDB.
 
 from typing import List, Optional, Dict
 
+from bson import ObjectId
+
 from models.sheet import Sheet
 
 
@@ -30,7 +32,7 @@ class SheetRepository:
         :return: The Sheet document with the given ID, or None if not found.
         :rtype: Optional[Sheet]
         """
-        return await Sheet.find_one(Sheet.id == sheet_id)
+        return await Sheet.find_one({"_id": ObjectId(sheet_id)})
 
     @staticmethod
     async def create(sheet: Sheet) -> Sheet:
