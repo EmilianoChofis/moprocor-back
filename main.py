@@ -5,6 +5,9 @@ import logging
 from fastapi import FastAPI
 import uvicorn
 from starlette.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse, JSONResponse
+import os
 
 from config.logging import logger, log_config
 from config.mongodb import init_db
@@ -49,6 +52,17 @@ def create_application() -> FastAPI:
         allow_methods=["*"],  # Allows all methods
         allow_headers=["*"],  # Allows all headers
     )
+
+    @application.get("/pdf/{filename}", tags=["Files"])
+    async def get_pdf(filename: str):
+        file_path = f"files/{filename}"
+
+        if not os.path.exists(file_path):
+            return JSONResponse(
+                content={"detail": "PDF no encontrado"}, status_code=404
+            )
+
+        return FileResponse(file_path)
 
     # Root endpoint
     @application.get("/", tags=["Health"])
