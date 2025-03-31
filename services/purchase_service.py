@@ -37,7 +37,19 @@ class PurchaseService:
         result = await PurchaseRepository.create_bundle(purchases)
         inserted_count = 0
 
-        json_purchases = ""
+        json_purchases = [
+            {
+                "order_number": purchase.order_number,
+                "symbol": purchase.symbol,
+                "quantity": purchase.quantity,
+                "flute": purchase.flute,
+                "ect": purchase.ect,
+                "liner": purchase.liner,
+                "type": purchase.type,
+                "estimated_delivery_date": purchase.estimated_delivery_date,
+            }
+            for purchase in purchases
+        ]
         json_boxes = ""
         json_sheets = ""
 
@@ -69,29 +81,10 @@ class PurchaseService:
                     except TypeError:
                         return str(obj)  # Fall back to string representation
 
-            purchase_data = [
-                {
-                    "order_number": purchase.order_number,
-                    "symbol": purchase.symbol,
-                    "quantity": purchase.quantity,
-                    "price": purchase.price,
-                    "date": purchase.date,
-                    "description": purchase.description,
-                    "flute": purchase.flute,
-                    "ect": purchase.ect,
-                    "liner": purchase.liner,
-                    "type": purchase.type,
-                    "estimated_delivery_date": purchase.estimated_delivery_date,
-                }
-                for purchase in purchases
-
-            ]
-
-
             # Convert all three data sets to JSON strings
-            json_purchases = json.dumps([p.model_dump() for p in purchases], cls=DateTimeEncoder)
+            json_purchases = json.dumps(json_purchases, cls=DateTimeEncoder)
             json_boxes = json.dumps([b.model_dump() for b in filtered_boxes], cls=DateTimeEncoder)
-            json_sheets = json.dumps([s.model_dump() for s in filtered_sheets],  cls=DateTimeEncoder)
+            json_sheets = json.dumps([s.model_dump() for s in filtered_sheets], cls=DateTimeEncoder)
 
-        print(json_purchases,  json_boxes, json_sheets)
+        print(json_purchases, json_boxes, json_sheets)
         return inserted_count, json_purchases, json_boxes, json_sheets
