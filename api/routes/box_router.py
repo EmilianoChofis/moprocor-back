@@ -37,7 +37,7 @@ async def get_box_by_symbol(symbol: str):
 
 
 @router.post("/create", response_model=Box, status_code=status.HTTP_201_CREATED)
-async def create_box(symbol: str = Form(...),status: str =  Form(...), ect: int = Form(...), liner: str = Form(...), width: float = Form(...), length: float = Form(...), flute: str = Form(...), treatment: int = Form(...), client: str = Form(...), crease1:  float = Form(...), crease2: float = Form(...), crease3: float = Form(...), box_type: str = Form(...), file: UploadFile = File(...)):
+async def create_box(symbol: str = Form(...), ect: int = Form(...), liner: str = Form(...), width: float = Form(...), length: float = Form(...), flute: str = Form(...), treatment: int = Form(...), client: str = Form(...), crease1:  float = Form(...), crease2: float = Form(...), crease3: float = Form(...), box_status: str =  Form(...), box_type: str = Form(...), file: UploadFile = File(...)):
     """Define the create_box function"""
     try:
         creases = {
@@ -47,7 +47,6 @@ async def create_box(symbol: str = Form(...),status: str =  Form(...), ect: int 
         }
         box = Box(
             symbol=symbol,
-            status=status,
             ect=ect,
             liner=liner,
             width=width,
@@ -56,6 +55,7 @@ async def create_box(symbol: str = Form(...),status: str =  Form(...), ect: int 
             treatment=treatment,
             client=client,
             creases=Crease(**creases),
+            status=box_status,
             type=box_type,
             pdf_link=file.filename
         )
@@ -103,4 +103,15 @@ async def get_pages(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to retrieve total pages: {str(e)}"
+        ) from e
+
+@router.get("/getSymbols", response_model=List[str])
+async def get_symbols():
+    """Obtiene los símbolos de las cajas"""
+    try:
+        return await BoxService.get_all_symbols()
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to retrieve symbols: {str(e)}"
         ) from e

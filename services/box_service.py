@@ -4,7 +4,7 @@ import shutil
 
 import dotenv
 # Import the required libraries
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Any, Coroutine
 from fastapi import HTTPException, UploadFile, File
 from models.box import Box
 from repositories.box_repository import BoxRepository
@@ -100,4 +100,10 @@ class BoxService:
         total_items = await BoxRepository.get_total_count(query)
         total_pages = (total_items + items_per_page - 1) // items_per_page  # Redondeo hacia arriba
         return total_pages
+
+    @staticmethod
+    async def get_all_symbols() -> list[str]:
+        """Get all box symbols from the database."""
+        return await BoxRepository.get_all_symbols()
+
 

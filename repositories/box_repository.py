@@ -45,8 +45,18 @@ class BoxRepository:
 
     @staticmethod
     async def get_filtered_boxes(query: str, offset: int, limit: int) -> Dict[str, list[Box]]:
-        """Obtiene todas las cajas con paginación y total"""
+        """
+        Get filtered boxes with pagination.
 
+        :param query: The search query to filter boxes.
+        :type query: str
+        :param offset: The number of documents to skip.
+        :type offset: int
+        :param limit: The maximum number of documents to return.
+        :type limit: int
+        :return: A dictionary containing the filtered boxes.
+        :rtype: Dict[str, list[Box]]
+        """
         # Filtro de búsqueda
         filters = {
             "$or": [
@@ -65,8 +75,14 @@ class BoxRepository:
 
     @staticmethod
     async def get_total_count(query: str) -> int:
-        """Obtiene el total de cajas filtradas"""
+        """
+        Get the total count of filtered boxes.
 
+        :param query: The search query to filter boxes.
+        :type query: str
+        :return: The total count of filtered boxes.
+        :rtype: int
+        """
         filters = {
             "$or": [
                 {"symbol": {"$regex": query, "$options": "i"}},
@@ -79,3 +95,17 @@ class BoxRepository:
 
         total_count = await Box.find(filters).count()
         return total_count
+
+    @staticmethod
+    async def get_all_symbols() -> List[str]:
+        """
+        Get all box symbols from the database.
+
+        :return: List of all box symbols.
+        :rtype: List[str]
+        """
+        # For raw MongoDB queries with projection, use the motor client directly
+        collection = Box.get_motor_collection()
+        cursor = collection.find({}, {"symbol": 1, "_id": 0})
+        result = await cursor.to_list(length=None)
+        return [doc["symbol"] for doc in result]

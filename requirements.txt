@@ -12,3 +12,4 @@ python-multipart>=0.0.5
 beanie~=1.29.0
 pylint>=2.11.1
 black>=21.12b0
+starlette~=0.46.0
