@@ -49,6 +49,7 @@ class PurchaseService:
                 "liner": purchase.liner,
                 "type": purchase.type,
                 "estimated_delivery_date": purchase.estimated_delivery_date,
+                "arapack_lot": purchase.arapack_lot,
             }
             for purchase in purchases
         ]
