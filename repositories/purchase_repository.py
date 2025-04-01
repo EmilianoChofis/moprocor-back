@@ -1,7 +1,7 @@
 """
 Repository for Purchase documents in the database.
 """
-from typing import List
+from typing import List, Dict
 
 from models.box import Box
 from models.purchase import Purchase
@@ -73,5 +73,45 @@ class PurchaseRepository:
         compatible_sheets = await cursor.to_list()
         compatible_sheets = await Sheet.find(filter_sheets).to_list()
         return compatible_sheets
+
+    @staticmethod
+    async def get_filtered_purchases(query: str, offset: int, limit: int) -> Dict[str, list[Purchase]]:
+        # Filtro de búsqueda
+        filters = {
+            "$or": [
+                {"symbol": {"$regex": query, "$options": "i"}},
+                {"order_number": {"$regex": query, "$options": "i"}},
+                {"client": {"$regex": query, "$options": "i"}},
+                {"receipt_date": {"$regex": query, "$options": "i"}},
+                {"arapack_lot": {"$regex": query, "$options": "i"}},
+            ]
+        }
+
+        purchases = await Purchase.find(filters).skip(offset).limit(limit).to_list()
+
+        return purchases
+
+    @staticmethod
+    async def get_total_count(query: str) -> int:
+        """
+        Get the total count of filtered purchases.
+
+        :param query: The search query to filter purchases.
+        :type query: str
+        :return: The total count of filtered purchases.
+        :rtype: int
+        """
+        filters = {
+            "$or": [
+                {"symbol": {"$regex": query, "$options": "i"}},
+                {"order_number": {"$regex": query, "$options": "i"}},
+                {"client": {"$regex": query, "$options": "i"}},
+                {"receipt_date": {"$regex": query, "$options": "i"}},
+                {"arapack_lot": {"$regex": query, "$options": "i"}},
+            ]
+        }
+
+        total_count = await Purchase.find(filters).count()
+        return total_count
 
 

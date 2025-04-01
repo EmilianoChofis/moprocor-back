@@ -3,7 +3,7 @@ Routes for box operations using MongoDB.
 """
 
 import json
-from typing import List, Dict, Union
+from typing import List
 from fastapi import APIRouter, HTTPException, status, UploadFile, File, Form, Query
 
 from models.box import Box, Crease

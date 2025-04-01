@@ -3,6 +3,8 @@ This module contains the PurchaseService class, which is responsible for interac
 """
 import json
 from datetime import datetime
+from typing import List, Dict
+from models.purchase import Purchase
 
 from repositories.purchase_repository import PurchaseRepository
 
@@ -88,3 +90,20 @@ class PurchaseService:
 
         print(json_purchases, json_boxes, json_sheets)
         return inserted_count, json_purchases, json_boxes, json_sheets
+
+    @staticmethod
+    async def get_filtered_purchases(query: str, page: int, items_per_page: int) -> Dict[str, List[Purchase]]:
+        """Obtiene las compras con paginación"""
+
+        # Calcula el offset
+        offset = (page - 1) * items_per_page
+
+        # Obtiene las compras paginadas y el total
+        return await PurchaseRepository.get_filtered_purchases(query, offset, items_per_page)
+
+    @staticmethod
+    async def get_pages(query: str, items_per_page: int) -> int:
+        """Obtiene el total de páginas"""
+        total_items = await PurchaseRepository.get_total_count(query)
+        total_pages = (total_items + items_per_page - 1) // items_per_page
+        return total_pages

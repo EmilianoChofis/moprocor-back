@@ -2,13 +2,13 @@
 import json
 from typing import List
 
-from fastapi import HTTPException, APIRouter, status
+from fastapi import HTTPException, APIRouter, status, Query
 
 from models.purchase import Purchase
 from services.purchase_service import PurchaseService
 
 router = APIRouter()
-
+ITEMS_PER_PAGE=10
 
 @router.get("/getAll", response_model=List[Purchase])
 async def get_purchases():
@@ -40,3 +40,38 @@ async def create_bundle(purchases: List[Purchase]):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to create bundle: {str(e)}",
         ) from e
+
+@router.get("/getFilteredPurchases", response_model=List[Purchase])
+async def get_filtered_purchases(
+query: str = Query("", description="Filtro de búsqueda"),
+    page: int = Query(1, description="Número de página")
+):
+    """Define the get_filtered_purchases function"""
+    if page < 1:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="El número de página debe ser mayor a 0"
+        )
+
+    try:
+        result = await PurchaseService.get_filtered_purchases(query, page, ITEMS_PER_PAGE)
+        return result
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to retrieve filtered purchases: {str(e)}",
+        ) from e
+
+@router.get("/getPages", response_model=int)
+async def get_pages(
+        query: str = Query("", description="Filtro de búsqueda")
+):
+    """Obtiene el total de páginas"""
+    try:
+        return await PurchaseService.get_pages(query, ITEMS_PER_PAGE)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to retrieve total pages: {str(e)}"
+        ) from e
+

@@ -45,18 +45,6 @@ class BoxRepository:
 
     @staticmethod
     async def get_filtered_boxes(query: str, offset: int, limit: int) -> Dict[str, list[Box]]:
-        """
-        Get filtered boxes with pagination.
-
-        :param query: The search query to filter boxes.
-        :type query: str
-        :param offset: The number of documents to skip.
-        :type offset: int
-        :param limit: The maximum number of documents to return.
-        :type limit: int
-        :return: A dictionary containing the filtered boxes.
-        :rtype: Dict[str, list[Box]]
-        """
         # Filtro de búsqueda
         filters = {
             "$or": [

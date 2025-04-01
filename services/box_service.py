@@ -4,8 +4,8 @@ import shutil
 
 import dotenv
 # Import the required libraries
-from typing import List, Optional, Dict, Any, Coroutine
-from fastapi import HTTPException, UploadFile, File
+from typing import List, Optional, Dict
+from fastapi import HTTPException, UploadFile
 from models.box import Box
 from repositories.box_repository import BoxRepository
 
