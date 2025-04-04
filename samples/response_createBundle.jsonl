@@ -10,7 +10,7 @@
       "ect": 21,
       "liner": "KRAFT",
       "type": "CRR",
-      "estimated_delivery_date": "2025-03-27T00:00:00"
+      "estimated_delivery_date": "2025-03-28T00:00:00"
     },
     {
       "order_number": "120257111659",
@@ -610,6 +610,303 @@
         21
       ],
       "grams": 354,
+      "description": "",
+      "boxes": []
+    },
+    {
+      "id": "67ddbee6a331fd508605b134",
+      "roll_width": 90,
+      "p1": 0,
+      "p2": 0,
+      "p3": 0,
+      "ect": [
+        19
+      ],
+      "grams": 340,
+      "description": "",
+      "boxes": []
+    },
+    {
+      "id": "67ddbee6a331fd508605b13d",
+      "roll_width": 110,
+      "p1": 0,
+      "p2": 0,
+      "p3": 0,
+      "ect": [
+        19
+      ],
+      "grams": 345,
+      "description": "",
+      "boxes": []
+    },
+    {
+      "id": "67eae7036b850a529dab8c8c",
+      "roll_width": 133,
+      "p1": 110,
+      "p2": 110,
+      "p3": 110,
+      "ect": [
+        19
+      ],
+      "grams": 389,
+      "description": "This is a description",
+      "boxes": [
+        "ejemplo"
+      ]
+    },
+    {
+      "id": "67eae9356b850a529dab8c8d",
+      "roll_width": 145,
+      "p1": 19,
+      "p2": 22,
+      "p3": 22,
+      "ect": [
+        19,
+        22,
+        28
+      ],
+      "grams": 59,
+      "description": "Prueba de descripcion",
+      "boxes": [
+        "DEG CR CE-10",
+        "GALLETERA CR 15R-M"
+      ]
+    }
+  ]
+}
+{
+  "message": "Purchases created successfully",
+  "count": 6,
+  "purchases": [
+    {
+      "order_number": "4500249553",
+      "symbol": "DEG NO. 228",
+      "quantity": 5000,
+      "flute": "C",
+      "ect": 19,
+      "liner": "KRAFT",
+      "type": "CRS",
+      "estimated_delivery_date": "2025-02-24T00:00:00",
+      "arapack_lot": "25281"
+    },
+    {
+      "order_number": "4500249553",
+      "symbol": "DEG NO. 229",
+      "quantity": 3000,
+      "flute": "C",
+      "ect": 19,
+      "liner": "KRAFT",
+      "type": "CRS",
+      "estimated_delivery_date": "2025-02-25T00:00:00",
+      "arapack_lot": "25282"
+    },
+    {
+      "order_number": "4500249554",
+      "symbol": "DEG CR PRUDENCE",
+      "quantity": 2000,
+      "flute": "C",
+      "ect": 26,
+      "liner": "KRAFT",
+      "type": "CRS",
+      "estimated_delivery_date": "2025-02-26T00:00:00",
+      "arapack_lot": "25283"
+    },
+    {
+      "order_number": "4500249555",
+      "symbol": "DEG CR SWABS 500CT C24",
+      "quantity": 4000,
+      "flute": "C",
+      "ect": 19,
+      "liner": "KRAFT",
+      "type": "CRS",
+      "estimated_delivery_date": "2025-02-25T00:00:00",
+      "arapack_lot": "25284"
+    },
+    {
+      "order_number": "4500249555",
+      "symbol": "DEG CR SWABS 375CT C24",
+      "quantity": 2500,
+      "flute": "C",
+      "ect": 19,
+      "liner": "KRAFT",
+      "type": "CRS",
+      "estimated_delivery_date": "2025-02-25T00:00:00",
+      "arapack_lot": "25285"
+    },
+    {
+      "order_number": "4500249556",
+      "symbol": "DEG CR SWABS 500CT C24",
+      "quantity": 5000,
+      "flute": "C",
+      "ect": 19,
+      "liner": "KRAFT",
+      "type": "CRS",
+      "estimated_delivery_date": "2025-02-26T00:00:00",
+      "arapack_lot": "25286"
+    }
+  ],
+  "boxes": [
+    {
+      "id": "67f007628e5f7f393934c914",
+      "symbol": "DEG NO. 228",
+      "ect": 19,
+      "liner": "KRAFT",
+      "width": 56,
+      "length": 141,
+      "flute": "C",
+      "treatment": 0,
+      "client": "DEGASA S.A. DE C.V.",
+      "creases": {
+        "r1": 16.5,
+        "r2": 23,
+        "r3": 16.5
+      },
+      "status": "approved",
+      "type": "CRS",
+      "pdf_link": "2723 DEG NO. 228.pdf"
+    },
+    {
+      "id": "67f007dd8e5f7f393934c915",
+      "symbol": "DEG NO. 229",
+      "ect": 19,
+      "liner": "KRAFT",
+      "width": 47,
+      "length": 151,
+      "flute": "C",
+      "treatment": 0,
+      "client": "DEGASA S.A. DE C.V.",
+      "creases": {
+        "r1": 12,
+        "r2": 23,
+        "r3": 12
+      },
+      "status": "approved",
+      "type": "CRS",
+      "pdf_link": "2724 DG NO. 229.pdf"
+    },
+    {
+      "id": "67f008458e5f7f393934c916",
+      "symbol": "DEG CR PRUDENCE",
+      "ect": 26,
+      "liner": "KRAFT",
+      "width": 55.2,
+      "length": 95.8,
+      "flute": "C",
+      "treatment": 0,
+      "client": "DEGASA S.A. DE C.V.",
+      "creases": {
+        "r1": 7.7,
+        "r2": 11.2,
+        "r3": 7.7
+      },
+      "status": "approved",
+      "type": "CRS",
+      "pdf_link": "2737 DEG CR PRUDENCE.pdf"
+    },
+    {
+      "id": "67f008888e5f7f393934c917",
+      "symbol": "DEG CR SWABS 500CT C24",
+      "ect": 19,
+      "liner": "KRAFT",
+      "width": 55.1,
+      "length": 164.7,
+      "flute": "C",
+      "treatment": 0,
+      "client": "DEGASA S.A. DE C.V.",
+      "creases": {
+        "r1": 16.2,
+        "r2": 22.7,
+        "r3": 16.2
+      },
+      "status": "approved",
+      "type": "CRS",
+      "pdf_link": "2776 DEG CR SWABS 500CT C24.pdf"
+    },
+    {
+      "id": "67f008cb8e5f7f393934c918",
+      "symbol": "DEG CR SWABS 375CT C24",
+      "ect": 19,
+      "liner": "KRAFT",
+      "width": 49.1,
+      "length": 150.9,
+      "flute": "C",
+      "treatment": 0,
+      "client": "DEGASA S.A. DE C.V.",
+      "creases": {
+        "r1": 15.2,
+        "r2": 18.7,
+        "r3": 15.2
+      },
+      "status": "approved",
+      "type": "CRS",
+      "pdf_link": "2777 DEG CR SWABS 375CT C24.pdf"
+    }
+  ],
+  "sheets": [
+    {
+      "id": "67ddbee6a331fd508605b12d",
+      "roll_width": 73,
+      "p1": 0,
+      "p2": 0,
+      "p3": 0,
+      "ect": [
+        19,
+        21
+      ],
+      "grams": 354,
+      "description": "",
+      "boxes": []
+    },
+    {
+      "id": "67ddbee6a331fd508605b12f",
+      "roll_width": 73,
+      "p1": 0,
+      "p2": 0,
+      "p3": 0,
+      "ect": [
+        26
+      ],
+      "grams": 390,
+      "description": "",
+      "boxes": []
+    },
+    {
+      "id": "67ddbee6a331fd508605b130",
+      "roll_width": 86,
+      "p1": 0,
+      "p2": 0,
+      "p3": 0,
+      "ect": [
+        19
+      ],
+      "grams": 330,
+      "description": "",
+      "boxes": []
+    },
+    {
+      "id": "67ddbee6a331fd508605b131",
+      "roll_width": 86,
+      "p1": 0,
+      "p2": 0,
+      "p3": 0,
+      "ect": [
+        19,
+        21
+      ],
+      "grams": 350,
+      "description": "",
+      "boxes": []
+    },
+    {
+      "id": "67ddbee6a331fd508605b133",
+      "roll_width": 137,
+      "p1": 0,
+      "p2": 0,
+      "p3": 0,
+      "ect": [
+        19
+      ],
+      "grams": 350,
       "description": "",
       "boxes": []
     },
