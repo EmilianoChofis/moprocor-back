@@ -1,6 +1,30 @@
 {
   "processed_boxes": [
-    {},
+    {
+        "order_number": "string",
+        "symbol": "CR 30 R-170",
+        "quantity": 1,
+        "output": 1,
+        "hierarchy": "string",
+        "part": 1,
+        "remaining": 1,
+        "arapack_lot": "string",
+        "total_weight": 1
+        },
+        {
+        "order_number": "string",
+        "symbol": "string",
+        "quantity": 1,
+        "output": 1,
+        "hierarchy": "string",
+        "part": 1,
+        "remaining": 1,
+        "arapack_lot": "string",
+        "total_weight": 1
+        },
+        {
+        "authorized_refile": false
+    },
     {}
   ]
 }
