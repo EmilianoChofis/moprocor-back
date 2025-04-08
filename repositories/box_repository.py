@@ -94,6 +94,6 @@ class BoxRepository:
         """
         # For raw MongoDB queries with projection, use the motor client directly
         collection = Box.get_motor_collection()
-        cursor = collection.find({}, {"symbol": 1, "_id": 0})
+        cursor = collection.find({}, {"symbol": 1, "_id": 0}).sort("symbol", 1)
         result = await cursor.to_list(length=None)
         return [doc["symbol"] for doc in result]
