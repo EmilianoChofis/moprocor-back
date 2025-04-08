@@ -114,4 +114,14 @@ class PurchaseRepository:
         total_count = await Purchase.find(filters).count()
         return total_count
 
+    @staticmethod
+    async def create(purchase: Purchase):
+        """
+        Create a new purchase in the database.
+        :param purchase: The Purchase document to create.
+        :type purchase: Purchase
+        :return: The created Purchase document.
+        :rtype: Purchase
+        """
+        return await purchase.create()
 

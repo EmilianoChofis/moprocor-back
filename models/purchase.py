@@ -23,18 +23,18 @@ class Purchase(Document):
     arapack_lot: str
     subtotal: float
     total_invoice: float
-    weight: Optional[float] =  0.0
+    weight: float
     total_kilograms: float
     delivered_quantity: Optional[int] = 0
     initial_shipping_date: Optional[datetime] = None
     final_shipping_date: Optional[datetime] = None
-    delivery_dates: Optional[List[datetime]] = None
-    missing_quantity: int
+    delivery_dates: Optional[List[datetime]] = []
+    missing_quantity: Optional[int]= 0
     status: str
-    comments: Optional[str] = None
-    pending_kilograms: float
-    delivery_delay_days: int
-    real_delivery_period: int
+    comments: Optional[str] = ""
+    pending_kilograms: Optional[float] = 0.0
+    delivery_delay_days: Optional[int] = 0
+    real_delivery_period: Optional[int] = 0
     created_at: datetime = datetime.now()
 
     class Settings:

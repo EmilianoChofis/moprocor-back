@@ -75,3 +75,13 @@ async def get_pages(
             detail=f"Failed to retrieve total pages: {str(e)}"
         ) from e
 
+@router.post("/create", response_model=Purchase, status_code=status.HTTP_201_CREATED)
+async def create_purchase(purchase: Purchase):
+    """Define the create_purchase function"""
+    try:
+        return await PurchaseService.create_purchase(purchase)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to create purchase: {str(e)}",
+        ) from e

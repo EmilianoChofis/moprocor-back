@@ -108,3 +108,8 @@ class PurchaseService:
         total_items = await PurchaseRepository.get_total_count(query)
         total_pages = (total_items + items_per_page - 1) // items_per_page
         return total_pages
+
+    @staticmethod
+    async def create_purchase(purchase: Purchase):
+        """Create a new purchase in the database."""
+        return await PurchaseRepository.create(purchase)
