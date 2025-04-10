@@ -23,7 +23,7 @@ class Purchase(Document):
     arapack_lot: str
     subtotal: float
     total_invoice: float
-    weight: float
+    weight: Optional[float] = 0.0
     total_kilograms: float
     delivered_quantity: Optional[int] = 0
     initial_shipping_date: Optional[datetime] = None

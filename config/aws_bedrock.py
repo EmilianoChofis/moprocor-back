@@ -1,9 +1,5 @@
-"""
-AWS Bedrock service configuration.
-This file contains configuration for AWS Bedrock service.
-"""
-
 import os
+import json
 import boto3
 from dotenv import load_dotenv
 
@@ -20,7 +16,7 @@ class AWSBedrockService:
     def configure(cls):
         """Configure AWS Bedrock client."""
         cls.client = boto3.client(
-            "bedrock-runtime",
+            service_name="bedrock-runtime",
             region_name=os.getenv("AWS_REGION", "us-east-1"),
             aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
             aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
@@ -32,3 +28,29 @@ class AWSBedrockService:
         if cls.client is None:
             cls.configure()
         return cls.client
+
+    @classmethod
+    def invoke_model(cls, prompt, model_id="amazon.nova-pro-v1:0"):
+        """
+        Invoke the Bedrock model with a prompt.
+        """
+        client = cls.get_client()
+        body = json.dumps({
+            "messages": [
+                {"role": "user", "content": [prompt]}
+            ],
+            "inferenceConfig": {
+                "temperature": 0.4
+            },
+        })
+
+        response = client.invoke_model(
+            modelId=model_id,
+            body=body,
+            contentType="application/json",
+            accept="application/json"
+        )
+
+        # Parse and return the response
+        response_body = json.loads(response.get("body").read())
+        return response_body["output"]["message"]["content"][0]["text"]
