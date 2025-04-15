@@ -35,6 +35,17 @@ class BoxRepository:
         return await Box.find_one(Box.symbol == symbol)
 
     @staticmethod
+    async def get_by_id(id: PydanticObjectId) -> Optional[Box]:
+        """
+        Get a box by its ID.
+
+        :param id: The ID of the box to retrieve.
+        :type id: PydanticObjectId
+        :return: The Box document with the given ID, or None if not found.
+        :rtype: Optional[Box]
+        """
+        return await Box.get(id)
+    @staticmethod
     async def create(box: Box) -> Box:
         """
         Create a new box in the database.

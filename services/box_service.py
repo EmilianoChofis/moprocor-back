@@ -122,7 +122,7 @@ class BoxService:
     ) -> Optional[Box]:
         """Actualiza una caja y opcionalmente reemplaza su archivo PDF."""
         # Obtener la caja existente
-        box = await BoxRepository.get_by_symbol(symbol)
+        box = await BoxRepository.get_by_id(id=box_id)
         if not box:
             raise HTTPException(status_code=404, detail="Caja no encontrada")
 
