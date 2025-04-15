@@ -1,6 +1,6 @@
 """Sheet service module for interacting with the sheets' repository."""
 
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 from beanie import PydanticObjectId
 from fastapi import HTTPException
