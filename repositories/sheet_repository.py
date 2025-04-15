@@ -118,6 +118,6 @@ class SheetRepository:
         :return: The updated Sheet document, or None if not found.
         :rtype: Optional[Sheet]
         """
-        if status not in ["APPROVED", "REVIEW", "DISUSE"]:
+        if status not in ["AVAILABLE", "UNAVAILABLE", "DISCONTINUED"]:
             raise ValueError("Invalid status value")
         return await SheetRepository.update_sheet(sheet_id, {"status": status})

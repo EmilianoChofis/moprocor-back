@@ -1,8 +1,8 @@
 """Purchase model definition."""
-
+from enum import unique
 from typing import Optional, List
 from datetime import datetime
-from beanie import Document
+from beanie import Document, Indexed
 
 
 class Purchase(Document):
@@ -20,7 +20,7 @@ class Purchase(Document):
     quantity: int
     estimated_delivery_date: datetime
     unit_cost: float
-    arapack_lot: str
+    arapack_lot: str = Indexed(unique=True)
     subtotal: float
     total_invoice: float
     weight: Optional[float] = 0.0
