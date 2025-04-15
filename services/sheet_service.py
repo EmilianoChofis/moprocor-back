@@ -1,6 +1,8 @@
 """Sheet service module for interacting with the sheets' repository."""
 
 from typing import List, Dict
+
+from beanie import PydanticObjectId
 from fastapi import HTTPException
 from repositories.sheet_repository import SheetRepository
 from models.sheet import Sheet
@@ -45,3 +47,22 @@ class SheetService:
         total_items = await SheetRepository.get_total_count(query)
         total_pages = (total_items + items_per_page - 1) // items_per_page
         return total_pages
+
+    @staticmethod
+    async def update_sheet(sheet_id: PydanticObjectId, update_data: dict) -> Optional[Sheet]:
+        """Update a sheet."""
+        sheet = await SheetRepository.update_sheet(sheet_id, update_data)
+        if not sheet:
+            raise HTTPException(status_code=404, detail="Sheet not found")
+        return sheet
+
+    @staticmethod
+    async def change_status(sheet_id: PydanticObjectId, status: str) -> Optional[Sheet]:
+        """Change the status of a sheet."""
+        try:
+            sheet = await SheetRepository.change_status(sheet_id, status)
+            if not sheet:
+                raise HTTPException(status_code=404, detail="Sheet not found")
+            return sheet
+        except ValueError as e:
+            raise HTTPException(status_code=400, detail=str(e))

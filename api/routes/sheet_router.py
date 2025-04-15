@@ -4,6 +4,7 @@ Routes for sheet operations using MongoDB.
 
 from typing import List
 
+from beanie import PydanticObjectId
 from fastapi import APIRouter, HTTPException, status, Query
 
 from models.sheet import Sheet
@@ -79,3 +80,33 @@ async def get_pages(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to retrieve sheets: {str(e)}",
         ) from e
+
+@router.put("/update/{sheet_id}", response_model=Sheet)
+async def update_sheet(sheet_id: PydanticObjectId, update_data: dict):
+    """
+    Update a sheet by its ID.
+    """
+    try:
+        return await SheetService.update_sheet(sheet_id, update_data)
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to update sheet: {str(e)}"
+        )
+
+@router.patch("/changeStatus/{sheet_id}", response_model=Sheet)
+async def change_status(sheet_id: PydanticObjectId, sheet_status: str):
+    """
+    Change the status of a sheet by its ID.
+    """
+    try:
+        return await SheetService.change_status(sheet_id, sheet_status)
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to change sheet status: {str(e)}"
+        )

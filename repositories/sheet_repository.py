@@ -4,6 +4,7 @@ Sheet repository for interacting with the sheets collection in MongoDB.
 
 from typing import List, Optional, Dict
 
+from beanie import PydanticObjectId
 from bson import ObjectId
 
 from models.sheet import Sheet
@@ -86,3 +87,37 @@ class SheetRepository:
 
         total_count = await Sheet.find(filters).count()
         return total_count
+
+    @staticmethod
+    async def update_sheet(sheet_id: PydanticObjectId, update_data: dict) -> Optional[Sheet]:
+        """
+        Update a sheet in the database.
+
+        :param sheet_id: The ID of the sheet to update.
+        :type sheet_id: PydanticObjectId
+        :param update_data: The data to update in the sheet.
+        :type update_data: dict
+        :return: The updated Sheet document, or None if not found.
+        :rtype: Optional[Sheet]
+        """
+        sheet = await Sheet.get(sheet_id)
+        if not sheet:
+            return None
+        await sheet.update({"$set": update_data})
+        return await Sheet.get(sheet_id)
+
+    @staticmethod
+    async def change_status(sheet_id: PydanticObjectId, status: str) -> Optional[Sheet]:
+        """
+        Change the status of a sheet.
+
+        :param sheet_id: The ID of the sheet to update.
+        :type sheet_id: PydanticObjectId
+        :param status: The new status for the sheet.
+        :type status: str
+        :return: The updated Sheet document, or None if not found.
+        :rtype: Optional[Sheet]
+        """
+        if status not in ["APPROVED", "REVIEW", "DISUSE"]:
+            raise ValueError("Invalid status value")
+        return await SheetRepository.update_sheet(sheet_id, {"status": status})
