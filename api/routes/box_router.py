@@ -3,7 +3,7 @@ Routes for box operations using MongoDB.
 """
 
 import json
-from typing import List
+from typing import List, Optional
 
 from beanie import PydanticObjectId
 from fastapi import APIRouter, HTTPException, status, UploadFile, File, Form, Query
@@ -120,18 +120,50 @@ async def get_symbols():
 
 
 @router.put("/update/{box_id}", response_model=Box)
-async def update_box(box_id: PydanticObjectId, update_data: dict):
+async def update_box(
+    box_id: PydanticObjectId,
+    symbol: str = Form(...),
+    ect: int = Form(...),
+    liner: str = Form(...),
+    width: float = Form(...),
+    length: float = Form(...),
+    flute: str = Form(...),
+    treatment: int = Form(...),
+    client: str = Form(...),
+    crease1: float = Form(...),
+    crease2: float = Form(...),
+    crease3: float = Form(...),
+    box_status: str = Form(...),
+    box_type: str = Form(...),
+    pdf_file: Optional[UploadFile] = None
+):
     """
-    Update a box by its ID.
+    Actualiza una caja por su ID y opcionalmente reemplaza su archivo PDF.
     """
     try:
-        return await BoxService.update_box(box_id, update_data)
+        return await BoxService.update_box(
+            box_id,
+            symbol=symbol,
+            ect=ect,
+            liner=liner,
+            width=width,
+            length=length,
+            flute=flute,
+            treatment=treatment,
+            client=client,
+            crease1=crease1,
+            crease2=crease2,
+            crease3=crease3,
+            box_status=box_status,
+            box_type=box_type,
+            pdf_file=pdf_file
+        )
     except HTTPException as e:
         raise e
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to update box: {str(e)}"
+            detail=f"Error al actualizar la caja: {str(e)}"
         )
 
 @router.patch("/changeStatus/{box_id}", response_model=Box)
