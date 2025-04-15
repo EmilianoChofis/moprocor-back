@@ -3,6 +3,9 @@ Box repository for MongoDB.
 """
 
 from typing import List, Optional, Dict
+
+from beanie import PydanticObjectId
+
 from models.box import Box
 
 
@@ -97,3 +100,37 @@ class BoxRepository:
         cursor = collection.find({}, {"symbol": 1, "_id": 0}).sort("symbol", 1)
         result = await cursor.to_list(length=None)
         return [doc["symbol"] for doc in result]
+
+    @staticmethod
+    async def update_box(box_id: PydanticObjectId, update_data: dict) -> Optional[Box]:
+        """
+        Update a box in the database.
+
+        :param box_id: The ID of the box to update.
+        :type box_id: PydanticObjectId
+        :param update_data: The data to update in the box.
+        :type update_data: dict
+        :return: The updated Box document, or None if not found.
+        :rtype: Optional[Box]
+        """
+        box = await Box.get(box_id)
+        if not box:
+            return None
+        await box.update({"$set": update_data})
+        return await Box.get(box_id)
+
+    @staticmethod
+    async def change_status(box_id: PydanticObjectId, status: str) -> Optional[Box]:
+        """
+        Change the status of a box.
+
+        :param box_id: The ID of the box to update.
+        :type box_id: PydanticObjectId
+        :param status: The new status for the box.
+        :type status: str
+        :return: The updated Box document, or None if not found.
+        :rtype: Optional[Box]
+        """
+        if status not in ["APPROVED", "REVIEW", "DISUSE"]:
+            raise ValueError("Invalid status value")
+        return await BoxRepository.update_box(box_id, {"status": status})

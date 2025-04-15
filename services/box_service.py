@@ -5,6 +5,8 @@ import shutil
 import dotenv
 # Import the required libraries
 from typing import List, Optional, Dict
+
+from beanie import PydanticObjectId
 from fastapi import HTTPException, UploadFile
 from models.box import Box
 from repositories.box_repository import BoxRepository
@@ -73,12 +75,6 @@ class BoxService:
         return await BoxRepository.create(box)
 
     @staticmethod
-    async def update_box(symbol: str, box_data: dict) -> Optional[Box]:
-        """Update a box."""
-        # Implementation for updating a box
-        pass
-
-    @staticmethod
     async def delete_box(symbol: str) -> bool:
         """Delete a box."""
         # Implementation for deleting a box
@@ -105,5 +101,24 @@ class BoxService:
     async def get_all_symbols() -> list[str]:
         """Get all box symbols from the database."""
         return await BoxRepository.get_all_symbols()
+
+    @staticmethod
+    async def update_box(box_id: PydanticObjectId, update_data: dict) -> Optional[Box]:
+        """Update a box."""
+        box = await BoxRepository.update_box(box_id, update_data)
+        if not box:
+            raise HTTPException(status_code=404, detail="Box not found")
+        return box
+
+    @staticmethod
+    async def change_status(box_id: PydanticObjectId, status: str) -> Optional[Box]:
+        """Change the status of a box."""
+        try:
+            box = await BoxRepository.change_status(box_id, status)
+            if not box:
+                raise HTTPException(status_code=404, detail="Box not found")
+            return box
+        except ValueError as e:
+            raise HTTPException(status_code=400, detail=str(e))
 
 

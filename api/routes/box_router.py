@@ -4,6 +4,8 @@ Routes for box operations using MongoDB.
 
 import json
 from typing import List
+
+from beanie import PydanticObjectId
 from fastapi import APIRouter, HTTPException, status, UploadFile, File, Form, Query
 
 from models.box import Box, Crease
@@ -115,3 +117,34 @@ async def get_symbols():
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to retrieve symbols: {str(e)}"
         ) from e
+
+
+@router.put("/update/{box_id}", response_model=Box)
+async def update_box(box_id: PydanticObjectId, update_data: dict):
+    """
+    Update a box by its ID.
+    """
+    try:
+        return await BoxService.update_box(box_id, update_data)
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to update box: {str(e)}"
+        )
+
+@router.patch("/changeStatus/{box_id}", response_model=Box)
+async def change_status(box_id: PydanticObjectId, box_status: str):
+    """
+    Change the status of a box by its ID.
+    """
+    try:
+        return await BoxService.change_status(box_id, box_status)
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to change box status: {str(e)}"
+        )
