@@ -21,6 +21,16 @@ async def get_purchases():
             detail=f"Failed to retrieve : {str(e)}",
         ) from e
 
+@router.get("/getByArapackLot/{purchase_arapack_lot}", response_model=Purchase)
+async def get_purchase_by_id(purchase_arapack_lot: str):
+    """Define the get_purchase_by_id function"""
+    purchase = await PurchaseService.get_purchase_by_arapack_lot(purchase_arapack_lot)
+    if not purchase:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Purchase with ID {purchase_arapack_lot} not found",
+        )
+    return purchase
 
 @router.post("/createBundle", status_code=status.HTTP_201_CREATED)
 async def create_bundle(purchases: List[Purchase]):

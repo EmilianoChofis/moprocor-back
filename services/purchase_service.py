@@ -3,6 +3,7 @@ This module contains the PurchaseService class, which is responsible for interac
 """
 import json
 from datetime import datetime
+from fastapi import HTTPException
 from typing import List, Dict
 from models.purchase import Purchase
 
@@ -16,6 +17,14 @@ class PurchaseService:
     async def get_all_purchases():
         """ Get all purchases from the database. """
         return await PurchaseRepository.get_all()
+
+    @staticmethod
+    async def get_purchase_by_arapack_lot(purchase_arapack_lot: str):
+        """ Get a purchase by its ID. """
+        purchase = await PurchaseRepository.get_by_arapack_lot(purchase_arapack_lot)
+        if not purchase:
+            raise HTTPException(status_code=404, detail="Purchase not found")
+        return purchase
 
     @staticmethod
     async def create_bundle(purchases):

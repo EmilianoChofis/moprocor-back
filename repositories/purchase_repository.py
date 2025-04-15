@@ -3,6 +3,8 @@ Repository for Purchase documents in the database.
 """
 from typing import List, Dict
 
+from bson import ObjectId
+
 from models.box import Box
 from models.purchase import Purchase
 from models.sheet import Sheet
@@ -19,6 +21,17 @@ class PurchaseRepository:
         :rtype: List[Purchase]
         """
         return await Purchase.all().to_list()
+
+    @staticmethod
+    async def get_by_arapack_lot(purchase_arapack_lot: str):
+        """
+        Get a purchase by its ID.
+        :param purchase_id: The ID of the purchase to retrieve.
+        :type purchase_id: str
+        :return: The Purchase document with the given ID, or None if not found.
+        :rtype: Purchase
+        """
+        return await Purchase.find_one({"arapack_lot": purchase_arapack_lot})
 
     @staticmethod
     async def create_bundle(purchases):
@@ -75,7 +88,7 @@ class PurchaseRepository:
         return compatible_sheets
 
     @staticmethod
-    async def get_filtered_purchases(query: str, offset: int, limit: int) -> Dict[str, list[Purchase]]:
+    async def get_filtered_purchases(query: str, offset: int, limit: int) -> List[Purchase]:
         # Filtro de búsqueda
         filters = {
             "$or": [
@@ -87,7 +100,10 @@ class PurchaseRepository:
             ]
         }
 
-        purchases = await Purchase.find(filters).skip(offset).limit(limit).to_list()
+        collection = Purchase.get_motor_collection()
+        cursor = collection.find(filters).sort("receipt_date", -1).skip(offset).limit(limit)
+        #purchases = await Purchase.find(filters).sort("receipt_date", 1).skip(offset).limit(limit).to_list()
+        purchases = await cursor.to_list(length=None)
 
         return purchases
 

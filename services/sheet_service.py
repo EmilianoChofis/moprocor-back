@@ -1,6 +1,6 @@
 """Sheet service module for interacting with the sheets' repository."""
 
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 from beanie import PydanticObjectId
 from fastapi import HTTPException
@@ -22,7 +22,7 @@ class SheetService:
         sheet = await SheetRepository.get_by_id(sheet_id)
         if not sheet:
             raise HTTPException(status_code=404, detail="Sheet not found")
-        return await SheetRepository.get_by_id(sheet_id)
+        return sheet
 
     @staticmethod
     async def create_sheet(sheet: Sheet) -> Sheet:
