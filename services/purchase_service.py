@@ -4,6 +4,10 @@ This module contains the PurchaseService class, which is responsible for interac
 import json
 from datetime import datetime
 from typing import List, Dict
+
+from fastapi import HTTPException
+from pymongo.errors import DuplicateKeyError
+
 from models.purchase import Purchase
 
 from repositories.purchase_repository import PurchaseRepository
@@ -35,6 +39,15 @@ class PurchaseService:
             - JSON string of filtered boxes
             - JSON string of filtered sheets
         """
+        # Validate uniqueness of 'arapack_lot'
+        for purchase in purchases:
+            existing_purchase = await Purchase.find_one({"arapack_lot": purchase.arapack_lot})
+            if existing_purchase:
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"A purchase with the 'arapack_lot' {purchase.arapack_lot} already exists."
+                )
+
         # First insert the documents
         result = await PurchaseRepository.create_bundle(purchases)
         inserted_count = 0
@@ -112,4 +125,17 @@ class PurchaseService:
     @staticmethod
     async def create_purchase(purchase: Purchase):
         """Create a new purchase in the database."""
-        return await PurchaseRepository.create(purchase)
+        # Validate uniqueness of 'arapack_lot'
+        existing_purchase = await Purchase.find_one({"arapack_lot": purchase.arapack_lot})
+        if existing_purchase:
+            raise HTTPException(
+                status_code=400,
+                detail=f"A purchase with the 'arapack_lot' {purchase.arapack_lot} already exists."
+            )
+        try:
+            return await PurchaseRepository.create(purchase)
+        except DuplicateKeyError:
+            raise HTTPException(
+                status_code=400,
+                detail="A purchase with the same 'arapack_lot' already exists."
+            )
