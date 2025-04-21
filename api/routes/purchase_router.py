@@ -51,6 +51,7 @@ async def create_bundle(purchases: List[Purchase]):
             detail=f"Failed to create bundle: {str(e)}",
         ) from e
 
+
 @router.get("/getFilteredPurchases", response_model=List[Purchase])
 async def get_filtered_purchases(
 query: str = Query("", description="Filtro de búsqueda"),
