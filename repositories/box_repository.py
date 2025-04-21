@@ -71,7 +71,10 @@ class BoxRepository:
         }
 
         # Obtiene las cajas con paginación
-        boxes = await Box.find(filters).skip(offset).limit(limit).to_list()
+        collection = Box.get_motor_collection()
+        cursor = collection.find(filters).sort("symbol", 1).skip(offset).limit(limit)
+        boxes = await cursor.to_list(length=None)
+        #boxes = await Box.find(filters).skip(offset).limit(limit).to_list()
 
         return boxes
 
