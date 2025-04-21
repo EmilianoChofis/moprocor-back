@@ -8,7 +8,7 @@ from typing import List, Optional
 from beanie import PydanticObjectId
 from fastapi import APIRouter, HTTPException, status, UploadFile, File, Form, Query
 
-from models.box import Box, Crease
+from models.box import Box, Crease, Ink
 from services.box_service import BoxService
 
 router = APIRouter()
@@ -39,13 +39,21 @@ async def get_box_by_symbol(symbol: str):
 
 
 @router.post("/create", response_model=Box, status_code=status.HTTP_201_CREATED)
-async def create_box(symbol: str = Form(...), ect: int = Form(...), liner: str = Form(...), width: float = Form(...), length: float = Form(...), flute: str = Form(...), treatment: int = Form(...), client: str = Form(...), crease1:  float = Form(...), crease2: float = Form(...), crease3: float = Form(...), box_status: str =  Form(...), box_type: str = Form(...), file: UploadFile = File(...)):
+async def create_box(symbol: str = Form(...), ect: int = Form(...), liner: str = Form(...), width: float = Form(...), length: float = Form(...), flute: str = Form(...), treatment: int = Form(...), client: str = Form(...),
+                     crease1:  float = Form(...), crease2: float = Form(...), crease3: float = Form(...), gcmi_1: str = Form(...), gcmi_2: str = Form(...), gcmi_3: str = Form(...), gcmi_4: str = Form(...), weight: float = Form(...),
+                     box_status: str =  Form(...), box_type: str = Form(...), file: UploadFile = File(...)):
     """Define the create_box function"""
     try:
         creases = {
             "r1": crease1,
             "r2": crease2,
             "r3": crease3,
+        }
+        inks = {
+            "gcmi_1": gcmi_1,
+            "gcmi_2": gcmi_2,
+            "gcmi_3": gcmi_3,
+            "gcmi_4": gcmi_4,
         }
         box = Box(
             symbol=symbol,
@@ -57,6 +65,8 @@ async def create_box(symbol: str = Form(...), ect: int = Form(...), liner: str =
             treatment=treatment,
             client=client,
             creases=Crease(**creases),
+            inks=Ink(**inks),
+            weight=weight,
             status=box_status,
             type=box_type,
             pdf_link=file.filename
@@ -133,6 +143,11 @@ async def update_box(
     crease1: float = Form(...),
     crease2: float = Form(...),
     crease3: float = Form(...),
+    gcmi_1: str = Form(...),
+    gcmi_2: str = Form(...),
+    gcmi_3: str = Form(...),
+    gcmi_4: str = Form(...),
+    weight: float = Form(...),
     box_status: str = Form(...),
     box_type: str = Form(...),
     pdf_file: Optional[UploadFile] = None
@@ -154,6 +169,11 @@ async def update_box(
             crease1=crease1,
             crease2=crease2,
             crease3=crease3,
+            gcmi_1=gcmi_1,
+            gcmi_2=gcmi_2,
+            gcmi_3=gcmi_3,
+            gcmi_4=gcmi_4,
+            weight=weight,
             box_status=box_status,
             box_type=box_type,
             pdf_file=pdf_file

@@ -116,6 +116,11 @@ class BoxService:
             crease1: float,
             crease2: float,
             crease3: float,
+            gcmi_1: str,
+            gcmi_2: str,
+            gcmi_3: str,
+            gcmi_4: str,
+            weight: float,
             box_status: str,
             box_type: str,
             pdf_file: Optional[UploadFile]
@@ -137,6 +142,8 @@ class BoxService:
             "treatment": treatment,
             "client": client,
             "creases": {"r1": crease1, "r2": crease2, "r3": crease3},
+            "inks": {"gcmi_1": gcmi_1, "gcmi_2": gcmi_2, "gcmi_3": gcmi_3, "gcmi_4": gcmi_4},
+            "weight": weight,
             "status": box_status,
             "type": box_type,
         }

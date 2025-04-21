@@ -16,6 +16,15 @@ class Crease(BaseModel):
     r3: Optional[float] = None  # Radius 3 of the crease
 
 
+class Ink(BaseModel):
+    """Inks model representing the inks used in the box."""
+
+    gcmi_1: Optional[str] = None  # GCMI ink 1
+    gcmi_2: Optional[str] = None  # GCMI ink 2
+    gcmi_3: Optional[str] = None  # GCMI ink 3
+    gcmi_4: Optional[str] = None  # GCMI ink 4
+
+
 class Box(Document):
     """Box model representing a box document in MongoDB."""
 
@@ -28,6 +37,8 @@ class Box(Document):
     treatment: int  # Treatment type of the box
     client: str  # Client associated with the box
     creases: Crease  # Crease dimensions of the box
+    inks: Ink  # Inks used in the box
+    weight: Optional[float] = None  # Weight of the box
     status: str  # Status of the box
     type: str  # Type of the extra information
     pdf_link: str = ""  # Link to the PDF document of the box
