@@ -18,7 +18,7 @@ class Sheet(Document):
     grams: float
     description: Optional[str] = ""
     boxes: Optional[List[str]] = []  # List of Box objects associated with the sheet
-    status:  str = "AVAILABLE"  # Status of the sheet
+    status: str = "AVAILABLE"  # Status of the sheet
 
     class Settings:
         """Settings for the Sheet model."""

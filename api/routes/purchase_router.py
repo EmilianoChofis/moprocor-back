@@ -1,14 +1,16 @@
 """Define the purchase_router module"""
+
 import json
 from typing import List
 
-from fastapi import HTTPException, APIRouter, status, Query
+from fastapi import HTTPException, APIRouter, status, Query, Form, File, UploadFile
 
 from models.purchase import Purchase
 from services.purchase_service import PurchaseService
 
 router = APIRouter()
-ITEMS_PER_PAGE=10
+ITEMS_PER_PAGE = 10
+
 
 @router.get("/getAll", response_model=List[Purchase])
 async def get_purchases():
@@ -21,6 +23,7 @@ async def get_purchases():
             detail=f"Failed to retrieve : {str(e)}",
         ) from e
 
+
 @router.get("/getByArapackLot/{purchase_arapack_lot}", response_model=Purchase)
 async def get_purchase_by_id(purchase_arapack_lot: str):
     """Define the get_purchase_by_id function"""
@@ -32,18 +35,51 @@ async def get_purchase_by_id(purchase_arapack_lot: str):
         )
     return purchase
 
+
+@router.post("/loadPurchasesFromExcel", status_code=status.HTTP_200_OK)
+async def load_purchases_from_excel(
+    file: UploadFile = File(...), sheet_name: str = Form(...)
+):
+    """
+    Carga compras desde un archivo Excel.
+    Recibe un archivo Excel y el nombre de la hoja a procesar.
+    Retorna los datos formateados según el esquema definido.
+    """
+    try:
+        # Validación básica del archivo
+        if not file.filename.endswith(".xlsx"):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="El archivo debe ser un Excel (.xlsx)",
+            )
+
+        # Procesar el archivo a través del servicio
+        formatted_data = await PurchaseService.load_purchases(file, sheet_name)
+
+        return {"message": "Archivo procesado correctamente", "data": formatted_data}
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error al procesar el archivo: {str(e)}",
+        )
+
+
 @router.post("/createBundle", status_code=status.HTTP_201_CREATED)
 async def create_bundle(purchases: List[Purchase]):
     """Define the create_bundle function"""
     try:
-        inserted_count, json_purchases, json_boxes, json_sheets = await PurchaseService.create_bundle(purchases)
+        inserted_count, json_purchases, json_boxes, json_sheets = (
+            await PurchaseService.create_bundle(purchases)
+        )
 
         return {
             "message": "Purchases created successfully",
             "count": inserted_count,
             "purchases": json.loads(json_purchases) if json_purchases else {},
             "boxes": json.loads(json_boxes) if json_boxes else {},
-            "sheets": json.loads(json_sheets) if json_sheets else {}
+            "sheets": json.loads(json_sheets) if json_sheets else {},
         }
     except Exception as e:
         raise HTTPException(
@@ -54,18 +90,20 @@ async def create_bundle(purchases: List[Purchase]):
 
 @router.get("/getFilteredPurchases", response_model=List[Purchase])
 async def get_filtered_purchases(
-query: str = Query("", description="Filtro de búsqueda"),
-    page: int = Query(1, description="Número de página")
+    query: str = Query("", description="Filtro de búsqueda"),
+    page: int = Query(1, description="Número de página"),
 ):
     """Define the get_filtered_purchases function"""
     if page < 1:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="El número de página debe ser mayor a 0"
+            detail="El número de página debe ser mayor a 0",
         )
 
     try:
-        result = await PurchaseService.get_filtered_purchases(query, page, ITEMS_PER_PAGE)
+        result = await PurchaseService.get_filtered_purchases(
+            query, page, ITEMS_PER_PAGE
+        )
         return result
     except Exception as e:
         raise HTTPException(
@@ -73,18 +111,18 @@ query: str = Query("", description="Filtro de búsqueda"),
             detail=f"Failed to retrieve filtered purchases: {str(e)}",
         ) from e
 
+
 @router.get("/getPages", response_model=int)
-async def get_pages(
-        query: str = Query("", description="Filtro de búsqueda")
-):
+async def get_pages(query: str = Query("", description="Filtro de búsqueda")):
     """Obtiene el total de páginas"""
     try:
         return await PurchaseService.get_pages(query, ITEMS_PER_PAGE)
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to retrieve total pages: {str(e)}"
+            detail=f"Failed to retrieve total pages: {str(e)}",
         ) from e
+
 
 @router.post("/create", response_model=Purchase, status_code=status.HTTP_201_CREATED)
 async def create_purchase(purchase: Purchase):

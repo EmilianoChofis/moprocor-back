@@ -1,4 +1,5 @@
 """Purchase model definition."""
+
 from enum import unique
 from typing import Optional, List
 from datetime import datetime
@@ -7,6 +8,7 @@ from beanie import Document, Indexed
 
 class Purchase(Document):
     """Purchase model representing a purchase document in MongoDB."""
+
     receipt_date: datetime
     order_number: str
     client: str
@@ -16,10 +18,10 @@ class Purchase(Document):
     flute: str
     liner: str
     ect: int
-    number_of_inks: int
+    number_of_inks: Optional[int] = 0
     quantity: int
     estimated_delivery_date: datetime
-    unit_cost: float
+    unit_cost: Optional[float] = 0.0
     arapack_lot: str = Indexed(unique=True)
     subtotal: float
     total_invoice: float
@@ -29,7 +31,7 @@ class Purchase(Document):
     initial_shipping_date: Optional[datetime] = None
     final_shipping_date: Optional[datetime] = None
     delivery_dates: Optional[List[datetime]] = []
-    missing_quantity: Optional[int]= 0
+    missing_quantity: Optional[int] = 0
     status: str
     comments: Optional[str] = ""
     pending_kilograms: Optional[float] = 0.0
@@ -45,6 +47,7 @@ class Purchase(Document):
 
     class Config:
         """Configuration for the Purchase model."""
+
         json_schema_extra = {
             "example": {
                 "receipt_date": "2025-01-08T00:00:00",
@@ -74,6 +77,6 @@ class Purchase(Document):
                 "comments": None,
                 "pending_kilograms": 2220.00,
                 "delivery_delay_days": -45664,
-                "real_delivery_period": 0
+                "real_delivery_period": 0,
             }
         }

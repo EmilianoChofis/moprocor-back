@@ -1,6 +1,7 @@
 """
 Repository for Purchase documents in the database.
 """
+
 from typing import List, Dict
 
 from bson import ObjectId
@@ -11,7 +12,7 @@ from models.sheet import Sheet
 
 
 class PurchaseRepository:
-    """ Purchase repository for MongoDB using Beanie ORM functions. """
+    """Purchase repository for MongoDB using Beanie ORM functions."""
 
     @staticmethod
     async def get_all():
@@ -55,7 +56,18 @@ class PurchaseRepository:
         """
         # Filter boxes by symbol in purchase_bundle
         collection = Box.get_motor_collection()
-        cursor = collection.find({"symbol": {"$in": purchase_bundle}, "ect": 1, "liner": 1, "flute": 1, "weight": 1, "length": 1, "width": 1, "treatment": 1})
+        cursor = collection.find(
+            {
+                "symbol": {"$in": purchase_bundle},
+                "ect": 1,
+                "liner": 1,
+                "flute": 1,
+                "weight": 1,
+                "length": 1,
+                "width": 1,
+                "treatment": 1,
+            }
+        )
         result = await cursor.to_list()
         boxes = await Box.find({"symbol": {"$in": purchase_bundle}}).to_list()
         return boxes
@@ -75,20 +87,19 @@ class PurchaseRepository:
         ects = [box.ect for box in filtered_boxes]
 
         # Filter sheets by ECT and symbols
-        filter_sheets = {
-            "$or": [
-                {"ect": {"$in": ects}},
-                {"boxes": {"$in": symbols}}
-            ]
-        }
+        filter_sheets = {"$or": [{"ect": {"$in": ects}}, {"boxes": {"$in": symbols}}]}
         collection = Sheet.get_motor_collection()
-        cursor = collection.find(filter_sheets,  {"_id": 0, "description": 0, "p1":0, "p2":0, "p3":0})
+        cursor = collection.find(
+            filter_sheets, {"_id": 0, "description": 0, "p1": 0, "p2": 0, "p3": 0}
+        )
         compatible_sheets = await cursor.to_list()
         compatible_sheets = await Sheet.find(filter_sheets).to_list()
         return compatible_sheets
 
     @staticmethod
-    async def get_filtered_purchases(query: str, offset: int, limit: int) -> List[Purchase]:
+    async def get_filtered_purchases(
+        query: str, offset: int, limit: int
+    ) -> List[Purchase]:
         # Filtro de búsqueda
         filters = {
             "$or": [
@@ -101,8 +112,10 @@ class PurchaseRepository:
         }
 
         collection = Purchase.get_motor_collection()
-        cursor = collection.find(filters).sort("receipt_date", -1).skip(offset).limit(limit)
-        #purchases = await Purchase.find(filters).sort("receipt_date", 1).skip(offset).limit(limit).to_list()
+        cursor = (
+            collection.find(filters).sort("receipt_date", -1).skip(offset).limit(limit)
+        )
+        # purchases = await Purchase.find(filters).sort("receipt_date", 1).skip(offset).limit(limit).to_list()
         purchases = await cursor.to_list(length=None)
 
         return purchases
@@ -140,4 +153,3 @@ class PurchaseRepository:
         :rtype: Purchase
         """
         return await purchase.create()
-

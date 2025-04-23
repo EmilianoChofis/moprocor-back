@@ -48,7 +48,9 @@ class SheetRepository:
         return await Sheet.insert_one(sheet)
 
     @staticmethod
-    async def get_filtered_sheets(query: str, offset: int, limit: int) -> Dict[str, list[Sheet]]:
+    async def get_filtered_sheets(
+        query: str, offset: int, limit: int
+    ) -> Dict[str, list[Sheet]]:
         """Obtiene todas las hojas con paginación y total"""
 
         # Filtro de búsqueda
@@ -60,7 +62,7 @@ class SheetRepository:
                 {"p1": {"$in": [int(query)]}} if query.isdigit() else {},
                 {"p2": {"$in": [int(query)]}} if query.isdigit() else {},
                 {"p3": {"$in": [int(query)]}} if query.isdigit() else {},
-                {"description": {"$regex": query, "$options": "i"}}
+                {"description": {"$regex": query, "$options": "i"}},
             ]
         }
 
@@ -81,7 +83,7 @@ class SheetRepository:
                 {"p1": {"$in": [int(query)]}} if query.isdigit() else {},
                 {"p2": {"$in": [int(query)]}} if query.isdigit() else {},
                 {"p3": {"$in": [int(query)]}} if query.isdigit() else {},
-                {"description": {"$regex": query, "$options": "i"}}
+                {"description": {"$regex": query, "$options": "i"}},
             ]
         }
 
@@ -89,7 +91,9 @@ class SheetRepository:
         return total_count
 
     @staticmethod
-    async def update_sheet(sheet_id: PydanticObjectId, update_data: dict) -> Optional[Sheet]:
+    async def update_sheet(
+        sheet_id: PydanticObjectId, update_data: dict
+    ) -> Optional[Sheet]:
         """
         Update a sheet in the database.
 

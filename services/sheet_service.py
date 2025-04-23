@@ -35,7 +35,9 @@ class SheetService:
         return await SheetRepository.create(sheet)
 
     @staticmethod
-    async def get_filtered_sheets(query: str, page: int, items_per_page: int) -> Dict[str, list[Sheet]]:
+    async def get_filtered_sheets(
+        query: str, page: int, items_per_page: int
+    ) -> Dict[str, list[Sheet]]:
         """Get all sheets with pagination and total."""
         offset = (page - 1) * items_per_page
 
@@ -49,7 +51,9 @@ class SheetService:
         return total_pages
 
     @staticmethod
-    async def update_sheet(sheet_id: PydanticObjectId, update_data: dict) -> Optional[Sheet]:
+    async def update_sheet(
+        sheet_id: PydanticObjectId, update_data: dict
+    ) -> Optional[Sheet]:
         """Update a sheet."""
         sheet = await SheetRepository.update_sheet(sheet_id, update_data)
         if not sheet:

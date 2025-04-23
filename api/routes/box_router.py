@@ -12,7 +12,8 @@ from models.box import Box, Crease, Ink
 from services.box_service import BoxService
 
 router = APIRouter()
-ITEMS_PER_PAGE=10
+ITEMS_PER_PAGE = 10
+
 
 @router.get("/getAll", response_model=List[Box])
 async def get_boxes():
@@ -39,9 +40,27 @@ async def get_box_by_symbol(symbol: str):
 
 
 @router.post("/create", response_model=Box, status_code=status.HTTP_201_CREATED)
-async def create_box(symbol: str = Form(...), ect: int = Form(...), liner: str = Form(...), width: float = Form(...), length: float = Form(...), flute: str = Form(...), treatment: int = Form(...), client: str = Form(...),
-                     crease1:  float = Form(...), crease2: float = Form(...), crease3: float = Form(...), gcmi_1: str = Form(...), gcmi_2: str = Form(...), gcmi_3: str = Form(...), gcmi_4: str = Form(...), weight: float = Form(...),
-                     box_status: str =  Form(...), box_type: str = Form(...), file: UploadFile = File(...)):
+async def create_box(
+    symbol: str = Form(...),
+    ect: int = Form(...),
+    liner: str = Form(...),
+    width: float = Form(...),
+    length: float = Form(...),
+    flute: str = Form(...),
+    treatment: int = Form(...),
+    client: str = Form(...),
+    crease1: float = Form(...),
+    crease2: float = Form(...),
+    crease3: float = Form(...),
+    gcmi_1: str = Form(...),
+    gcmi_2: str = Form(...),
+    gcmi_3: str = Form(...),
+    gcmi_4: str = Form(...),
+    weight: float = Form(...),
+    box_status: str = Form(...),
+    box_type: str = Form(...),
+    file: UploadFile = File(...),
+):
     """Define the create_box function"""
     try:
         creases = {
@@ -69,7 +88,7 @@ async def create_box(symbol: str = Form(...), ect: int = Form(...), liner: str =
             weight=weight,
             status=box_status,
             type=box_type,
-            pdf_link=file.filename
+            pdf_link=file.filename,
         )
         return await BoxService.create_box(box, file)
     except json.JSONDecodeError:
@@ -83,16 +102,17 @@ async def create_box(symbol: str = Form(...), ect: int = Form(...), liner: str =
             detail=f"Failed to create box: {str(e)}",
         ) from e
 
+
 @router.get("/getFilteredBoxes", response_model=List[Box])
 async def get_filtered_boxes(
     query: str = Query("", description="Filtro de búsqueda"),
-    page: int = Query(1, description="Número de página")
+    page: int = Query(1, description="Número de página"),
 ):
     """Obtiene las cajas con paginación"""
     if page < 1:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="El número de página debe ser mayor a 0"
+            detail="El número de página debe ser mayor a 0",
         )
 
     try:
@@ -101,21 +121,21 @@ async def get_filtered_boxes(
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to retrieve boxes: {str(e)}"
+            detail=f"Failed to retrieve boxes: {str(e)}",
         )
 
+
 @router.get("/getPages", response_model=int)
-async def get_pages(
-        query: str = Query("", description="Filtro de búsqueda")
-):
+async def get_pages(query: str = Query("", description="Filtro de búsqueda")):
     """Obtiene el total de páginas"""
     try:
         return await BoxService.get_pages(query, ITEMS_PER_PAGE)
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to retrieve total pages: {str(e)}"
+            detail=f"Failed to retrieve total pages: {str(e)}",
         ) from e
+
 
 @router.get("/getSymbols", response_model=List[str])
 async def get_symbols():
@@ -125,7 +145,7 @@ async def get_symbols():
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to retrieve symbols: {str(e)}"
+            detail=f"Failed to retrieve symbols: {str(e)}",
         ) from e
 
 
@@ -150,7 +170,7 @@ async def update_box(
     weight: float = Form(...),
     box_status: str = Form(...),
     box_type: str = Form(...),
-    pdf_file: Optional[UploadFile] = None
+    pdf_file: Optional[UploadFile] = None,
 ):
     """
     Actualiza una caja por su ID y opcionalmente reemplaza su archivo PDF.
@@ -176,15 +196,16 @@ async def update_box(
             weight=weight,
             box_status=box_status,
             box_type=box_type,
-            pdf_file=pdf_file
+            pdf_file=pdf_file,
         )
     except HTTPException as e:
         raise e
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error al actualizar la caja: {str(e)}"
+            detail=f"Error al actualizar la caja: {str(e)}",
         )
+
 
 @router.patch("/changeStatus/{box_id}", response_model=Box)
 async def change_status(box_id: PydanticObjectId, box_status: str):
@@ -198,5 +219,5 @@ async def change_status(box_id: PydanticObjectId, box_status: str):
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to change box status: {str(e)}"
+            detail=f"Failed to change box status: {str(e)}",
         )

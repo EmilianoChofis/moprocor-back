@@ -11,7 +11,8 @@ from models.sheet import Sheet
 from services.sheet_service import SheetService
 
 router = APIRouter()
-ITEMS_PER_PAGE=10
+ITEMS_PER_PAGE = 10
+
 
 @router.get("/getAll", response_model=List[Sheet])
 async def get_sheets():
@@ -48,15 +49,16 @@ async def create_sheet(sheet: Sheet):
             detail=f"Failed to create sheet: {str(e)}",
         ) from e
 
+
 @router.get("/getFilteredSheets", response_model=List[Sheet])
 async def get_filtered_sheets(
     query: str = Query("", description="Filtro de búsqueda"),
-    page: int = Query(1, description="Número de página")
+    page: int = Query(1, description="Número de página"),
 ):
     if page < 1:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="El número de página debe ser mayor a 0"
+            detail="El número de página debe ser mayor a 0",
         )
     """Define the get_filtered_sheets function"""
     try:
@@ -68,10 +70,9 @@ async def get_filtered_sheets(
             detail=f"Failed to retrieve sheets: {str(e)}",
         ) from e
 
+
 @router.get("/getPages", response_model=int)
-async def get_pages(
-    query: str = Query("", description="Filtro de búsqueda")
-):
+async def get_pages(query: str = Query("", description="Filtro de búsqueda")):
     """Define the get_pages function"""
     try:
         return await SheetService.get_pages(query, ITEMS_PER_PAGE)
@@ -80,6 +81,7 @@ async def get_pages(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to retrieve sheets: {str(e)}",
         ) from e
+
 
 @router.put("/update/{sheet_id}", response_model=Sheet)
 async def update_sheet(sheet_id: PydanticObjectId, update_data: dict):
@@ -93,8 +95,9 @@ async def update_sheet(sheet_id: PydanticObjectId, update_data: dict):
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to update sheet: {str(e)}"
+            detail=f"Failed to update sheet: {str(e)}",
         )
+
 
 @router.patch("/changeStatus/{sheet_id}", response_model=Sheet)
 async def change_status(sheet_id: PydanticObjectId, sheet_status: str):
@@ -108,5 +111,5 @@ async def change_status(sheet_id: PydanticObjectId, sheet_status: str):
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to change sheet status: {str(e)}"
+            detail=f"Failed to change sheet status: {str(e)}",
         )

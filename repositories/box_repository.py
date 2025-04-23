@@ -45,6 +45,7 @@ class BoxRepository:
         :rtype: Optional[Box]
         """
         return await Box.get(id)
+
     @staticmethod
     async def create(box: Box) -> Box:
         """
@@ -58,7 +59,9 @@ class BoxRepository:
         return await Box.insert_one(box)
 
     @staticmethod
-    async def get_filtered_boxes(query: str, offset: int, limit: int) -> Dict[str, list[Box]]:
+    async def get_filtered_boxes(
+        query: str, offset: int, limit: int
+    ) -> Dict[str, list[Box]]:
         # Filtro de búsqueda
         filters = {
             "$or": [
@@ -66,7 +69,7 @@ class BoxRepository:
                 {"liner": {"$regex": query, "$options": "i"}},
                 {"flute": {"$regex": query, "$options": "i"}},
                 {"client": {"$regex": query, "$options": "i"}},
-                {"status": {"$regex": query, "$options": "i"}}
+                {"status": {"$regex": query, "$options": "i"}},
             ]
         }
 
@@ -74,7 +77,7 @@ class BoxRepository:
         collection = Box.get_motor_collection()
         cursor = collection.find(filters).sort("symbol", 1).skip(offset).limit(limit)
         boxes = await cursor.to_list(length=None)
-        #boxes = await Box.find(filters).skip(offset).limit(limit).to_list()
+        # boxes = await Box.find(filters).skip(offset).limit(limit).to_list()
 
         return boxes
 
@@ -94,7 +97,7 @@ class BoxRepository:
                 {"liner": {"$regex": query, "$options": "i"}},
                 {"flute": {"$regex": query, "$options": "i"}},
                 {"client": {"$regex": query, "$options": "i"}},
-                {"status": {"$regex": query, "$options": "i"}}
+                {"status": {"$regex": query, "$options": "i"}},
             ]
         }
 

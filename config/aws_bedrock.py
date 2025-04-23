@@ -35,20 +35,18 @@ class AWSBedrockService:
         Invoke the Bedrock model with a prompt.
         """
         client = cls.get_client()
-        body = json.dumps({
-            "messages": [
-                {"role": "user", "content": [prompt]}
-            ],
-            "inferenceConfig": {
-                "temperature": 0.4
-            },
-        })
+        body = json.dumps(
+            {
+                "messages": [{"role": "user", "content": [prompt]}],
+                "inferenceConfig": {"temperature": 0.4},
+            }
+        )
 
         response = client.invoke_model(
             modelId=model_id,
             body=body,
             contentType="application/json",
-            accept="application/json"
+            accept="application/json",
         )
 
         # Parse and return the response
