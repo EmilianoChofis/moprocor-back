@@ -5,15 +5,16 @@ import logging
 from fastapi import FastAPI
 import uvicorn
 from starlette.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
 import os
 
+from api.routes import auth_router
 from config.logging import logger, log_config
 from config.mongodb import init_db
 from api.routes.box_router import router as box_router
 from api.routes.sheet_router import router as sheet_router
 from api.routes.purchase_router import router as purchase_router
+from api.routes.auth_router import router as auth_router
 
 
 @asynccontextmanager
@@ -73,6 +74,7 @@ def create_application() -> FastAPI:
     application.include_router(router=box_router, prefix="/boxes", tags=["Boxes"])
     application.include_router(router=sheet_router, prefix="/sheets", tags=["Sheets"])
     application.include_router(router=purchase_router, prefix="/purchases", tags=["Purchases"])
+    application.include_router(router=auth_router, prefix="/auth", tags=["Auth"])
     return application
 
 
