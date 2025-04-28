@@ -24,16 +24,28 @@ async def get_purchases():
         ) from e
 
 
-@router.get("/getByArapackLot/{purchase_arapack_lot}", response_model=Purchase)
-async def get_purchase_by_id(purchase_arapack_lot: str):
-    """Define the get_purchase_by_id function"""
-    purchase = await PurchaseService.get_purchase_by_arapack_lot(purchase_arapack_lot)
-    if not purchase:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Purchase with ID {purchase_arapack_lot} not found",
+@router.get("/getByArapackLot", response_model=Purchase)
+async def get_purchase_by_id(arapack_lot: str):
+    try:
+        if not arapack_lot:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="El ID de compra no puede estar vacío",
+            )
+        purchase = await PurchaseService.get_purchase_by_arapack_lot(
+            arapack_lot
         )
-    return purchase
+        if not purchase:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Compra no encontrada",
+            )
+        return purchase
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error al obtener la compra: {str(e)}",
+        ) from e
 
 
 @router.post("/loadPurchasesFromExcel", status_code=status.HTTP_200_OK)
