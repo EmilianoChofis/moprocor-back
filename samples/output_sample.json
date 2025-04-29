@@ -24,7 +24,14 @@
       "authorized_refile": "boolean"
     }
   ],
-  "sheet": "string (ObjectId)",
+  "sheet": {
+    "id": "string",
+    "ect": "integer",
+    "roll_width": "integer",
+    "p1": "integer",
+    "p2": "integer",
+    "p3": "integer"
+  },
   "scheduled_date": "string (date: YYYY-MM-DD)",
   "treatment": "integer",
   "start_time": "string (time: HH:MM)",
