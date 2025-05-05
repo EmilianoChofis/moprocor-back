@@ -20,7 +20,7 @@ class Purchase(Document):
     ect: int
     number_of_inks: Optional[int] = 0
     quantity: int
-    estimated_delivery_date: datetime
+    estimated_delivery_date: Optional[datetime] = None
     unit_cost: Optional[float] = 0.0
     arapack_lot: str = Indexed(unique=True)
     subtotal: float
