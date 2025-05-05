@@ -7,9 +7,9 @@ from models.production_run import ProductionRun
 
 
 class ProgramPlanning(Document):
-    corridas: Optional[List[ProductionRun]] = []
+    production_runs: Optional[List[ProductionRun]] = []
     created_at: datetime = datetime.now()
-    sem: Optional[int] = 0
+    week: Optional[int] = 0
 
     class Settings:
         name = "program_planning"
@@ -17,7 +17,7 @@ class ProgramPlanning(Document):
     class Config:
         json_schema_extra = {
             "example": {
-                "corridas": [
+                "production_runs": [
                     {
                         "processed_boxes": [
                             {
@@ -88,6 +88,6 @@ class ProgramPlanning(Document):
                     },
                 ],
                 "created_at": "2025-05-08T00:00:00",
-                "sem": 20,
+                "week": 20,
             }
         }
