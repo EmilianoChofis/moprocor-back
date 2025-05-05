@@ -153,3 +153,12 @@ class PurchaseRepository:
         :rtype: Purchase
         """
         return await purchase.create()
+
+    @staticmethod
+    async def get_null_delivery_dates():
+        """
+        Get purchases with null delivery dates.
+        :return: List of Purchase documents with null delivery dates.
+        :rtype: List[Purchase]
+        """
+        return await Purchase.find({"estimated_delivery_date": None}).to_list()
