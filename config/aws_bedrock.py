@@ -18,8 +18,6 @@ class AWSBedrockService:
         cls.client = boto3.client(
             service_name="bedrock-runtime",
             region_name=os.getenv("AWS_REGION", "us-east-1"),
-            aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
-            aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
         )
 
     @classmethod
@@ -52,3 +50,5 @@ class AWSBedrockService:
         # Parse and return the response
         response_body = json.loads(response.get("body").read())
         return response_body["output"]["message"]["content"][0]["text"]
+
+

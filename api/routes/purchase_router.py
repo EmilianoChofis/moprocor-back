@@ -3,7 +3,7 @@
 import json
 from typing import List
 
-from fastapi import HTTPException, APIRouter, status, Query, Form, File, UploadFile
+from fastapi import HTTPException, APIRouter, status, Query, Form, File, UploadFile, BackgroundTasks
 
 from models.purchase import Purchase
 from services.purchase_service import PurchaseService
@@ -50,7 +50,7 @@ async def get_purchase_by_id(arapack_lot: str):
 
 @router.post("/loadPurchasesFromExcel", status_code=status.HTTP_200_OK)
 async def load_purchases_from_excel(
-    file: UploadFile = File(...), sheet_name: str = Form(...)
+        file: UploadFile = File(...), sheet_name: str = Form(...)
 ):
     """
     Carga compras desde un archivo Excel.
@@ -102,8 +102,8 @@ async def create_bundle(purchases: List[Purchase]):
 
 @router.get("/getFilteredPurchases", response_model=List[Purchase])
 async def get_filtered_purchases(
-    query: str = Query("", description="Filtro de búsqueda"),
-    page: int = Query(1, description="Número de página"),
+        query: str = Query("", description="Filtro de búsqueda"),
+        page: int = Query(1, description="Número de página"),
 ):
     """Define the get_filtered_purchases function"""
     if page < 1:
@@ -145,4 +145,16 @@ async def create_purchase(purchase: Purchase):
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to create purchase: {str(e)}",
+        ) from e
+
+
+@router.get("/getNullDeliveryDates", response_model=List[Purchase])
+async def get_null_delivery_dates():
+    """Define the get_null_delivery_dates function"""
+    try:
+        return await PurchaseService.get_null_delivery_dates()
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to retrieve purchases with null delivery dates: {str(e)}",
         ) from e

@@ -1,0 +1,46 @@
+{
+  "processed_boxes": [
+    {
+      "order_number": "string",
+      "symbol": "string",
+      "quantity": "integer",
+      "output": "integer",
+      "hierarchy": "string",
+      "part": "integer",
+      "remaining": "integer",
+      "arapack_lot": "string",
+      "machine": "string"
+    },
+    {
+      "order_number": "string",
+      "symbol": "string",
+      "quantity": "integer",
+      "output": "integer",
+      "hierarchy": "string",
+      "part": "integer",
+      "remaining": "integer",
+      "arapack_lot": "string",
+      "machine": "string"
+    },
+    {
+      "authorized_refile": "boolean"
+    }
+  ],
+  "sheet": {
+    "id": "string",
+    "ect": "integer",
+    "roll_width": "integer",
+    "p1": "integer",
+    "p2": "integer",
+    "p3": "integer"
+  },
+  "scheduled_date": "string (date: YYYY-MM-DD)",
+  "treatment": "integer",
+  "start_time": "string (time: HH:MM)",
+  "end_time": "string (time: HH:MM)",
+  "refile": "float",
+  "grams_per_m2": "integer",
+  "total_weight": "float",
+  "linear_meters": "integer",
+  "speed": "integer"
+}
