@@ -5,22 +5,22 @@ import logging
 from fastapi import FastAPI
 import uvicorn
 from starlette.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
 import os
 
+from api.routes import program_planning_router
 from config.logging import logger, log_config
 from config.mongodb import init_db
 from api.routes.box_router import router as box_router
 from api.routes.sheet_router import router as sheet_router
 from api.routes.purchase_router import router as purchase_router
 from api.routes.production_run_router import router as production_run_router
-
+from api.routes.program_planning_router import router as program_planning_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
-    Manage application lifecycle.
+    Manage the application lifecycle.
 
     This context manager handles database initialization on startup.
     """
@@ -75,6 +75,7 @@ def create_application() -> FastAPI:
     application.include_router(router=sheet_router, prefix="/sheets", tags=["Sheets"])
     application.include_router(router=purchase_router, prefix="/purchases", tags=["Purchases"])
     application.include_router(router=production_run_router, prefix="/production", tags=["Production"])
+    application.include_router(router=program_planning_router, prefix="/program", tags=["Program Planning"])
     return application
 
 

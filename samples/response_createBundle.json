@@ -1,0 +1,1454 @@
+{
+  "message": "Purchases created successfully",
+  "count": 55,
+  "purchases": [
+    {
+      "order_number": "047834",
+      "symbol": "GALLETERA CR 3-D",
+      "quantity": 10000,
+      "flute": "C",
+      "ect": 19,
+      "liner": "BCO",
+      "type": "CRS",
+      "estimated_delivery_date": "2025-04-21T00:00:00",
+      "arapack_lot": "241870"
+    },
+    {
+      "order_number": "048519",
+      "symbol": "GALLETERA CR 10 VARIAS",
+      "quantity": 5000,
+      "flute": "C",
+      "ect": 19,
+      "liner": "BCO",
+      "type": "CRR",
+      "estimated_delivery_date": "2025-04-21T00:00:00",
+      "arapack_lot": "25375"
+    },
+    {
+      "order_number": "047852",
+      "symbol": "GALLETERA CR 20R-170",
+      "quantity": 1758,
+      "flute": "C",
+      "ect": 19,
+      "liner": "KRAFT",
+      "type": "CRR",
+      "estimated_delivery_date": "2025-04-21T00:00:00",
+      "arapack_lot": "241887"
+    },
+    {
+      "order_number": "048092",
+      "symbol": "GALLETERA CR 20R-170",
+      "quantity": 5242,
+      "flute": "C",
+      "ect": 19,
+      "liner": "KRAFT",
+      "type": "CRR",
+      "estimated_delivery_date": "2025-04-21T00:00:00",
+      "arapack_lot": "242223"
+    },
+    {
+      "order_number": "048405",
+      "symbol": "GALLETERA CR 15R-R",
+      "quantity": 5838,
+      "flute": "C",
+      "ect": 19,
+      "liner": "KRAFT",
+      "type": "CRR",
+      "estimated_delivery_date": "2025-04-21T00:00:00",
+      "arapack_lot": "25194"
+    },
+    {
+      "order_number": "048406",
+      "symbol": "GALLETERA CR 15R-R",
+      "quantity": 4162,
+      "flute": "C",
+      "ect": 19,
+      "liner": "KRAFT",
+      "type": "CRR",
+      "estimated_delivery_date": "2025-04-21T00:00:00",
+      "arapack_lot": "25195"
+    },
+    {
+      "order_number": "048081",
+      "symbol": "GALLETERA CR 30R-170",
+      "quantity": 5000,
+      "flute": "C",
+      "ect": 19,
+      "liner": "KRAFT",
+      "type": "CRR",
+      "estimated_delivery_date": "2025-04-22T00:00:00",
+      "arapack_lot": "242214"
+    },
+    {
+      "order_number": "048530",
+      "symbol": "GALLETERA CR 30-R",
+      "quantity": 700,
+      "flute": "C",
+      "ect": 19,
+      "liner": "KRAFT",
+      "type": "CRR",
+      "estimated_delivery_date": "2025-04-24T00:00:00",
+      "arapack_lot": "25386"
+    },
+    {
+      "order_number": "048531",
+      "symbol": "GALLETERA CR 30-R",
+      "quantity": 5300,
+      "flute": "C",
+      "ect": 19,
+      "liner": "KRAFT",
+      "type": "CRR",
+      "estimated_delivery_date": "2025-04-24T00:00:00",
+      "arapack_lot": "25386"
+    },
+    {
+      "order_number": "048633",
+      "symbol": "CR 5 ANGEL 200",
+      "quantity": 3000,
+      "flute": "C",
+      "ect": 21,
+      "liner": "KRAFT",
+      "type": "CRR",
+      "estimated_delivery_date": "2025-04-26T00:00:00",
+      "arapack_lot": "25387"
+    },
+    {
+      "order_number": "048408",
+      "symbol": "GALLETERA CR 10-3",
+      "quantity": 5000,
+      "flute": "C",
+      "ect": 19,
+      "liner": "KRAFT",
+      "type": "CRR",
+      "estimated_delivery_date": "2025-04-26T00:00:00",
+      "arapack_lot": "25197"
+    },
+    {
+      "order_number": "047860",
+      "symbol": "GALLETERA CR 20R-140",
+      "quantity": 5000,
+      "flute": "C",
+      "ect": 19,
+      "liner": "KRAFT",
+      "type": "CRR",
+      "estimated_delivery_date": "2025-04-26T00:00:00",
+      "arapack_lot": "241895"
+    },
+    {
+      "order_number": "048381",
+      "symbol": "GALLETERA CR 20R-140",
+      "quantity": 5000,
+      "flute": "C",
+      "ect": 19,
+      "liner": "KRAFT",
+      "type": "CRR",
+      "estimated_delivery_date": "2025-04-26T00:00:00",
+      "arapack_lot": "25172"
+    },
+    {
+      "order_number": "047462",
+      "symbol": "GALLETERA CR AVEO 10-2",
+      "quantity": 2000,
+      "flute": "C",
+      "ect": 19,
+      "liner": "KRAFT",
+      "type": "CRR",
+      "estimated_delivery_date": "2025-04-26T00:00:00",
+      "arapack_lot": "241464"
+    },
+    {
+      "order_number": "048526",
+      "symbol": "GALLETERA CR 15R-D",
+      "quantity": 1939,
+      "flute": "C",
+      "ect": 19,
+      "liner": "KRAFT",
+      "type": "CRR",
+      "estimated_delivery_date": "2025-04-26T00:00:00",
+      "arapack_lot": "25382"
+    },
+    {
+      "order_number": "048527",
+      "symbol": "GALLETERA CR 15R-D",
+      "quantity": 1061,
+      "flute": "C",
+      "ect": 19,
+      "liner": "KRAFT",
+      "type": "CRR",
+      "estimated_delivery_date": "2025-04-26T00:00:00",
+      "arapack_lot": "25383"
+    },
+    {
+      "order_number": "4500255578",
+      "symbol": "DEG CR CE-10 (PDA)",
+      "quantity": 2882,
+      "flute": "C",
+      "ect": 19,
+      "liner": "KRAFT",
+      "type": "CRR",
+      "estimated_delivery_date": "2025-04-22T00:00:00",
+      "arapack_lot": "25584"
+    },
+    {
+      "order_number": "4500255578",
+      "symbol": "DEG CR CE-10 (PDA)",
+      "quantity": 8000,
+      "flute": "C",
+      "ect": 19,
+      "liner": "KRAFT",
+      "type": "CRR",
+      "estimated_delivery_date": "2025-04-22T00:00:00",
+      "arapack_lot": "25585"
+    },
+    {
+      "order_number": "4500254447",
+      "symbol": "DEG CR NO.152 (PDA)",
+      "quantity": 1500,
+      "flute": "C",
+      "ect": 21,
+      "liner": "KRAFT",
+      "type": "CRR",
+      "estimated_delivery_date": "2025-04-22T00:00:00",
+      "arapack_lot": "25524"
+    },
+    {
+      "order_number": "4500254514",
+      "symbol": "DEG CR 375",
+      "quantity": 10000,
+      "flute": "C",
+      "ect": 23,
+      "liner": "KRAFT",
+      "type": "CRR",
+      "estimated_delivery_date": "2025-04-24T00:00:00",
+      "arapack_lot": "25503"
+    },
+    {
+      "order_number": "4500254514",
+      "symbol": "DEG CR 750",
+      "quantity": 5000,
+      "flute": "C",
+      "ect": 29,
+      "liner": "KRAFT",
+      "type": "CRR",
+      "estimated_delivery_date": "2025-04-24T00:00:00",
+      "arapack_lot": "25504"
+    },
+    {
+      "order_number": "4500254514",
+      "symbol": "DEG CR 500 (LEMOINE)",
+      "quantity": 10000,
+      "flute": "C",
+      "ect": 23,
+      "liner": "KRAFT",
+      "type": "CRR",
+      "estimated_delivery_date": "2025-04-24T00:00:00",
+      "arapack_lot": "25619"
+    },
+    {
+      "order_number": "4500249697",
+      "symbol": "DEG CR 32 OZ ALPLA (4016021-R01)DERMO",
+      "quantity": 15000,
+      "flute": "C",
+      "ect": 44,
+      "liner": "KRAFT",
+      "type": "CRR",
+      "estimated_delivery_date": "2025-04-21T00:00:00",
+      "arapack_lot": "25402"
+    },
+    {
+      "order_number": "4500252926",
+      "symbol": "DEG CR 230 ZENKERLAB 4016080",
+      "quantity": 6000,
+      "flute": "C",
+      "ect": 40,
+      "liner": "KRAFT",
+      "type": "CRR",
+      "estimated_delivery_date": "2025-04-23T00:00:00",
+      "arapack_lot": "25445"
+    },
+    {
+      "order_number": "4500255195",
+      "symbol": "DEG CR 24-B (ESP)",
+      "quantity": 1100,
+      "flute": "C",
+      "ect": 23,
+      "liner": "KRAFT",
+      "type": "CRR",
+      "estimated_delivery_date": "2025-04-25T00:00:00",
+      "arapack_lot": "25539"
+    },
+    {
+      "order_number": "4500255195",
+      "symbol": "DEG LAMINA 120X100 (ESP)",
+      "quantity": 1000,
+      "flute": "C",
+      "ect": 23,
+      "liner": "KRAFT",
+      "type": "LAM",
+      "estimated_delivery_date": "2025-04-25T00:00:00",
+      "arapack_lot": "25540"
+    },
+    {
+      "order_number": "4500255195",
+      "symbol": "DEG CR NO 196 40112068 (ESP)",
+      "quantity": 240,
+      "flute": "C",
+      "ect": 21,
+      "liner": "KRAFT",
+      "type": "CRR",
+      "estimated_delivery_date": "2025-04-25T00:00:00",
+      "arapack_lot": "25541"
+    },
+    {
+      "order_number": "4500251281",
+      "symbol": "DEG CR No.14 (VDAS)",
+      "quantity": 3000,
+      "flute": "C",
+      "ect": 26,
+      "liner": "KRAFT",
+      "type": "CRR",
+      "estimated_delivery_date": "2025-04-23T00:00:00",
+      "arapack_lot": "25359"
+    },
+    {
+      "order_number": "4500251281",
+      "symbol": "DEG CR No.14 (VDAS)",
+      "quantity": 3000,
+      "flute": "C",
+      "ect": 26,
+      "liner": "KRAFT",
+      "type": "CRR",
+      "estimated_delivery_date": "2025-04-25T00:00:00",
+      "arapack_lot": "25360"
+    },
+    {
+      "order_number": "000767",
+      "symbol": "HMS WOOLWORTH",
+      "quantity": 2000,
+      "flute": "C",
+      "ect": 32,
+      "liner": "KRAFT",
+      "type": "CRR",
+      "estimated_delivery_date": "2025-04-21T00:00:00",
+      "arapack_lot": "25590"
+    },
+    {
+      "order_number": "CIO 0014",
+      "symbol": "ESQUINERO 185X32",
+      "quantity": 5400,
+      "flute": "C",
+      "ect": 21,
+      "liner": "KRAFT",
+      "type": "ESQ",
+      "estimated_delivery_date": "2025-04-24T00:00:00",
+      "arapack_lot": "25634"
+    },
+    {
+      "order_number": "2600088004",
+      "symbol": "SABORMEX 92485",
+      "quantity": 8500,
+      "flute": "C",
+      "ect": 19,
+      "liner": "KRAFT",
+      "type": "SEP",
+      "estimated_delivery_date": "2025-04-21T00:00:00",
+      "arapack_lot": "25620"
+    },
+    {
+      "order_number": "2600088234",
+      "symbol": "PRODUCTOS RICH 87465",
+      "quantity": 9000,
+      "flute": "C",
+      "ect": 26,
+      "liner": "KRAFT",
+      "type": "SEP",
+      "estimated_delivery_date": "2025-04-21T00:00:00",
+      "arapack_lot": "25621"
+    },
+    {
+      "order_number": "2600086942",
+      "symbol": "SABORMEX 75704",
+      "quantity": 5000,
+      "flute": "C",
+      "ect": 19,
+      "liner": "KRAFT",
+      "type": "SEP",
+      "estimated_delivery_date": "2025-04-21T00:00:00",
+      "arapack_lot": "25622"
+    },
+    {
+      "order_number": "2600086941",
+      "symbol": "SABORMEX 75397",
+      "quantity": 11000,
+      "flute": "C",
+      "ect": 32,
+      "liner": "KRAFT",
+      "type": "SEP",
+      "estimated_delivery_date": "2025-04-21T00:00:00",
+      "arapack_lot": "25623"
+    },
+    {
+      "order_number": "2600086943",
+      "symbol": "SABORMEX 75705",
+      "quantity": 5000,
+      "flute": "C",
+      "ect": 19,
+      "liner": "KRAFT",
+      "type": "SEP",
+      "estimated_delivery_date": "2025-04-21T00:00:00",
+      "arapack_lot": "25624"
+    },
+    {
+      "order_number": "2600087907",
+      "symbol": "PRODUCTOS RICH 87458",
+      "quantity": 5000,
+      "flute": "C",
+      "ect": 26,
+      "liner": "KRAFT",
+      "type": "SEP",
+      "estimated_delivery_date": "2025-04-21T00:00:00",
+      "arapack_lot": "25625"
+    },
+    {
+      "order_number": "2600088222",
+      "symbol": "PRODUCTOS RICH 87458",
+      "quantity": 12000,
+      "flute": "C",
+      "ect": 26,
+      "liner": "KRAFT",
+      "type": "SEP",
+      "estimated_delivery_date": "2025-04-21T00:00:00",
+      "arapack_lot": "25626"
+    },
+    {
+      "order_number": "2600088223",
+      "symbol": "PRODUCTOS RICH 87458",
+      "quantity": 12000,
+      "flute": "C",
+      "ect": 26,
+      "liner": "KRAFT",
+      "type": "SEP",
+      "estimated_delivery_date": "2025-04-23T00:00:00",
+      "arapack_lot": "25627"
+    },
+    {
+      "order_number": "2600088232",
+      "symbol": "PRODUCTOS RICH 92465",
+      "quantity": 6000,
+      "flute": "C",
+      "ect": 26,
+      "liner": "KRAFT",
+      "type": "SEP",
+      "estimated_delivery_date": "2025-04-23T00:00:00",
+      "arapack_lot": "25628"
+    },
+    {
+      "order_number": "2600088397",
+      "symbol": "SEP PROSENTEC 101691",
+      "quantity": 25000,
+      "flute": "B",
+      "ect": 32,
+      "liner": "KRAFT",
+      "type": "SEP",
+      "estimated_delivery_date": "2025-04-23T00:00:00",
+      "arapack_lot": "25629"
+    },
+    {
+      "order_number": "2600088224",
+      "symbol": "PRODUCTOS RICH 87458",
+      "quantity": 12000,
+      "flute": "C",
+      "ect": 26,
+      "liner": "KRAFT",
+      "type": "SEP",
+      "estimated_delivery_date": "2025-04-23T00:00:00",
+      "arapack_lot": "25630"
+    },
+    {
+      "order_number": "2600088225",
+      "symbol": "PRODUCTOS RICH 87458",
+      "quantity": 12000,
+      "flute": "C",
+      "ect": 26,
+      "liner": "KRAFT",
+      "type": "SEP",
+      "estimated_delivery_date": "2025-04-23T00:00:00",
+      "arapack_lot": "25631"
+    },
+    {
+      "order_number": "2600088657",
+      "symbol": "SABORMEX 87460",
+      "quantity": 25500,
+      "flute": "C",
+      "ect": 35,
+      "liner": "KRAFT",
+      "type": "SEP",
+      "estimated_delivery_date": "2025-04-25T00:00:00",
+      "arapack_lot": "25638"
+    },
+    {
+      "order_number": "2600088660",
+      "symbol": "SABORMEX 76638",
+      "quantity": 42000,
+      "flute": "C",
+      "ect": 21,
+      "liner": "KRAFT",
+      "type": "SEP",
+      "estimated_delivery_date": "2025-04-25T00:00:00",
+      "arapack_lot": "25639"
+    },
+    {
+      "order_number": "2600088661",
+      "symbol": "SABORMEX 87491",
+      "quantity": 19000,
+      "flute": "C",
+      "ect": 19,
+      "liner": "KRAFT",
+      "type": "SEP",
+      "estimated_delivery_date": "2025-04-25T00:00:00",
+      "arapack_lot": "25640"
+    },
+    {
+      "order_number": "2600088221",
+      "symbol": "PRODUCTOS RICH 82737",
+      "quantity": 12000,
+      "flute": "C",
+      "ect": 32,
+      "liner": "KRAFT",
+      "type": "SEP",
+      "estimated_delivery_date": "2025-04-25T00:00:00",
+      "arapack_lot": "25641"
+    },
+    {
+      "order_number": "2398",
+      "symbol": "W.A CHEDRAUI 920 ML (0521)",
+      "quantity": 3500,
+      "flute": "C",
+      "ect": 19,
+      "liner": "KRAFT",
+      "type": "CRS",
+      "estimated_delivery_date": "2025-04-14T00:00:00",
+      "arapack_lot": "25D212"
+    },
+    {
+      "order_number": "2161",
+      "symbol": "W.A AURRERA 1L (0346)",
+      "quantity": 10000,
+      "flute": "C",
+      "ect": 23,
+      "liner": "KRAFT",
+      "type": "CRS",
+      "estimated_delivery_date": "2025-04-21T00:00:00",
+      "arapack_lot": "25D234"
+    },
+    {
+      "order_number": "2161",
+      "symbol": "W.A AURRERA 2 LT (0330)",
+      "quantity": 10000,
+      "flute": "C",
+      "ect": 21,
+      "liner": "KRAFT",
+      "type": "CRS",
+      "estimated_delivery_date": "2025-04-21T00:00:00",
+      "arapack_lot": "25D235"
+    },
+    {
+      "order_number": "2161",
+      "symbol": "W.A PATITOS 1/2 (0310)",
+      "quantity": 5000,
+      "flute": "C",
+      "ect": 19,
+      "liner": "KRAFT",
+      "type": "CRS",
+      "estimated_delivery_date": "2025-04-21T00:00:00",
+      "arapack_lot": "25D236"
+    },
+    {
+      "order_number": "2161",
+      "symbol": "W.A PATITOS 2L VENTANA (0313)",
+      "quantity": 5000,
+      "flute": "C",
+      "ect": 21,
+      "liner": "KRAFT",
+      "type": "CRS",
+      "estimated_delivery_date": "2025-04-21T00:00:00",
+      "arapack_lot": "25D237"
+    },
+    {
+      "order_number": "2161",
+      "symbol": "CR PATITOS 6L (0317)",
+      "quantity": 2400,
+      "flute": "C",
+      "ect": 26,
+      "liner": "KRAFT",
+      "type": "CRR",
+      "estimated_delivery_date": "2025-04-21T00:00:00",
+      "arapack_lot": "25D238"
+    },
+    {
+      "order_number": "2161",
+      "symbol": "0317 SEPARADOR (BM)",
+      "quantity": 4800,
+      "flute": "C",
+      "ect": 26,
+      "liner": "KRAFT",
+      "type": "SEP",
+      "estimated_delivery_date": "2025-04-21T00:00:00",
+      "arapack_lot": "25D239"
+    },
+    {
+      "order_number": "535",
+      "symbol": "W.A BARRILITO BCO 3L (0318)",
+      "quantity": 10000,
+      "flute": "C",
+      "ect": 32,
+      "liner": "KRAFT",
+      "type": "CRS",
+      "estimated_delivery_date": "2025-04-22T00:00:00",
+      "arapack_lot": "25D240"
+    }
+  ],
+  "boxes": [
+    {
+      "id": "68069c14642a03c6c937a875",
+      "symbol": "GALLETERA CR 3-D",
+      "ect": 19,
+      "liner": "BLANCO",
+      "width": 57.2,
+      "length": 85.8,
+      "flute": "C",
+      "treatment": 0,
+      "client": "GALLETERA DE PUEBLA S.A DE C.V.",
+      "creases": {
+        "r1": 8.2,
+        "r2": 11.2,
+        "r3": 8.2
+      },
+      "inks": {
+        "gcmi_1": "Negro 90",
+        "gcmi_2": "",
+        "gcmi_3": "",
+        "gcmi_4": ""
+      },
+      "weight": 0.096,
+      "status": "approved",
+      "type": "CRS",
+      "pdf_link": "2001 CR 3-D.pdf"
+    },
+    {
+      "id": "68069f07642a03c6c937a876",
+      "symbol": "GALLETERA CR 10 VARIAS",
+      "ect": 19,
+      "liner": "BLANCO",
+      "width": 57,
+      "length": 80.6,
+      "flute": "C",
+      "treatment": 0,
+      "client": "GALLETERA DE PUEBLA S.A DE C.V.",
+      "creases": {
+        "r1": 7.9,
+        "r2": 11.7,
+        "r3": 7.9
+      },
+      "inks": {
+        "gcmi_1": "Negro 90",
+        "gcmi_2": "",
+        "gcmi_3": "",
+        "gcmi_4": ""
+      },
+      "weight": 0.09,
+      "status": "approved",
+      "type": "CRS",
+      "pdf_link": "2011 CR 10 VARIAS.pdf"
+    },
+    {
+      "id": "68069f6a642a03c6c937a877",
+      "symbol": "GALLETERA CR 20R-170",
+      "ect": 19,
+      "liner": "KRAFT",
+      "width": 44.5,
+      "length": 103.7,
+      "flute": "C",
+      "treatment": 0,
+      "client": "GALLETERA DE PUEBLA S.A DE C.V.",
+      "creases": {
+        "r1": 11.4,
+        "r2": 21.7,
+        "r3": 11.4
+      },
+      "inks": {
+        "gcmi_1": "Negro 90",
+        "gcmi_2": "",
+        "gcmi_3": "",
+        "gcmi_4": ""
+      },
+      "weight": 0.182,
+      "status": "approved",
+      "type": "CRR",
+      "pdf_link": "2556 GALLETERA CR 20R-170.pdf"
+    },
+    {
+      "id": "6806a21ec9d6df9ae568a476",
+      "symbol": "W.A AURRERA 1L (0346)",
+      "ect": 21,
+      "liner": "kraft",
+      "width": 11.5,
+      "length": 58.2,
+      "flute": "c",
+      "treatment": 0,
+      "client": "string",
+      "creases": {
+        "r1": 12.3,
+        "r2": 33.6,
+        "r3": 12.3
+      },
+      "inks": {
+        "gcmi_1": "string",
+        "gcmi_2": "string",
+        "gcmi_3": "string",
+        "gcmi_4": "string"
+      },
+      "weight": 0.288,
+      "status": "APPROVED",
+      "type": "CRS",
+      "pdf_link": "1.3 FO-UTEZ-VIN-02_Rev.06_Registro_del_proyecto_de_estadias_y_Reporte_de_asesorias_2025_EOH (3).pdf"
+    },
+    {
+      "id": "6806a2b8642a03c6c937a879",
+      "symbol": "GALLETERA CR 30R-170",
+      "ect": 19,
+      "liner": "KRAFT",
+      "width": 39.5,
+      "length": 156.1,
+      "flute": "C",
+      "treatment": 0,
+      "client": "GALLETERA DE PUEBLA S.A DE C.V.",
+      "creases": {
+        "r1": 11.4,
+        "r2": 16.7,
+        "r3": 11.4
+      },
+      "inks": {
+        "gcmi_1": "Negro 90",
+        "gcmi_2": "",
+        "gcmi_3": "",
+        "gcmi_4": ""
+      },
+      "weight": 0.243,
+      "status": "approved",
+      "type": "CRR",
+      "pdf_link": "2406 CR 30R-170.pdf"
+    },
+    {
+      "id": "6806a330642a03c6c937a87a",
+      "symbol": "GALLETERA CR 30-R",
+      "ect": 19,
+      "liner": "KRAFT",
+      "width": 44.2,
+      "length": 165.3,
+      "flute": "C",
+      "treatment": 0,
+      "client": "GALLETERA DE PUEBLA S.A DE C.V.",
+      "creases": {
+        "r1": 13.9,
+        "r2": 16.4,
+        "r3": 13.9
+      },
+      "inks": {
+        "gcmi_1": "Negro 90",
+        "gcmi_2": "",
+        "gcmi_3": "",
+        "gcmi_4": ""
+      },
+      "weight": 0.288,
+      "status": "approved",
+      "type": "CRR",
+      "pdf_link": "1988 CR 30-R.pdf"
+    },
+    {
+      "id": "6806a37f642a03c6c937a87b",
+      "symbol": "CR 5 ANGEL 200",
+      "ect": 21,
+      "liner": "KRAFT",
+      "width": 64.4,
+      "length": 101.2,
+      "flute": "C",
+      "treatment": 0,
+      "client": "GALLETERA DE PUEBLA S.A DE C.V.",
+      "creases": {
+        "r1": 10.4,
+        "r2": 10.4,
+        "r3": 10.4
+      },
+      "inks": {
+        "gcmi_1": "Negro 90",
+        "gcmi_2": "",
+        "gcmi_3": "",
+        "gcmi_4": ""
+      },
+      "weight": 0.141,
+      "status": "approved",
+      "type": "CRS",
+      "pdf_link": "0477 CR 5 ANGEL 200.pdf"
+    },
+    {
+      "id": "6806a3ee642a03c6c937a87c",
+      "symbol": "GALLETERA CR 10-3",
+      "ect": 19,
+      "liner": "KRAFT",
+      "width": 57,
+      "length": 80.6,
+      "flute": "C",
+      "treatment": 0,
+      "client": "GALLETERA DE PUEBLA S.A DE C.V.",
+      "creases": {
+        "r1": 7.9,
+        "r2": 11.7,
+        "r3": 7.9
+      },
+      "inks": {
+        "gcmi_1": "Negro 90",
+        "gcmi_2": "",
+        "gcmi_3": "",
+        "gcmi_4": ""
+      },
+      "weight": 0.09,
+      "status": "approved",
+      "type": "CRS",
+      "pdf_link": "2005 CR 10-3.pdf"
+    },
+    {
+      "id": "6806a3f2c9d6df9ae568a477",
+      "symbol": "W.A AURRERA 2 LT (0330)",
+      "ect": 21,
+      "liner": "kraft",
+      "width": 109.2,
+      "length": 114.1,
+      "flute": "c",
+      "treatment": 0,
+      "client": "BLANQUEADORA MEXICANA S. DE R.L DE C.V",
+      "creases": {
+        "r1": 0,
+        "r2": 0,
+        "r3": 0
+      },
+      "inks": {
+        "gcmi_1": "rojo 74",
+        "gcmi_2": "negro 90",
+        "gcmi_3": "string",
+        "gcmi_4": "string"
+      },
+      "weight": 0.269,
+      "status": "APPROVED",
+      "type": "CRS",
+      "pdf_link": "registro proyecto.pdf"
+    },
+    {
+      "id": "6806a529642a03c6c937a87d",
+      "symbol": "GALLETERA CR 20R-140",
+      "ect": 19,
+      "liner": "KRAFT",
+      "width": 44.5,
+      "length": 103.7,
+      "flute": "C",
+      "treatment": 0,
+      "client": "GALLETERA DE PUEBLA S.A DE C.V.",
+      "creases": {
+        "r1": 11.4,
+        "r2": 21.7,
+        "r3": 11.4
+      },
+      "inks": {
+        "gcmi_1": "Negro 90",
+        "gcmi_2": "",
+        "gcmi_3": "",
+        "gcmi_4": ""
+      },
+      "weight": 0.182,
+      "status": "approved",
+      "type": "CRR",
+      "pdf_link": "2397 CR 20R-140.pdf"
+    },
+    {
+      "id": "6806be04c9d6df9ae568a478",
+      "symbol": "W.A PATITOS 1/2 (0310)",
+      "ect": 19,
+      "liner": "KRAFT",
+      "width": 114.4,
+      "length": 106.2,
+      "flute": "C",
+      "treatment": 0,
+      "client": "BLANQUEADORA MEXICANA S. R.L DE C.V",
+      "creases": {
+        "r1": 0,
+        "r2": 0,
+        "r3": 0
+      },
+      "inks": {
+        "gcmi_1": "string",
+        "gcmi_2": "string",
+        "gcmi_3": "string",
+        "gcmi_4": "string"
+      },
+      "weight": 0.239,
+      "status": "APPROVED",
+      "type": "CRS",
+      "pdf_link": "registro proyecto.pdf"
+    },
+    {
+      "id": "6806c4dec9d6df9ae568a479",
+      "symbol": "CR PATITOS 6L (0317)",
+      "ect": 26,
+      "liner": "KRAFT",
+      "width": 149.5,
+      "length": 53.6,
+      "flute": "C",
+      "treatment": 0,
+      "client": "BLANQUEADORA MEXICANA S. DE R.L. DE C.V.",
+      "creases": {
+        "r1": 9.3,
+        "r2": 35,
+        "r3": 9.3
+      },
+      "inks": {
+        "gcmi_1": "Negro 90",
+        "gcmi_2": "",
+        "gcmi_3": "",
+        "gcmi_4": ""
+      },
+      "weight": 0.422,
+      "status": "approved",
+      "type": "CRR",
+      "pdf_link": "registro proyecto.pdf"
+    },
+    {
+      "id": "6806c5ac4b498238c062d843",
+      "symbol": "DEG CR CE-10 (PDA)",
+      "ect": 19,
+      "liner": "KRAFT",
+      "width": 55.8,
+      "length": 150.3,
+      "flute": "C",
+      "treatment": 0,
+      "client": "DEGASA S.A. DE C.V.",
+      "creases": {
+        "r1": 16.4,
+        "r2": 23,
+        "r3": 16.4
+      },
+      "inks": {
+        "gcmi_1": "Negro 90",
+        "gcmi_2": "",
+        "gcmi_3": "",
+        "gcmi_4": ""
+      },
+      "weight": 0.33,
+      "status": "approved",
+      "type": "CRR",
+      "pdf_link": "4017010 DEG CR CE-10 (PDA).pdf"
+    },
+    {
+      "id": "6806c6c14b498238c062d844",
+      "symbol": "DEG CR 32 OZ ALPLA (4016021-R01)DERMO",
+      "ect": 44,
+      "liner": "KRAFT",
+      "width": 49.7,
+      "length": 122.5,
+      "flute": "C",
+      "treatment": 0,
+      "client": "DEGASA S.A. DE C.V.",
+      "creases": {
+        "r1": 12.6,
+        "r2": 24.5,
+        "r3": 12.6
+      },
+      "inks": {
+        "gcmi_1": "Negro 90",
+        "gcmi_2": "",
+        "gcmi_3": "",
+        "gcmi_4": ""
+      },
+      "weight": 0.444,
+      "status": "approved",
+      "type": "CRR",
+      "pdf_link": "0709 DEG CR 32 OZ ALPLA (4016021-R01) DERMO.pdf"
+    },
+    {
+      "id": "6806c8e14b498238c062d845",
+      "symbol": "DEG CR 24-B (ESP)",
+      "ect": 23,
+      "liner": "KRAFT",
+      "width": 56.1,
+      "length": 180.3,
+      "flute": "C",
+      "treatment": 0,
+      "client": "DEGASA S.A. DE C.V.",
+      "creases": {
+        "r1": 13.7,
+        "r2": 28.7,
+        "r3": 13.7
+      },
+      "inks": {
+        "gcmi_1": "Negro 90",
+        "gcmi_2": "",
+        "gcmi_3": "",
+        "gcmi_4": ""
+      },
+      "weight": 0.483,
+      "status": "approved",
+      "type": "CRR",
+      "pdf_link": "4013014 DEG CR 24-B (ESP).pdf"
+    },
+    {
+      "id": "6806c92d4b498238c062d846",
+      "symbol": "DEG CR NO 196 40112068 (ESP)",
+      "ect": 21,
+      "liner": "KRAFT",
+      "width": 46,
+      "length": 108.3,
+      "flute": "C",
+      "treatment": 0,
+      "client": "DEGASA S.A. DE C.V.",
+      "creases": {
+        "r1": 12.4,
+        "r2": 21.2,
+        "r3": 12.4
+      },
+      "inks": {
+        "gcmi_1": "Negro 90",
+        "gcmi_2": "",
+        "gcmi_3": "",
+        "gcmi_4": ""
+      },
+      "weight": 0.215,
+      "status": "approved",
+      "type": "CRR",
+      "pdf_link": "0659 DEG CR NO196 40112068 (ESP).pdf"
+    },
+    {
+      "id": "6806c9a74b498238c062d847",
+      "symbol": "HMS WOOLWORTH",
+      "ect": 32,
+      "liner": "KRAFT",
+      "width": 43.7,
+      "length": 153.3,
+      "flute": "C",
+      "treatment": 0,
+      "client": "INDUSTRIAL JARAM S.A. DE C.V.",
+      "creases": {
+        "r1": 12.9,
+        "r2": 17.9,
+        "r3": 12.9
+      },
+      "inks": {
+        "gcmi_1": "Negro 90",
+        "gcmi_2": "",
+        "gcmi_3": "",
+        "gcmi_4": ""
+      },
+      "weight": 0.428,
+      "status": "approved",
+      "type": "CRR",
+      "pdf_link": "2841 HMS WOOLWORTH.pdf"
+    },
+    {
+      "id": "6806c9e1c9d6df9ae568a47a",
+      "symbol": "0317 SEPARADOR (BM)",
+      "ect": 26,
+      "liner": "KRAFT",
+      "width": 33.7,
+      "length": 18,
+      "flute": "C",
+      "treatment": 0,
+      "client": "BLANQUEADORA MEXICANA S. DE R.L. DE C.V.",
+      "creases": {
+        "r1": 0,
+        "r2": 0,
+        "r3": 0
+      },
+      "inks": {
+        "gcmi_1": "",
+        "gcmi_2": "",
+        "gcmi_3": "",
+        "gcmi_4": ""
+      },
+      "weight": 0.032,
+      "status": "approved",
+      "type": "SEP",
+      "pdf_link": "registro proyecto.pdf"
+    },
+    {
+      "id": "6806cd204b498238c062d848",
+      "symbol": "ESQUINERO 185X32",
+      "ect": 21,
+      "liner": "KRAFT",
+      "width": 32,
+      "length": 185,
+      "flute": "C",
+      "treatment": 0,
+      "client": "COMERCIOS INTEGRALES OR S.A. DE C.V.",
+      "creases": {
+        "r1": 0,
+        "r2": 0,
+        "r3": 0
+      },
+      "inks": {
+        "gcmi_1": "",
+        "gcmi_2": "",
+        "gcmi_3": "",
+        "gcmi_4": ""
+      },
+      "weight": 0.256,
+      "status": "approved",
+      "type": "Esquinero",
+      "pdf_link": "0510 ESQUINERO 185X32.pdf"
+    },
+    {
+      "id": "6806cde14b498238c062d849",
+      "symbol": "PRODUCTOS RICH 87465",
+      "ect": 26,
+      "liner": "KRAFT",
+      "width": 21.5,
+      "length": 63,
+      "flute": "C",
+      "treatment": 0,
+      "client": "GRUPAK OPERACIONES S.A. DE C.V.",
+      "creases": {
+        "r1": 0,
+        "r2": 0,
+        "r3": 0
+      },
+      "inks": {
+        "gcmi_1": "",
+        "gcmi_2": "",
+        "gcmi_3": "",
+        "gcmi_4": ""
+      },
+      "weight": 0.071,
+      "status": "approved",
+      "type": "Separador",
+      "pdf_link": "87465 PRODUCTOS RICH. 87465.pdf"
+    },
+    {
+      "id": "6806d31d4b498238c062d84a",
+      "symbol": "GALLETERA CR 15R-D",
+      "ect": 19,
+      "liner": "KRAFT",
+      "width": 42,
+      "length": 112.3,
+      "flute": "C",
+      "treatment": 0,
+      "client": "GALLETERA DE PUEBLA S.A DE C.V.",
+      "creases": {
+        "r1": 12.9,
+        "r2": 16.2,
+        "r3": 12.9
+      },
+      "inks": {
+        "gcmi_1": "Negro 90",
+        "gcmi_2": "",
+        "gcmi_3": "",
+        "gcmi_4": ""
+      },
+      "weight": 0.185,
+      "status": "approved",
+      "type": "CRR",
+      "pdf_link": "1964 CR 15-R-D.pdf"
+    },
+    {
+      "id": "6806d3534b498238c062d84b",
+      "symbol": "GALLETERA CR AVEO 10-2",
+      "ect": 19,
+      "liner": "KRAFT",
+      "width": 65.4,
+      "length": 153.4,
+      "flute": "C",
+      "treatment": 0,
+      "client": "GALLETERA DE PUEBLA S.A DE C.V.",
+      "creases": {
+        "r1": 10.6,
+        "r2": 10.5,
+        "r3": 10.6
+      },
+      "inks": {
+        "gcmi_1": "Negro 90",
+        "gcmi_2": "",
+        "gcmi_3": "",
+        "gcmi_4": ""
+      },
+      "weight": 0.198,
+      "status": "approved",
+      "type": "CRR",
+      "pdf_link": "0066 GALLETERA CR AVEO-10-2.pdf"
+    },
+    {
+      "id": "6808f9f5f1bbbc9119046267",
+      "symbol": "DEG CR 500 (LEMOINE)",
+      "ect": 23,
+      "liner": "KRAFT",
+      "width": 56.8,
+      "length": 148.7,
+      "flute": "C",
+      "treatment": 0,
+      "client": "DEGASA S.A. DE C.V.",
+      "creases": {
+        "r1": 15.9,
+        "r2": 25,
+        "r3": 15.9
+      },
+      "inks": {
+        "gcmi_1": "Negro 90",
+        "gcmi_2": "",
+        "gcmi_3": "",
+        "gcmi_4": ""
+      },
+      "weight": 0.404,
+      "status": "approved",
+      "type": "CRR",
+      "pdf_link": "0769 DEG CR 500 (LEMOINE).pdf"
+    }
+  ],
+  "sheets": [
+    {
+      "id": "67ddbee6a331fd508605b138",
+      "roll_width": 133,
+      "p1": 140,
+      "p2": 140,
+      "p3": 140,
+      "ect": [
+        29,
+        32
+      ],
+      "grams": 420,
+      "description": "",
+      "boxes": [
+        "EASTER EGG CANE WITH CHOCOLATE 1.7 OZ"
+      ],
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "67ddbee6a331fd508605b131",
+      "roll_width": 86,
+      "p1": 110,
+      "p2": 110,
+      "p3": 130,
+      "ect": [
+        19,
+        21
+      ],
+      "grams": 350,
+      "description": "",
+      "boxes": [],
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "67ddbee6a331fd508605b12f",
+      "roll_width": 73,
+      "p1": 130,
+      "p2": 130,
+      "p3": 130,
+      "ect": [
+        26
+      ],
+      "grams": 390,
+      "description": "",
+      "boxes": [],
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "67ddbee6a331fd508605b13c",
+      "roll_width": 160,
+      "p1": 110,
+      "p2": 110,
+      "p3": 125,
+      "ect": [
+        21,
+        23
+      ],
+      "grams": 345,
+      "description": "",
+      "boxes": [],
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "67ddbee6a331fd508605b136",
+      "roll_width": 115,
+      "p1": 110,
+      "p2": 110,
+      "p3": 125,
+      "ect": [
+        21,
+        23
+      ],
+      "grams": 345,
+      "description": "",
+      "boxes": [],
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "67ddbee6a331fd508605b139",
+      "roll_width": 114,
+      "p1": 110,
+      "p2": 115,
+      "p3": 115,
+      "ect": [
+        21,
+        23
+      ],
+      "grams": 340,
+      "description": "",
+      "boxes": [],
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "67ddbee6a331fd508605b13b",
+      "roll_width": 160,
+      "p1": 140,
+      "p2": 140,
+      "p3": 140,
+      "ect": [
+        32,
+        35
+      ],
+      "grams": 420,
+      "description": "",
+      "boxes": [],
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "67ddbee6a331fd508605b133",
+      "roll_width": 137,
+      "p1": 110,
+      "p2": 110,
+      "p3": 130,
+      "ect": [
+        19
+      ],
+      "grams": 350,
+      "description": "",
+      "boxes": [],
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "67ddbee6a331fd508605b137",
+      "roll_width": 115,
+      "p1": 110,
+      "p2": 110,
+      "p3": 125,
+      "ect": [
+        21,
+        23
+      ],
+      "grams": 360,
+      "description": "",
+      "boxes": [],
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "67ddbee6a331fd508605b12d",
+      "roll_width": 73,
+      "p1": 112,
+      "p2": 112,
+      "p3": 130,
+      "ect": [
+        19,
+        21
+      ],
+      "grams": 354,
+      "description": "",
+      "boxes": [],
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "67ddbee6a331fd508605b134",
+      "roll_width": 90,
+      "p1": 115,
+      "p2": 110,
+      "p3": 115,
+      "ect": [
+        19
+      ],
+      "grams": 340,
+      "description": "",
+      "boxes": [],
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "67ddbee6a331fd508605b12e",
+      "roll_width": 73,
+      "p1": 130,
+      "p2": 112,
+      "p3": 130,
+      "ect": [
+        23
+      ],
+      "grams": 372,
+      "description": "",
+      "boxes": [],
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "67ddbee6a331fd508605b13a",
+      "roll_width": 102,
+      "p1": 150,
+      "p2": 150,
+      "p3": 150,
+      "ect": [
+        44
+      ],
+      "grams": 450,
+      "description": "",
+      "boxes": [],
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "67ddbee6a331fd508605b13d",
+      "roll_width": 110,
+      "p1": 115,
+      "p2": 115,
+      "p3": 115,
+      "ect": [
+        19
+      ],
+      "grams": 345,
+      "description": "",
+      "boxes": [],
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "67eae7036b850a529dab8c8c",
+      "roll_width": 133,
+      "p1": 110,
+      "p2": 110,
+      "p3": 110,
+      "ect": [
+        19
+      ],
+      "grams": 389,
+      "description": "This is a description",
+      "boxes": [
+        "ejemplo"
+      ],
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "67eae9356b850a529dab8c8d",
+      "roll_width": 145,
+      "p1": 19,
+      "p2": 22,
+      "p3": 22,
+      "ect": [
+        19,
+        22,
+        28
+      ],
+      "grams": 59,
+      "description": "Prueba de descripcion",
+      "boxes": [
+        "DEG CR CE-10",
+        "GALLETERA CR 15R-M"
+      ],
+      "status": "AVAILABLE"
+    }
+  ]
+}

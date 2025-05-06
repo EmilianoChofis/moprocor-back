@@ -4,14 +4,11 @@ This module contains the PurchaseService class, which is responsible for interac
 
 import json
 from datetime import datetime
-from typing import List, Dict
-
+from typing import List
 from fastapi import HTTPException
 from pymongo.errors import DuplicateKeyError
 from starlette.datastructures import UploadFile
-
 from models.purchase import Purchase
-
 from repositories.purchase_repository import PurchaseRepository
 from utils.extract_purchases import read_excel_to_json
 
@@ -154,7 +151,7 @@ class PurchaseService:
     @staticmethod
     async def get_filtered_purchases(
         query: str, page: int, items_per_page: int
-    ) -> Dict[str, List[Purchase]]:
+    ) -> List[Purchase]:
         """Obtiene las compras con paginación"""
 
         # Calcula el offset
@@ -184,6 +181,11 @@ class PurchaseService:
                 status_code=400,
                 detail=f"A purchase with the 'arapack_lot' {purchase.arapack_lot} already exists.",
             )
+
+        # Calculate the week of the year using delivery date
+        if purchase.estimated_delivery_date:
+            purchase.week_of_year = purchase.estimated_delivery_date.isocalendar()[1]
+
         try:
             return await PurchaseRepository.create(purchase)
         except DuplicateKeyError:
@@ -191,3 +193,9 @@ class PurchaseService:
                 status_code=400,
                 detail="A purchase with the same 'arapack_lot' already exists.",
             )
+
+    @staticmethod
+    async def get_null_delivery_dates():
+        """Get purchases with null delivery dates."""
+        return await PurchaseRepository.get_null_delivery_dates()
+
