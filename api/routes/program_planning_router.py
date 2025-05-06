@@ -8,7 +8,7 @@ from services.program_planning_service import ProgramPlanningService
 
 router =  APIRouter()
 
-@router.get("/getByWeek/{week}", response_model=List[ProgramPlanning])
+@router.get("/getByWeek/{week}", response_model=ProgramPlanning)
 async def get_production_runs_by_week(week: int):
     try:
         production_runs = await ProgramPlanningService.get_by_week(week)
