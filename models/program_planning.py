@@ -85,6 +85,7 @@ class ProgramPlanning(Document):
                         "total_weight": 150.56,
                         "linear_meters": 2250,
                         "speed": 60,
+                        "machine": "FLEJADORA"
                     },
                 ],
                 "created_at": "2025-05-08T00:00:00",
