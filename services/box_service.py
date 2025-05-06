@@ -6,7 +6,7 @@ import shutil
 import dotenv
 
 # Import the required libraries
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Any, Coroutine, Mapping
 
 from beanie import PydanticObjectId
 from fastapi import HTTPException, UploadFile
@@ -120,7 +120,7 @@ class BoxService:
     @staticmethod
     async def get_filtered_boxes(
         query: str, page: int, items_per_page: int
-    ) -> Dict[str, List[Box]]:
+    ) -> List[Mapping[str, Any] | Any]:
         """
         Retrieve filtered boxes with pagination.
 
