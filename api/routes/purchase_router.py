@@ -48,58 +48,6 @@ async def get_purchase_by_id(arapack_lot: str):
         ) from e
 
 
-@router.post("/loadPurchasesFromExcel", status_code=status.HTTP_200_OK)
-async def load_purchases_from_excel(
-        file: UploadFile = File(...), sheet_name: str = Form(...)
-):
-    """
-    Carga compras desde un archivo Excel.
-    Recibe un archivo Excel y el nombre de la hoja a procesar.
-    Retorna los datos formateados según el esquema definido.
-    """
-    try:
-        # Validación básica del archivo
-        if not file.filename.endswith(".xlsx"):
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="El archivo debe ser un Excel (.xlsx)",
-            )
-
-        # Procesar el archivo a través del servicio
-        formatted_data = await PurchaseService.load_purchases(file, sheet_name)
-
-        return {"message": "Archivo procesado correctamente", "data": formatted_data}
-    except HTTPException as e:
-        raise e
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error al procesar el archivo: {str(e)}",
-        )
-
-
-@router.post("/createBundle", status_code=status.HTTP_201_CREATED)
-async def create_bundle(purchases: List[Purchase]):
-    """Define the create_bundle function"""
-    try:
-        inserted_count, json_purchases, json_boxes, json_sheets = (
-            await PurchaseService.create_bundle(purchases)
-        )
-
-        return {
-            "message": "Purchases created successfully",
-            "count": inserted_count,
-            "purchases": json.loads(json_purchases) if json_purchases else {},
-            "boxes": json.loads(json_boxes) if json_boxes else {},
-            "sheets": json.loads(json_sheets) if json_sheets else {},
-        }
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to create bundle: {str(e)}",
-        ) from e
-
-
 @router.get("/getFilteredPurchases", response_model=List[Purchase])
 async def get_filtered_purchases(
         query: str = Query("", description="Filtro de búsqueda"),
