@@ -3,7 +3,7 @@
 import json
 from typing import List
 
-from fastapi import HTTPException, APIRouter, status, Query, Form, File, UploadFile, BackgroundTasks
+from fastapi import HTTPException, APIRouter, status, Query, Form, File, UploadFile
 
 from models.purchase import Purchase
 from services.purchase_service import PurchaseService

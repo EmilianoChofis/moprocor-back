@@ -1,6 +1,5 @@
 """Purchase model definition."""
 
-from enum import unique
 from typing import Optional, List
 from datetime import datetime
 from beanie import Document, Indexed
@@ -38,6 +37,7 @@ class Purchase(Document):
     delivery_delay_days: Optional[int] = 0
     real_delivery_period: Optional[int] = 0
     created_at: datetime = datetime.now()
+    week_of_year: Optional[int] = None
 
     class Settings:
         """Settings for the Purchase model."""
