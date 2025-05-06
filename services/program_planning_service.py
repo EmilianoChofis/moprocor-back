@@ -6,7 +6,7 @@ from repositories.program_planning_repository import ProgramPlanningRepository
 
 class ProgramPlanningService:
     @staticmethod
-    async def get_by_week(week: int) -> List[ProgramPlanning]:
+    async def get_by_week(week: int) -> ProgramPlanning:
         """
         Get all production runs for a specific week.
         :param week: The week number to filter by.
