@@ -50,5 +50,3 @@ class AWSBedrockService:
         # Parse and return the response
         response_body = json.loads(response.get("body").read())
         return response_body["output"]["message"]["content"][0]["text"]
-
-

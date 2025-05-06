@@ -3,7 +3,11 @@ from typing import List, Dict, Any
 import os
 
 
-def construct_prompt(purchases: List[Dict[str, Any]], sheets: List[Dict[str, Any]], boxes: List[Dict[str, Any]]) -> str:
+def construct_prompt(
+    purchases: List[Dict[str, Any]],
+    sheets: List[Dict[str, Any]],
+    boxes: List[Dict[str, Any]],
+) -> str:
     """
     Construye el prompt para el modelo de IA con los datos proporcionados.
 
@@ -19,7 +23,7 @@ def construct_prompt(purchases: List[Dict[str, Any]], sheets: List[Dict[str, Any
     current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     template_path = os.path.join(current_dir, "samples", "prompt_json_format.json")
 
-    with open(template_path, 'r', encoding='utf-8') as file:
+    with open(template_path, "r", encoding="utf-8") as file:
         prompt_template = json.load(file)
 
     # Convertir las listas a formato JSON string
