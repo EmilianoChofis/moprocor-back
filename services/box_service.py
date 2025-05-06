@@ -52,7 +52,7 @@ class BoxService:
         """
         box = await BoxRepository.get_by_symbol(symbol)
         if not box:
-            raise HTTPException(status_code=404, detail="Box not found")
+            raise HTTPException(status_code=404, detail="Caja no encontrada")
         return await BoxRepository.get_by_symbol(symbol)
 
     @staticmethod
@@ -74,12 +74,13 @@ class BoxService:
         existing_box = await BoxRepository.get_by_symbol(box.symbol)
         if existing_box:
             raise HTTPException(
-                status_code=400, detail=f"Box with symbol {box.symbol} already exists"
+                status_code=400,
+                detail=f"Ya existe una caja con el simbolo {box.symbol}",
             )
 
         # Validate file type
         if not pdf_file.content_type == "application/pdf":
-            raise HTTPException(status_code=400, detail="File must be a PDF")
+            raise HTTPException(status_code=400, detail="El archivo debe ser un PDF")
 
         # If pdf_link is empty, use the original filename or create one from the symbol
         if not box.pdf_link:
@@ -97,7 +98,7 @@ class BoxService:
                 shutil.copyfileobj(pdf_file.file, buffer)
         except Exception as e:
             raise HTTPException(
-                status_code=500, detail=f"Failed to save PDF file: {str(e)}"
+                status_code=500, detail=f"Error al guardar achivo PDF: {str(e)}"
             )
 
         return await BoxRepository.create(box)
@@ -293,7 +294,7 @@ class BoxService:
         try:
             box = await BoxRepository.change_status(box_id, status)
             if not box:
-                raise HTTPException(status_code=404, detail="Box not found")
+                raise HTTPException(status_code=404, detail="Caja no encontrada")
             return box
         except ValueError as e:
             raise HTTPException(status_code=400, detail=str(e))
