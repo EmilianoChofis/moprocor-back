@@ -9,7 +9,7 @@ from models.production_run import ProductionRun
 class ProgramPlanning(Document):
     production_runs: Optional[List[ProductionRun]] = []
     created_at: datetime = datetime.now()
-    week: Optional[int] = 0
+    week_of_year: Optional[int] = 0
 
     class Settings:
         name = "program_planning"

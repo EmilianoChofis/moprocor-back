@@ -17,4 +17,4 @@ class ProgramPlanningRepository:
         :return: List of ProgramPlanning documents for the specified week.
         :rtype: List[ProgramPlanning]
         """
-        return await ProgramPlanning.collection.find({"week": week}).to_list(None)
+        return await ProgramPlanning.find({"week_of_year": week}).to_list()
