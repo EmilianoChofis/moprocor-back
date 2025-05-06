@@ -5,7 +5,156 @@ Accept: application/json
 
 ###
 
-GET http://127.0.0.1:8000/hello/User
-Accept: application/json
+# Legacy AI endpoint
+POST http://127.0.0.1:8000/ia
+Content-Type: application/json
+
+"What is the best way to optimize production planning for corrugated cardboard?"
+
+###
+
+# Production Planning AI endpoint
+POST http://127.0.0.1:8000/ai/production-planning
+Content-Type: application/json
+
+{
+  "purchases": [
+    {
+      "id": "p1",
+      "customer": "Customer A",
+      "delivery_date": "2023-06-01",
+      "boxes": ["b1", "b2"],
+      "quantity": 1000
+    }
+  ],
+  "sheets": [
+    {
+      "id": "s1",
+      "width": 1000,
+      "length": 2000,
+      "ect": "A",
+      "anti_humidity": true
+    }
+  ],
+  "boxes": [
+    {
+      "id": "b1",
+      "width": 500,
+      "length": 600,
+      "height": 400,
+      "ect": "A",
+      "anti_humidity": true
+    },
+    {
+      "id": "b2",
+      "width": 300,
+      "length": 400,
+      "height": 300,
+      "ect": "A",
+      "anti_humidity": true
+    }
+  ]
+}
+
+###
+
+# Inventory Management AI endpoint
+POST http://127.0.0.1:8000/ai/inventory-management
+Content-Type: application/json
+
+{
+  "inventory": [
+    {
+      "id": "i1",
+      "product": "Product A",
+      "quantity": 100,
+      "min_stock": 20,
+      "max_stock": 200
+    },
+    {
+      "id": "i2",
+      "product": "Product B",
+      "quantity": 50,
+      "min_stock": 10,
+      "max_stock": 100
+    }
+  ],
+  "demand_history": [
+    {
+      "product": "Product A",
+      "month": "2023-05",
+      "quantity": 50
+    },
+    {
+      "product": "Product A",
+      "month": "2023-04",
+      "quantity": 45
+    },
+    {
+      "product": "Product B",
+      "month": "2023-05",
+      "quantity": 30
+    },
+    {
+      "product": "Product B",
+      "month": "2023-04",
+      "quantity": 25
+    }
+  ],
+  "supplier_lead_times": [
+    {
+      "supplier": "Supplier X",
+      "product": "Product A",
+      "lead_time_days": 14
+    },
+    {
+      "supplier": "Supplier Y",
+      "product": "Product B",
+      "lead_time_days": 7
+    }
+  ]
+}
+
+###
+
+# Order Optimization AI endpoint
+POST http://127.0.0.1:8000/ai/order-optimization
+Content-Type: application/json
+
+{
+  "orders": [
+    {
+      "id": "o1",
+      "customer": "Customer B",
+      "product": "Product B",
+      "quantity": 200,
+      "due_date": "2023-06-15"
+    },
+    {
+      "id": "o2",
+      "customer": "Customer A",
+      "product": "Product A",
+      "quantity": 150,
+      "due_date": "2023-06-10"
+    }
+  ],
+  "available_stock": [
+    {
+      "product": "Product A",
+      "quantity": 100
+    },
+    {
+      "product": "Product B",
+      "quantity": 80
+    }
+  ],
+  "production_capacity": {
+    "daily_capacity": {
+      "Product A": 30,
+      "Product B": 25
+    },
+    "lead_time_days": 3
+  }
+}
 
 ###

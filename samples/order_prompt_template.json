@@ -1,0 +1,6 @@
+{
+  "text": "You are an order optimization expert. Your task is to analyze the current orders and suggest the most efficient way to fulfill them. Consider factors such as available stock, production capacity, delivery deadlines, and shipping costs. Provide a detailed plan for fulfilling all orders in the most cost-effective and timely manner, prioritizing orders based on urgency and customer importance.",
+  "orders": "",
+  "available_stock": "",
+  "production_capacity": ""
+}

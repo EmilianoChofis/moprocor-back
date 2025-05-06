@@ -2,19 +2,22 @@
 
 from contextlib import asynccontextmanager
 import logging
-from fastapi import FastAPI
+from fastapi import FastAPI, Body
 import uvicorn
 from starlette.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 import os
+from typing import Dict, Any, List
 
 from api.routes import program_planning_router
+from config.aws_bedrock import invoke_bedrock_model, initialize_bedrock_client
 from config.logging import logger, log_config
 from config.mongodb import init_db
 from api.routes.box_router import router as box_router
 from api.routes.sheet_router import router as sheet_router
 from api.routes.purchase_router import router as purchase_router
 from api.routes.program_planning_router import router as program_planning_router
+from utils.prompt_constructor import construct_prompt, PromptType
 
 
 @asynccontextmanager
@@ -64,6 +67,71 @@ def create_application() -> FastAPI:
             )
 
         return FileResponse(file_path)
+
+    @application.post("/ia", tags=["AI"])
+    async def ia(prompt: str):
+        """Legacy endpoint for simple text prompts"""
+        prompt_dict = {"text": prompt}
+        client = initialize_bedrock_client()
+        response = invoke_bedrock_model(client, prompt_dict)
+        return {"response": response}
+    
+    @application.post("/ai/production-planning", tags=["AI"])
+    async def production_planning(
+        purchases: List[Dict[str, Any]] = Body(...),
+        sheets: List[Dict[str, Any]] = Body(...),
+        boxes: List[Dict[str, Any]] = Body(...)
+    ):
+        """
+        Generate production planning recommendations using AI
+        """
+        data = {
+            "purchases": purchases,
+            "sheets": sheets,
+            "boxes": boxes
+        }
+        prompt = construct_prompt(PromptType.PRODUCTION_PLANNING, data)
+        client = initialize_bedrock_client()
+        response = invoke_bedrock_model(client, prompt)
+        return {"response": response}
+    
+    @application.post("/ai/inventory-management", tags=["AI"])
+    async def inventory_management(
+        inventory: List[Dict[str, Any]] = Body(...),
+        demand_history: List[Dict[str, Any]] = Body(...),
+        supplier_lead_times: List[Dict[str, Any]] = Body(...)
+    ):
+        """
+        Generate inventory management recommendations using AI
+        """
+        data = {
+            "inventory": inventory,
+            "demand_history": demand_history,
+            "supplier_lead_times": supplier_lead_times
+        }
+        prompt = construct_prompt(PromptType.INVENTORY_MANAGEMENT, data)
+        client = initialize_bedrock_client()
+        response = invoke_bedrock_model(client, prompt)
+        return {"response": response}
+    
+    @application.post("/ai/order-optimization", tags=["AI"])
+    async def order_optimization(
+        orders: List[Dict[str, Any]] = Body(...),
+        available_stock: List[Dict[str, Any]] = Body(...),
+        production_capacity: Dict[str, Any] = Body(...)
+    ):
+        """
+        Generate order optimization recommendations using AI
+        """
+        data = {
+            "orders": orders,
+            "available_stock": available_stock,
+            "production_capacity": production_capacity
+        }
+        prompt = construct_prompt(PromptType.ORDER_OPTIMIZATION, data)
+        client = initialize_bedrock_client()
+        response = invoke_bedrock_model(client, prompt)
+        return {"response": response}
 
     # Root endpoint
     @application.get("/", tags=["Health"])
