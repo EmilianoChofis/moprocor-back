@@ -15,11 +15,11 @@ async def get_production_runs_by_week(week: int):
         if not production_runs:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"No production runs found for week {week}",
+                detail=f"No program planning found for week {week}",
             )
         return production_runs
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to retrieve production runs: {str(e)}",
+            detail=f"Failed to retrieve program planning: {str(e)}",
         ) from e
