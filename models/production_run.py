@@ -82,6 +82,3 @@ class ProductionRun(Document):
                 "speed": 60,
             }
         }
-
-
-

@@ -1,4 +1,3 @@
-
 from typing import List
 
 from fastapi import APIRouter, HTTPException, status
@@ -6,7 +5,8 @@ from fastapi import APIRouter, HTTPException, status
 from models.program_planning import ProgramPlanning
 from services.program_planning_service import ProgramPlanningService
 
-router =  APIRouter()
+router = APIRouter()
+
 
 @router.get("/getByWeek/{week}", response_model=List[ProgramPlanning])
 async def get_production_runs_by_week(week: int):

@@ -78,4 +78,3 @@ class PurchaseService:
     async def get_null_delivery_dates():
         """Get purchases with null delivery dates."""
         return await PurchaseRepository.get_null_delivery_dates()
-

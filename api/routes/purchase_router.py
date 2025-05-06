@@ -32,9 +32,7 @@ async def get_purchase_by_id(arapack_lot: str):
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="El ID de compra no puede estar vacío",
             )
-        purchase = await PurchaseService.get_purchase_by_arapack_lot(
-            arapack_lot
-        )
+        purchase = await PurchaseService.get_purchase_by_arapack_lot(arapack_lot)
         if not purchase:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -50,8 +48,8 @@ async def get_purchase_by_id(arapack_lot: str):
 
 @router.get("/getFilteredPurchases", response_model=List[Purchase])
 async def get_filtered_purchases(
-        query: str = Query("", description="Filtro de búsqueda"),
-        page: int = Query(1, description="Número de página"),
+    query: str = Query("", description="Filtro de búsqueda"),
+    page: int = Query(1, description="Número de página"),
 ):
     """Define the get_filtered_purchases function"""
     if page < 1:
