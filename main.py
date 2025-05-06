@@ -14,8 +14,8 @@ from config.mongodb import init_db
 from api.routes.box_router import router as box_router
 from api.routes.sheet_router import router as sheet_router
 from api.routes.purchase_router import router as purchase_router
-from api.routes.production_run_router import router as production_run_router
 from api.routes.program_planning_router import router as program_planning_router
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -73,9 +73,12 @@ def create_application() -> FastAPI:
     # Register routers
     application.include_router(router=box_router, prefix="/boxes", tags=["Boxes"])
     application.include_router(router=sheet_router, prefix="/sheets", tags=["Sheets"])
-    application.include_router(router=purchase_router, prefix="/purchases", tags=["Purchases"])
-    application.include_router(router=production_run_router, prefix="/production", tags=["Production"])
-    application.include_router(router=program_planning_router, prefix="/program", tags=["Program Planning"])
+    application.include_router(
+        router=purchase_router, prefix="/purchases", tags=["Purchases"]
+    )
+    application.include_router(
+        router=program_planning_router, prefix="/program", tags=["Program Planning"]
+    )
     return application
 
 

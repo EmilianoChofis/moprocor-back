@@ -9,7 +9,7 @@ class ProgramPlanningRepository:
     """
 
     @staticmethod
-    async def get_by_week(week: int) -> List[ProgramPlanning]:
+    async def get_by_week(week: int) -> ProgramPlanning:
         """
         Get all production runs for a specific week.
         :param week: The week number to filter by.
@@ -17,4 +17,4 @@ class ProgramPlanningRepository:
         :return: List of ProgramPlanning documents for the specified week.
         :rtype: List[ProgramPlanning]
         """
-        return await ProgramPlanning.find({"week_of_year": week}).to_list()
+        return await ProgramPlanning.find_one({"week_of_year": week})

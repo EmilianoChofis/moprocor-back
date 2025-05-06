@@ -2,7 +2,7 @@
 Box repository for MongoDB.
 """
 
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Any, Mapping
 
 from beanie import PydanticObjectId
 
@@ -60,24 +60,26 @@ class BoxRepository:
 
     @staticmethod
     async def get_filtered_boxes(
-        query: str, offset: int, limit: int
-    ) -> Dict[str, list[Box]]:
-        # Filtro de búsqueda
-        filters = {
-            "$or": [
-                {"symbol": {"$regex": query, "$options": "i"}},
-                {"liner": {"$regex": query, "$options": "i"}},
-                {"flute": {"$regex": query, "$options": "i"}},
-                {"client": {"$regex": query, "$options": "i"}},
-                {"status": {"$regex": query, "$options": "i"}},
-            ]
-        }
+            query: str, offset: int, limit: int
+    ) -> List[Mapping[str, Any] | Any]:
+        """
+        Get filtered boxes with pagination.
 
-        # Obtiene las cajas con paginación
+        :param query: The search query to filter boxes.
+        :type query: str
+        :param offset: The number of records to skip.
+        :type offset: int
+        :param limit: The maximum number of records to return.
+        :type limit: int
+        :return: List of filtered boxes.
+        :rtype: Dict[str, list[Box]]
+        """
+        filters = BoxRepository._create_search_filter(query)
+
+        # Get the filtered boxes from the database
         collection = Box.get_motor_collection()
         cursor = collection.find(filters).sort("symbol", 1).skip(offset).limit(limit)
         boxes = await cursor.to_list(length=None)
-        # boxes = await Box.find(filters).skip(offset).limit(limit).to_list()
 
         return boxes
 
@@ -91,16 +93,7 @@ class BoxRepository:
         :return: The total count of filtered boxes.
         :rtype: int
         """
-        filters = {
-            "$or": [
-                {"symbol": {"$regex": query, "$options": "i"}},
-                {"liner": {"$regex": query, "$options": "i"}},
-                {"flute": {"$regex": query, "$options": "i"}},
-                {"client": {"$regex": query, "$options": "i"}},
-                {"status": {"$regex": query, "$options": "i"}},
-            ]
-        }
-
+        filters = BoxRepository._create_search_filter(query)
         total_count = await Box.find(filters).count()
         return total_count
 
@@ -151,3 +144,23 @@ class BoxRepository:
         if status not in ["APPROVED", "REVIEW", "DISUSE"]:
             raise ValueError("Invalid status value")
         return await BoxRepository.update_box(box_id, {"status": status})
+
+    @staticmethod
+    def _create_search_filter(query: str) -> dict:
+        """
+        Create a search filter for MongoDB queries.
+
+        :param query: La consulta de búsqueda.
+        :type query: str
+        :return: El filtro para consultas MongoDB.
+        :rtype: dict
+        """
+        return {
+            "$or": [
+                {"symbol": {"$regex": query, "$options": "i"}},
+                {"liner": {"$regex": query, "$options": "i"}},
+                {"flute": {"$regex": query, "$options": "i"}},
+                {"client": {"$regex": query, "$options": "i"}},
+                {"status": {"$regex": query, "$options": "i"}},
+            ]
+        }
