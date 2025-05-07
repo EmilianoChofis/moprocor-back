@@ -77,12 +77,10 @@ class ProgramPlanning(Document):
                             "p3": 110,
                         },
                         "scheduled_date": "2025-05-12",
-                        "treatment": 0,
+                        "treatment": False,
                         "start_time": "08:00:00",
                         "end_time": "09:00:00",
                         "refile": 5.0,
-                        "grams_per_m2": 110,
-                        "total_weight": 150.56,
                         "linear_meters": 2250,
                         "speed": 60,
                         "machine": "FLEJADORA"

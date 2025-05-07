@@ -1,6 +1,7 @@
 from typing import List, Union
 
 from beanie import Document
+from openpyxl.pivot.fields import Boolean
 from pydantic import BaseModel
 from datetime import date, time
 
@@ -33,7 +34,7 @@ class ProductionRun(Document):
     processed_boxes: List[Union[ProcessedBox, AuthorizedRefile]]
     sheet: Sheet
     scheduled_date: date
-    treatment: int
+    treatment: bool
     start_time: time
     end_time: time
     refile: float
