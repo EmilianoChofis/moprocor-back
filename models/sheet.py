@@ -15,7 +15,7 @@ class Sheet(Document):
     p2: int
     p3: int
     ect: List[int]
-    grams: float
+    grams: int
     description: Optional[str] = ""
     boxes: Optional[List[str]] = []  # List of Box objects associated with the sheet
     status: str = "AVAILABLE"  # Status of the sheet

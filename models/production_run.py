@@ -27,6 +27,7 @@ class Sheet(BaseModel):
     p1: int
     p2: int
     p3: int
+    grams: int
 
 
 class ProductionRun(Document):
@@ -37,7 +38,6 @@ class ProductionRun(Document):
     start_time: time
     end_time: time
     refile: float
-    grams_per_m2: int
     total_weight: float
     linear_meters: int
     speed: int

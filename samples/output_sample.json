@@ -30,14 +30,14 @@
     "roll_width": "integer",
     "p1": "integer",
     "p2": "integer",
-    "p3": "integer"
+    "p3": "integer",
+    "grams": "integer"
   },
   "scheduled_date": "string (date: YYYY-MM-DD)",
   "treatment": "integer",
   "start_time": "string (time: HH:MM)",
   "end_time": "string (time: HH:MM)",
   "refile": "float",
-  "grams_per_m2": "integer",
   "total_weight": "float",
   "linear_meters": "integer",
   "speed": "integer"
