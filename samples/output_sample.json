@@ -31,14 +31,12 @@
     "p1": "integer",
     "p2": "integer",
     "p3": "integer",
-    "grams": "integer"
   },
   "scheduled_date": "string (date: YYYY-MM-DD)",
   "treatment": "integer",
   "start_time": "string (time: HH:MM)",
   "end_time": "string (time: HH:MM)",
   "refile": "float",
-  "total_weight": "float",
   "linear_meters": "integer",
   "speed": "integer"
 }
