@@ -1,9 +1,39 @@
-from datetime import datetime
+from datetime import datetime, date, time
 from typing import List, Optional
 
 from beanie import Document
+from pydantic import BaseModel
 
-from models.production_run import ProductionRun
+class ProcessedBox(BaseModel):
+    order_number: str
+    symbol: str
+    quantity: int
+    output: int
+    hierarchy: str
+    part: int
+    remaining: int
+    arapack_lot: str
+
+class Sheet(BaseModel):
+    id: str
+    ect: int
+    roll_width: int
+    p1: int
+    p2: int
+    p3: int
+
+
+class ProductionRun(BaseModel):
+    processed_boxes: List[ProcessedBox]
+    authorized_refile: bool
+    sheet: Sheet
+    scheduled_date: date
+    treatment: bool
+    start_time: time
+    end_time: time
+    refile: float
+    linear_meters: int
+    speed: int
 
 
 class ProgramPlanning(Document):
@@ -21,37 +51,35 @@ class ProgramPlanning(Document):
                     {
                         "processed_boxes": [
                             {
-                                "order_number": "4500247311",
-                                "symbol": "DEG SUA CE-01 4017016 (PDA)",
-                                "quantity": 10000,
-                                "output": 3,
-                                "hierarchy": "priority",
-                                "part": 1,
+                                "order_number": "string",
+                                "symbol": "string",
+                                "quantity": 0,
+                                "output": 0,
+                                "hierarchy": "string",
+                                "part": 0,
                                 "remaining": 0,
-                                "arapack_lot": "25056",
-                            },
-                            {
-                                "authorized_refile": False,
-                            },
+                                "arapack_lot": "string"
+                            }
                         ],
+                        "authorized_refile": True,
                         "sheet": {
-                            "id": "1",
-                            "ect": 19,
-                            "roll_width": 160,
-                            "p1": 110,
-                            "p2": 110,
-                            "p3": 110,
+                            "id": "string",
+                            "ect": 0,
+                            "roll_width": 0,
+                            "p1": 0,
+                            "p2": 0,
+                            "p3": 0
                         },
-                        "scheduled_date": "2025-05-12",
-                        "treatment": 0,
-                        "start_time": "08:00:00",
-                        "end_time": "09:00:00",
-                        "refile": 5.0,
-                        "linear_meters": 2250,
-                        "speed": 60,
-                    },
+                        "scheduled_date": "2023-10-23",
+                        "treatment": True,
+                        "start_time": "2023-10-23T19:23:00",
+                        "end_time": "2023-10-23T19:23:00",
+                        "refile": 0,
+                        "linear_meters": 0,
+                        "speed": 0
+                    }
                 ],
-                "created_at": "2025-05-08T00:00:00",
-                "week_of_year": 20,
+                "created_at": "2023-10-23T19:23:00",
+                "week_of_year": 20
             }
         }
