@@ -40,7 +40,6 @@ class ProductionRun(Document):
     refile: float
     linear_meters: int
     speed: int
-    machine: str
 
 
 
