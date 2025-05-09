@@ -33,15 +33,12 @@ class ProductionRun(Document):
     processed_boxes: List[Union[ProcessedBox, AuthorizedRefile]]
     sheet: Sheet
     scheduled_date: date
-    treatment: int
+    treatment: bool
     start_time: time
     end_time: time
     refile: float
-    grams_per_m2: int
-    total_weight: float
     linear_meters: int
     speed: int
-    machine: str
 
 
 
