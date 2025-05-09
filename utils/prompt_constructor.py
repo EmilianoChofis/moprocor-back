@@ -31,7 +31,7 @@ def construct_prompt(
     template_paths = {
         PromptType.PRODUCTION_PLANNING: os.path.join(current_dir, "samples", "prompt_json_format.json"),
         PromptType.INVENTORY_MANAGEMENT: os.path.join(current_dir, "samples", "inventory_prompt_template.json"),
-        PromptType.ORDER_OPTIMIZATION: os.path.join(current_dir, "samples", "order_prompt_template.json")
+        PromptType.ORDER_OPTIMIZATION: os.path.join(current_dir, "samples", "register_prompt_template.json")
     }
     
     template_path = template_paths.get(prompt_type)

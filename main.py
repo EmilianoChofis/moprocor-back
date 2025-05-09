@@ -78,17 +78,17 @@ def create_application() -> FastAPI:
     
     @application.post("/ai/production-planning", tags=["AI"])
     async def production_planning(
-        purchases: List[Dict[str, Any]] = Body(...),
+        purchase: Dict[str, Any] = Body(...),
         sheets: List[Dict[str, Any]] = Body(...),
-        boxes: List[Dict[str, Any]] = Body(...)
+        box: Dict[str, Any] = Body(...)
     ):
         """
         Generate production planning recommendations using AI
         """
         data = {
-            "purchases": purchases,
+            "purchase": purchase,
             "sheets": sheets,
-            "boxes": boxes
+            "box": box
         }
         prompt = construct_prompt(PromptType.PRODUCTION_PLANNING, data)
         client = initialize_bedrock_client()
