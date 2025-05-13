@@ -1,8 +1,10 @@
 """Define the purchase_router module"""
 
 from typing import List
+from datetime import datetime
 
-from fastapi import HTTPException, APIRouter, status, Query
+from fastapi import HTTPException, APIRouter, status, Query, BackgroundTasks
+from pydantic import BaseModel
 
 from models.purchase import Purchase
 from services.purchase_service import PurchaseService
@@ -147,6 +149,106 @@ async def create_purchase(purchase: Purchase):
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to create purchase: {str(e)}",
+        ) from e
+
+
+@router.post("/create_with_ai", response_model=Purchase, status_code=status.HTTP_201_CREATED)
+async def create_purchase_with_ai(purchase: Purchase, background_tasks: BackgroundTasks):
+    """
+    Create a new purchase and trigger AI processing in the background.
+
+    Args:
+        purchase (Purchase): The purchase data to be created.
+        background_tasks (BackgroundTasks): FastAPI background tasks for asynchronous processing.
+
+    Returns:
+        Purchase: The created purchase.
+
+    Raises:
+        HTTPException: If an error occurs while creating the purchase.
+    """
+    try:
+        return await PurchaseService.create_purchase_with_ai(purchase, background_tasks)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to create purchase with AI: {str(e)}",
+        ) from e
+
+
+class QuantityUpdate(BaseModel):
+    """Model for quantity update requests."""
+    new_quantity: int
+
+
+@router.put("/update_quantity/{arapack_lot}", response_model=Purchase)
+async def update_purchase_quantity(
+    arapack_lot: str, 
+    update_data: QuantityUpdate, 
+    background_tasks: BackgroundTasks
+):
+    """
+    Update the quantity of a purchase and trigger AI processing in the background.
+
+    Args:
+        arapack_lot (str): The arapack lot of the purchase to update.
+        update_data (QuantityUpdate): The new quantity data.
+        background_tasks (BackgroundTasks): FastAPI background tasks for asynchronous processing.
+
+    Returns:
+        Purchase: The updated purchase.
+
+    Raises:
+        HTTPException: If the purchase is not found or an error occurs during the update.
+    """
+    try:
+        return await PurchaseService.update_purchase_quantity(
+            arapack_lot, 
+            update_data.new_quantity, 
+            background_tasks
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to update purchase quantity: {str(e)}",
+        ) from e
+
+
+class DeliveryDateUpdate(BaseModel):
+    """Model for delivery date update requests."""
+    new_delivery_date: datetime
+
+
+@router.put("/update_delivery_date/{arapack_lot}", response_model=Purchase)
+async def update_delivery_date(
+    arapack_lot: str, 
+    update_data: DeliveryDateUpdate, 
+    background_tasks: BackgroundTasks
+):
+    """
+    Update the delivery date of a purchase and trigger AI processing in the background.
+
+    Args:
+        arapack_lot (str): The arapack lot of the purchase to update.
+        update_data (DeliveryDateUpdate): The new delivery date data.
+        background_tasks (BackgroundTasks): FastAPI background tasks for asynchronous processing.
+
+    Returns:
+        Purchase: The updated purchase.
+
+    Raises:
+        HTTPException: If the purchase is not found or an error occurs during the update.
+    """
+    try:
+        return await PurchaseService.update_delivery_date(
+            arapack_lot, 
+            update_data.new_delivery_date, 
+            background_tasks
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to update delivery date: {str(e)}",
         ) from e
 
 

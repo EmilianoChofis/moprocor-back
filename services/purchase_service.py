@@ -4,16 +4,33 @@ This module contains the PurchaseService class, which is responsible for interac
 
 import json
 from datetime import datetime
-from typing import List
-from fastapi import HTTPException
+from typing import List, Dict, Any
+from fastapi import HTTPException, BackgroundTasks
 from pymongo.errors import DuplicateKeyError
 from starlette.datastructures import UploadFile
 from models.purchase import Purchase
+from models.box import Box
+from models.sheet import Sheet
 from repositories.purchase_repository import PurchaseRepository
+from repositories.box_repository import BoxRepository
+from repositories.sheet_repository import SheetRepository
+from repositories.program_planning_repository import ProgramPlanningRepository
+from services.ia_service import IAService
+from services.updaters.register_updater import RegisterUpdater
+from services.updaters.quantity_updater import QuantityUpdater
+from services.updaters.delivery_date_updater import DeliveryDateUpdater
 
 
 class PurchaseService:
     """Class for Purchase service."""
+
+    # Initialize the IAService
+    _ia_service = IAService()
+    
+    # Initialize the updaters
+    _register_updater = RegisterUpdater(_ia_service)
+    _quantity_updater = QuantityUpdater(_ia_service)
+    _delivery_date_updater = DeliveryDateUpdater(_ia_service)
 
     @staticmethod
     async def get_all_purchases():
@@ -73,6 +90,186 @@ class PurchaseService:
                 status_code=400,
                 detail="A purchase with the same 'arapack_lot' already exists.",
             )
+
+    @staticmethod
+    async def create_purchase_with_ai(purchase: Purchase, background_tasks: BackgroundTasks):
+        """
+        Create a new purchase and trigger AI processing in the background.
+        
+        Args:
+            purchase: The purchase to create.
+            background_tasks: FastAPI background tasks for asynchronous processing.
+        
+        Returns:
+            Purchase: The created purchase.
+        """
+        # First, create the purchase normally
+        created_purchase = await PurchaseService.create_purchase(purchase)
+        
+        # Then, trigger AI processing in the background
+        background_tasks.add_task(
+            PurchaseService._process_new_purchase_with_ai,
+            created_purchase
+        )
+        
+        return created_purchase
+    
+    @staticmethod
+    async def _process_new_purchase_with_ai(purchase: Purchase):
+        """
+        Process a new purchase with AI in the background.
+        
+        Args:
+            purchase: The purchase to process.
+        """
+        # Get the box associated with the purchase
+        box = await BoxRepository.get_by_symbol(purchase.symbol)
+        if not box:
+            return
+        
+        # Get available sheets
+        sheets = await SheetRepository.get_all()
+        
+        # Prepare input data for the updater
+        input_data = {
+            "purchase": purchase.dict(),
+            "box": box.dict(),
+            "sheets": [sheet.dict() for sheet in sheets],
+            "program_planning": {}
+        }
+        
+        # Call the register updater
+        await PurchaseService._register_updater.update(input_data)
+    
+    @staticmethod
+    async def update_purchase_quantity(
+        arapack_lot: str, 
+        new_quantity: int, 
+        background_tasks: BackgroundTasks
+    ) -> Purchase:
+        """
+        Update the quantity of a purchase and trigger AI processing in the background.
+        
+        Args:
+            arapack_lot: The arapack lot of the purchase to update.
+            new_quantity: The new quantity.
+            background_tasks: FastAPI background tasks for asynchronous processing.
+        
+        Returns:
+            Purchase: The updated purchase.
+        """
+        # Get the purchase
+        purchase = await PurchaseRepository.get_by_arapack_lot(arapack_lot)
+        if not purchase:
+            raise HTTPException(status_code=404, detail="Purchase not found")
+        
+        # Update the quantity
+        purchase.quantity = new_quantity
+        await purchase.save()
+        
+        # Trigger AI processing in the background
+        background_tasks.add_task(
+            PurchaseService._process_quantity_update_with_ai,
+            purchase
+        )
+        
+        return purchase
+    
+    @staticmethod
+    async def _process_quantity_update_with_ai(purchase: Purchase):
+        """
+        Process a quantity update with AI in the background.
+        
+        Args:
+            purchase: The purchase with updated quantity.
+        """
+        # Get the program planning for the purchase's week
+        program_planning = await ProgramPlanningRepository.get_by_week(purchase.week_of_year)
+        if not program_planning:
+            return
+        
+        # Prepare input data for the updater
+        input_data = {
+            "purchase": purchase.dict(),
+            "program_planning": program_planning.dict()
+        }
+        
+        # Call the quantity updater
+        await PurchaseService._quantity_updater.update(input_data)
+    
+    @staticmethod
+    async def update_delivery_date(
+        arapack_lot: str, 
+        new_delivery_date: datetime, 
+        background_tasks: BackgroundTasks
+    ) -> Purchase:
+        """
+        Update the delivery date of a purchase and trigger AI processing in the background.
+        
+        Args:
+            arapack_lot: The arapack lot of the purchase to update.
+            new_delivery_date: The new delivery date.
+            background_tasks: FastAPI background tasks for asynchronous processing.
+        
+        Returns:
+            Purchase: The updated purchase.
+        """
+        # Get the purchase
+        purchase = await PurchaseRepository.get_by_arapack_lot(arapack_lot)
+        if not purchase:
+            raise HTTPException(status_code=404, detail="Purchase not found")
+        
+        # Store the original week
+        original_week = purchase.week_of_year
+        
+        # Update the delivery date
+        purchase.estimated_delivery_date = new_delivery_date
+        
+        # Calculate the new week of the year
+        purchase.week_of_year = new_delivery_date.isocalendar()[1]
+        
+        # Save the updated purchase
+        await purchase.save()
+        
+        # Trigger AI processing in the background
+        background_tasks.add_task(
+            PurchaseService._process_delivery_date_update_with_ai,
+            purchase,
+            original_week
+        )
+        
+        return purchase
+    
+    @staticmethod
+    async def _process_delivery_date_update_with_ai(purchase: Purchase, original_week: int):
+        """
+        Process a delivery date update with AI in the background.
+        
+        Args:
+            purchase: The purchase with updated delivery date.
+            original_week: The original week of the year.
+        """
+        # Get the original program planning
+        original_program = await ProgramPlanningRepository.get_by_week(original_week)
+        if not original_program:
+            return
+        
+        # Get the new program planning if the week changed
+        new_program = None
+        if purchase.week_of_year != original_week:
+            new_program = await ProgramPlanningRepository.get_by_week(purchase.week_of_year)
+        
+        # Prepare input data for the updater
+        input_data = {
+            "purchase": purchase.dict(),
+            "programs": {
+                "original_program_planning": original_program.dict(),
+                "new_program_planning": new_program.dict() if new_program else {}
+            }
+        }
+        
+        # Call the delivery date updater
+        await PurchaseService._delivery_date_updater.update(input_data)
 
     @staticmethod
     async def get_null_delivery_dates():
