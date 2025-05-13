@@ -4,6 +4,7 @@ from typing import List, Optional
 from beanie import Document
 from pydantic import BaseModel
 
+
 class ProcessedBox(BaseModel):
     order_number: str
     symbol: str
@@ -13,6 +14,7 @@ class ProcessedBox(BaseModel):
     part: int
     remaining: int
     arapack_lot: str
+
 
 class Sheet(BaseModel):
     id: str
@@ -58,7 +60,7 @@ class ProgramPlanning(Document):
                                 "hierarchy": "string",
                                 "part": 0,
                                 "remaining": 0,
-                                "arapack_lot": "string"
+                                "arapack_lot": "string",
                             }
                         ],
                         "authorized_refile": True,
@@ -68,7 +70,7 @@ class ProgramPlanning(Document):
                             "roll_width": 0,
                             "p1": 0,
                             "p2": 0,
-                            "p3": 0
+                            "p3": 0,
                         },
                         "scheduled_date": "2023-10-23",
                         "treatment": True,
@@ -76,10 +78,10 @@ class ProgramPlanning(Document):
                         "end_time": "2023-10-23T19:23:00",
                         "refile": 0,
                         "linear_meters": 0,
-                        "speed": 0
+                        "speed": 0,
                     }
                 ],
                 "created_at": "2023-10-23T19:23:00",
-                "week_of_year": 20
+                "week_of_year": 20,
             }
         }

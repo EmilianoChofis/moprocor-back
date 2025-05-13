@@ -1,5 +1,3 @@
-from typing import List
-
 from fastapi import APIRouter, HTTPException, status
 
 from models.program_planning import ProgramPlanning

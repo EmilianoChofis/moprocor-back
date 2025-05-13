@@ -69,8 +69,8 @@ async def get_purchase_by_id(arapack_lot: str):
 
 @router.get("/getFilteredPurchases", response_model=List[Purchase])
 async def get_filtered_purchases(
-        query: str = Query("", description="Filtro de búsqueda"),
-        page: int = Query(1, description="Número de página"),
+    query: str = Query("", description="Filtro de búsqueda"),
+    page: int = Query(1, description="Número de página"),
 ):
     """
     Retrieve filtered purchases based on a search query and pagination.
