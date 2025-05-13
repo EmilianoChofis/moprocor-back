@@ -60,7 +60,7 @@ class BoxRepository:
 
     @staticmethod
     async def get_filtered_boxes(
-            query: str, offset: int, limit: int
+        query: str, offset: int, limit: int
     ) -> List[Mapping[str, Any] | Any]:
         """
         Get filtered boxes with pagination.

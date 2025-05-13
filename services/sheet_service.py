@@ -27,11 +27,6 @@ class SheetService:
     @staticmethod
     async def create_sheet(sheet: Sheet) -> Sheet:
         """Create a sheet."""
-        existing_sheet = await SheetRepository.get_by_id(str(sheet.id))
-        if existing_sheet:
-            raise HTTPException(
-                status_code=400, detail=f"Sheet with ID {sheet.id} already exists"
-            )
         return await SheetRepository.create(sheet)
 
     @staticmethod

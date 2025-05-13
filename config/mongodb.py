@@ -36,7 +36,9 @@ async def init_db():
         logger.info("MongoDB connection successful")
 
         db = client[MONGODB_DB_NAME]
-        await init_beanie(database=db, document_models=[Box, Sheet, Purchase, ProgramPlanning])
+        await init_beanie(
+            database=db, document_models=[Box, Sheet, Purchase, ProgramPlanning]
+        )
         logger.info("Database initialization complete.")
     except Exception as e:
         logger.error("An error occurred while initializing the database %e", e)

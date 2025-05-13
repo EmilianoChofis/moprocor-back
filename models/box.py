@@ -34,7 +34,7 @@ class Box(Document):
     width: float  # Width of the box
     length: float  # Length of the box
     flute: str  # Flute type of the box
-    treatment: int  # Treatment type of the box
+    treatment: bool  # Treatment type of the box
     client: str  # Client associated with the box
     creases: Crease  # Crease dimensions of the box
     inks: Ink  # Inks used in the box
@@ -61,7 +61,7 @@ class Box(Document):
                 "width": 55.8,
                 "length": 150.3,
                 "flute": "c",
-                "treatment": 0,
+                "treatment": False,
                 "client": "degasa",
                 "creases": {
                     "r1": 10,

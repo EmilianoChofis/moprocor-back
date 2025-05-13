@@ -1,5 +1,5 @@
 """
-Model for the sheets table
+Model for the sheet table
 """
 
 from typing import List, Optional
