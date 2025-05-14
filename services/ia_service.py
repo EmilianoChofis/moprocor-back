@@ -14,31 +14,31 @@ class IAService:
     """
     Service for interacting with AI models and processing their responses.
     """
-    
+
     def __init__(self):
         """Initialize the IAService with a PromptBuilder."""
         self.prompt_builder = PromptBuilder()
-    
+
     def build_prompt(self, action_type: str, data: Dict[str, Any]) -> str:
         """
         Build a prompt for the AI model.
-        
+
         Args:
             action_type: The type of action ("register", "update_quantity", or "update_delivery_date").
             data: The domain data to include in the prompt.
-        
+
         Returns:
             str: The complete prompt.
         """
         return self.prompt_builder.build(action_type, data)
-    
+
     async def call(self, prompt: str) -> str:
         """
         Call the AWS Bedrock client with the given prompt.
-        
+
         Args:
             prompt: The prompt to send to the AI model.
-        
+
         Returns:
             str: The AI model's response.
         """
@@ -49,14 +49,14 @@ class IAService:
         except Exception as e:
             logger.error(f"Error calling AI service: {str(e)}")
             return ""
-    
+
     def parse_response(self, response: str) -> Optional[Dict[str, Any]]:
         """
         Parse the text output from the AI model into a JSON object.
-        
+
         Args:
             response: The text response from the AI model.
-        
+
         Returns:
             Optional[Dict[str, Any]]: The parsed JSON object, or None if parsing fails.
         """
@@ -68,13 +68,13 @@ class IAService:
             except json.JSONDecodeError:
                 # If that fails, try to extract JSON from the text
                 # Look for JSON-like patterns (starting with { and ending with })
-                start_idx = response.find('{')
-                end_idx = response.rfind('}')
-                
+                start_idx = response.find("{")
+                end_idx = response.rfind("}")
+
                 if start_idx != -1 and end_idx != -1 and end_idx > start_idx:
-                    json_str = response[start_idx:end_idx+1]
+                    json_str = response[start_idx : end_idx + 1]
                     return json.loads(json_str)
-                
+
                 # If no JSON-like pattern is found, return None
                 logger.error(f"Failed to extract JSON from response: {response}")
                 return None

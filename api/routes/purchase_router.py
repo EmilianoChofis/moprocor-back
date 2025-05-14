@@ -152,8 +152,12 @@ async def create_purchase(purchase: Purchase):
         ) from e
 
 
-@router.post("/create_with_ai", response_model=Purchase, status_code=status.HTTP_201_CREATED)
-async def create_purchase_with_ai(purchase: Purchase, background_tasks: BackgroundTasks):
+@router.post(
+    "/create_with_ai", response_model=Purchase, status_code=status.HTTP_201_CREATED
+)
+async def create_purchase_with_ai(
+    purchase: Purchase, background_tasks: BackgroundTasks
+):
     """
     Create a new purchase and trigger AI processing in the background.
 
@@ -178,14 +182,13 @@ async def create_purchase_with_ai(purchase: Purchase, background_tasks: Backgrou
 
 class QuantityUpdate(BaseModel):
     """Model for quantity update requests."""
+
     new_quantity: int
 
 
 @router.put("/update_quantity/{arapack_lot}", response_model=Purchase)
 async def update_purchase_quantity(
-    arapack_lot: str, 
-    update_data: QuantityUpdate, 
-    background_tasks: BackgroundTasks
+    arapack_lot: str, update_data: QuantityUpdate, background_tasks: BackgroundTasks
 ):
     """
     Update the quantity of a purchase and trigger AI processing in the background.
@@ -203,9 +206,7 @@ async def update_purchase_quantity(
     """
     try:
         return await PurchaseService.update_purchase_quantity(
-            arapack_lot, 
-            update_data.new_quantity, 
-            background_tasks
+            arapack_lot, update_data.new_quantity, background_tasks
         )
     except Exception as e:
         raise HTTPException(
@@ -216,14 +217,13 @@ async def update_purchase_quantity(
 
 class DeliveryDateUpdate(BaseModel):
     """Model for delivery date update requests."""
+
     new_delivery_date: datetime
 
 
 @router.put("/update_delivery_date/{arapack_lot}", response_model=Purchase)
 async def update_delivery_date(
-    arapack_lot: str, 
-    update_data: DeliveryDateUpdate, 
-    background_tasks: BackgroundTasks
+    arapack_lot: str, update_data: DeliveryDateUpdate, background_tasks: BackgroundTasks
 ):
     """
     Update the delivery date of a purchase and trigger AI processing in the background.
@@ -241,9 +241,7 @@ async def update_delivery_date(
     """
     try:
         return await PurchaseService.update_delivery_date(
-            arapack_lot, 
-            update_data.new_delivery_date, 
-            background_tasks
+            arapack_lot, update_data.new_delivery_date, background_tasks
         )
     except Exception as e:
         raise HTTPException(
