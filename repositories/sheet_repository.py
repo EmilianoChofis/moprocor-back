@@ -24,7 +24,7 @@ class SheetRepository:
         return await Sheet.all().to_list()
 
     @staticmethod
-    async def get_by_id(sheet_id: str) -> Optional[Sheet]:
+    async def get_by_id(sheet_id: PydanticObjectId) -> Optional[Sheet]:
         """
         Get a sheet by its ID.
 
@@ -109,19 +109,3 @@ class SheetRepository:
             return None
         await sheet.update({"$set": update_data})
         return await Sheet.get(sheet_id)
-
-    @staticmethod
-    async def change_status(sheet_id: PydanticObjectId, status: str) -> Optional[Sheet]:
-        """
-        Change the status of a sheet.
-
-        :param sheet_id: The ID of the sheet to update.
-        :type sheet_id: PydanticObjectId
-        :param status: The new status for the sheet.
-        :type status: str
-        :return: The updated Sheet document, or None if not found.
-        :rtype: Optional[Sheet]
-        """
-        if status not in ["AVAILABLE", "UNAVAILABLE", "DISCONTINUED"]:
-            raise ValueError("Invalid status value")
-        return await SheetRepository.update_sheet(sheet_id, {"status": status})
