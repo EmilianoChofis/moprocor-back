@@ -13,6 +13,12 @@ from services.purchase_service import PurchaseService
 router = APIRouter()
 ITEMS_PER_PAGE = 10  # Default number of items per page for pagination
 
+class UpdateDeliveryInfo(BaseModel):
+    """Model for updating delivery information.
+    attributes optionals
+    """
+    new_delivery_date: datetime = None
+    new_quantity: int = None
 
 @router.get("/getAll", response_model=List[Purchase])
 async def get_purchases():
@@ -267,4 +273,31 @@ async def get_null_delivery_dates():
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to retrieve purchases with null delivery dates: {str(e)}",
+        ) from e
+
+@router.patch("/updateDeliveryInfo/{arapack_lot}", response_model=Purchase)
+async def update_delivery_info(
+    arapack_lot: str, update_data: UpdateDeliveryInfo
+):
+    """
+    Update the delivery information of a purchase and trigger AI processing in the background.
+
+    Args:
+        arapack_lot (str): The arapack lot of the purchase to update.
+        update_data (DeliveryDateUpdate): The new delivery date data.
+
+    Returns:
+        Purchase: The updated purchase.
+
+    Raises:
+        HTTPException: If the purchase is not found or an error occurs during the update.
+    """
+    try:
+        return await PurchaseService.update_delivery_info(
+            arapack_lot, update_data.new_delivery_date, update_data.new_quantity
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to update delivery info: {str(e)}",
         ) from e

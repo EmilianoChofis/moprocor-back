@@ -282,3 +282,36 @@ class PurchaseService:
     async def get_null_delivery_dates():
         """Get purchases with null delivery dates."""
         return await PurchaseRepository.get_null_delivery_dates()
+
+    @staticmethod
+    async def update_delivery_info(arapack_lot: str, new_delivery_date: datetime, new_quantity: int):
+        """
+        Update the delivery information of a purchase. if not contains new_delivery_date or new_quantity, update only the one that is not None.
+
+        Args:
+            arapack_lot (str): The arapack lot of the purchase to update.
+            new_delivery_date (datetime): The new delivery date.
+            new_quantity (int): The new quantity.
+
+        Returns:
+            Purchase: The updated purchase.
+        """
+
+        # Get the purchase
+        purchase = await PurchaseRepository.get_by_arapack_lot(arapack_lot)
+        if not purchase:
+            raise HTTPException(status_code=404, detail="Purchase not found")
+
+        # Update the delivery date if provided
+        if new_delivery_date:
+            purchase.estimated_delivery_date = new_delivery_date
+
+        # Update the quantity if provided
+        if new_quantity:
+            purchase.quantity = new_quantity
+
+        # Save the updated purchase
+        await purchase.save()
+
+        return purchase
+
