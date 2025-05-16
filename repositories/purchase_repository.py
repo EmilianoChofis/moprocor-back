@@ -106,7 +106,6 @@ class PurchaseRepository:
                 {"symbol": {"$regex": query, "$options": "i"}},
                 {"order_number": {"$regex": query, "$options": "i"}},
                 {"client": {"$regex": query, "$options": "i"}},
-                {"receipt_date": {"$regex": query, "$options": "i"}},
                 {"arapack_lot": {"$regex": query, "$options": "i"}},
             ]
         }
@@ -135,7 +134,6 @@ class PurchaseRepository:
                 {"symbol": {"$regex": query, "$options": "i"}},
                 {"order_number": {"$regex": query, "$options": "i"}},
                 {"client": {"$regex": query, "$options": "i"}},
-                {"receipt_date": {"$regex": query, "$options": "i"}},
                 {"arapack_lot": {"$regex": query, "$options": "i"}},
             ]
         }

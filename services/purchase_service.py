@@ -8,7 +8,7 @@ from typing import List, Dict, Any
 from fastapi import HTTPException, BackgroundTasks
 from pymongo.errors import DuplicateKeyError
 from starlette.datastructures import UploadFile
-from models.purchase import Purchase
+from models.purchase import Purchase, DeliveryDate
 from models.box import Box
 from models.sheet import Sheet
 from repositories.purchase_repository import PurchaseRepository
@@ -82,6 +82,8 @@ class PurchaseService:
         # Calculate the week of the year using delivery date
         if purchase.estimated_delivery_date:
             purchase.week_of_year = purchase.estimated_delivery_date.isocalendar()[1]
+
+        purchase.missing_quantity = purchase.quantity
 
         try:
             return await PurchaseRepository.create(purchase)
@@ -313,5 +315,73 @@ class PurchaseService:
         # Save the updated purchase
         await purchase.save()
 
+        return purchase
+
+    @staticmethod
+    async def create_shipping(arapack_lot: str, initial_shipping_date: datetime, quantity: int, comment: str, finish_shipping_date: datetime = None):
+        """
+        Create a shipping for a purchase.
+
+        Args:
+            arapack_lot (str): The arapack lot of the purchase to update.
+            initial_shipping_date (datetime): The initial shipping date.
+            quantity (int): The quantity to ship.
+            comment (str): A comment for the shipping.
+            finish_shipping_date (datetime, optional): The finish shipping date. Defaults to None.
+
+        Returns:
+            Purchase: The updated purchase.
+        """
+        # Get the purchase
+        purchase = await PurchaseRepository.get_by_arapack_lot(arapack_lot)
+        if not purchase:
+            raise HTTPException(status_code=404, detail="Purchase not found")
+
+        # Create the new delivery date
+        new_delivery_date: DeliveryDate = DeliveryDate(
+            initial_shipping_date=initial_shipping_date,
+            quantity=quantity,
+            comment=comment,
+            finish_shipping_date=finish_shipping_date,
+        )
+
+        purchase.missing_quantity = purchase.missing_quantity - quantity
+
+        # Add the new delivery date to the purchase
+        if not purchase.delivery_dates:
+            purchase.delivery_dates = []
+        purchase.delivery_dates.append(new_delivery_date)
+
+        # Save the updated purchase
+        await purchase.save()
+
+        return purchase
+
+    @staticmethod
+    async def complete_shipping(arapack_lot: str, index: int):
+        """
+        Complete a shipping for a purchase.
+
+        Args:
+            arapack_lot (str): The arapack lot of the purchase to update.
+            index (int): The index of the delivery date to complete.
+
+        Returns:
+            Purchase: The updated purchase.
+        """
+        # Get the purchase
+        purchase = await PurchaseRepository.get_by_arapack_lot(arapack_lot)
+        if not purchase:
+            raise HTTPException(status_code=404, detail="Purchase not found")
+
+        # Check if the index is valid
+        if index < 0 or index >= len(purchase.delivery_dates):
+            raise HTTPException(status_code=400, detail="Invalid delivery date index")
+
+        # Complete the shipping
+        purchase.delivery_dates[index].finish_shipping_date = datetime.now()
+
+        # Save the updated purchase
+        await purchase.save()
         return purchase
 
