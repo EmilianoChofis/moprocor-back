@@ -6,7 +6,7 @@ from datetime import datetime
 from fastapi import HTTPException, APIRouter, status, Query, BackgroundTasks
 from pydantic import BaseModel
 
-from models.purchase import Purchase
+from models.purchase import Purchase, DeliveryDate
 from services.purchase_service import PurchaseService
 
 # Create an instance of APIRouter to define the routes for the purchase module
@@ -296,4 +296,51 @@ async def update_delivery_info(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to update delivery info: {str(e)}",
+        ) from e
+
+@router.patch("/createShipping/{arapack_lot}", response_model=Purchase)
+async def create_shipping(arapack_lot: str, shipping: DeliveryDate):
+    """
+    Create a shipping entry for a purchase.
+
+    Args:
+        arapack_lot (str): The arapack lot of the purchase to update.
+        shipping (Shipping): The shipping data to be created.
+
+    Returns:
+        Purchase: The updated purchase with the new shipping entry.
+
+    Raises:
+        HTTPException: If the purchase is not found or an error occurs during the update.
+    """
+    try:
+        return await PurchaseService.create_shipping(arapack_lot, shipping.initial_shipping_date, shipping.quantity, shipping.comment, shipping.finish_shipping_date)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to create shipping: {str(e)}",
+        ) from e
+
+@router.patch("/completeShipping/{arapack_lot}", response_model=Purchase)
+async def complete_shipping(arapack_lot: str, index: int):
+    """
+    Complete a shipping entry for a purchase.
+
+    Args:
+        arapack_lot (str): The arapack lot of the purchase to update.
+        index (int): The index of the shipping entry to complete.
+
+    Returns:
+        Purchase: The updated purchase with the completed shipping entry.
+
+    Raises:
+        HTTPException: If the purchase is not found or an error occurs during the update.
+    """
+    try:
+        print(arapack_lot, index)
+        return await PurchaseService.complete_shipping(arapack_lot, index)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to complete shipping: {str(e)}",
         ) from e
