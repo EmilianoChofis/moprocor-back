@@ -204,7 +204,7 @@ class PurchaseService:
 
     @staticmethod
     async def update_delivery_date(
-        arapack_lot: str, new_delivery_date: datetime, background_tasks: BackgroundTasks
+        arapack_lot: str, new_delivery_date: datetime, new_quantity: int, background_tasks: BackgroundTasks
     ) -> Purchase:
         """
         Update the delivery date of a purchase and trigger AI processing in the background.
@@ -212,6 +212,7 @@ class PurchaseService:
         Args:
             arapack_lot: The arapack lot of the purchase to update.
             new_delivery_date: The new delivery date.
+            new_quantity: The new quantity.
             background_tasks: FastAPI background tasks for asynchronous processing.
 
         Returns:
@@ -225,8 +226,13 @@ class PurchaseService:
         # Store the original week
         original_week = purchase.week_of_year
 
-        # Update the delivery date
-        purchase.estimated_delivery_date = new_delivery_date
+        # Update the delivery date if provided
+        if new_delivery_date:
+            purchase.estimated_delivery_date = new_delivery_date
+
+        # Update the quantity if provided
+        if new_quantity:
+            purchase.quantity = new_quantity
 
         # Calculate the new week of the year
         purchase.week_of_year = new_delivery_date.isocalendar()[1]
@@ -257,21 +263,24 @@ class PurchaseService:
         # Get the original program planning
         original_program = await ProgramPlanningRepository.get_by_week(original_week)
         if not original_program:
+            print("purchase service: Original program planning not found - Breaking")
             return
 
         # Get the new program planning if the week changed
         new_program = None
         if purchase.week_of_year != original_week:
+            print("Original week of the year:", original_week)
+            print("New week of the year:", purchase.week_of_year)
             new_program = await ProgramPlanningRepository.get_by_week(
                 purchase.week_of_year
             )
 
         # Prepare input data for the updater
         input_data = {
-            "purchase": purchase.dict(),
+            "purchase": purchase.model_dump(),
             "programs": {
-                "original_program_planning": original_program.dict(),
-                "new_program_planning": new_program.dict() if new_program else {},
+                "original_program_planning": original_program.model_dump(),
+                "new_program_planning": new_program.model_dump() if new_program else {},
             },
         }
 
@@ -309,6 +318,7 @@ class PurchaseService:
         # Update the quantity if provided
         if new_quantity:
             purchase.quantity = new_quantity
+
 
         # Save the updated purchase
         await purchase.save()

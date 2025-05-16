@@ -208,7 +208,7 @@ async def update_purchase_quantity(
         Purchase: The updated purchase.
 
     Raises:
-        HTTPException: If the purchase is not found or an error occurs during the update.
+        HTTPException: If the purchase is not found, or an error occurs during the update.
     """
     try:
         return await PurchaseService.update_purchase_quantity(
@@ -221,33 +221,29 @@ async def update_purchase_quantity(
         ) from e
 
 
-class DeliveryDateUpdate(BaseModel):
-    """Model for delivery date update requests."""
-
-    new_delivery_date: datetime
-
 
 @router.put("/update_delivery_date/{arapack_lot}", response_model=Purchase)
 async def update_delivery_date(
-    arapack_lot: str, update_data: DeliveryDateUpdate, background_tasks: BackgroundTasks
+    arapack_lot: str,  background_tasks: BackgroundTasks, new_delivery_date: datetime = None, new_quantity: int = None
 ):
     """
     Update the delivery date of a purchase and trigger AI processing in the background.
 
     Args:
         arapack_lot (str): The arapack lot of the purchase to update.
-        update_data (DeliveryDateUpdate): The new delivery date data.
+        new_delivery_date (datetime): The new delivery date.
+        new_quantity (int): The new quantity.
         background_tasks (BackgroundTasks): FastAPI background tasks for asynchronous processing.
 
     Returns:
         Purchase: The updated purchase.
 
     Raises:
-        HTTPException: If the purchase is not found or an error occurs during the update.
+        HTTPException: If the purchase is not found, or an error occurs during the update.
     """
     try:
         return await PurchaseService.update_delivery_date(
-            arapack_lot, update_data.new_delivery_date, background_tasks
+            arapack_lot, new_delivery_date, new_quantity, background_tasks
         )
     except Exception as e:
         raise HTTPException(

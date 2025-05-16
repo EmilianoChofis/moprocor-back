@@ -56,11 +56,18 @@ class DeliveryDateUpdater(ProductionPlanUpdater):
         new_week = purchase.get("week_of_year")
 
         if not original_week:
+            print("Delivery date updater: Original week of year is not provided.")
             return
+
+        # If the week has changed and new_program is empty, create a new program planning
+        if new_week and new_week != original_week and not new_program:
+            print(f"Delivery date updater: Creating new program planning for week {new_week}")
+            new_program = {"week_of_year": new_week, "production_runs": []}
+            programs["new_program_planning"] = new_program
 
         # Generate prompt for AI
         prompt = self.ia_service.build_prompt(
-            action_type="update_delivery_date",
+            action_type="update_info",
             data={
                 "purchase": purchase,
                 "original_program_planning": original_program,
@@ -70,11 +77,11 @@ class DeliveryDateUpdater(ProductionPlanUpdater):
 
         # Call AI service
         ai_response = await self.ia_service.call(prompt)
-
         # Parse the response
         updated_programs = self.ia_service.parse_response(ai_response)
 
         if not updated_programs:
+            print("Delivery date updater: Failed to updated programs.")
             return
 
         # Update original program planning
@@ -88,6 +95,7 @@ class DeliveryDateUpdater(ProductionPlanUpdater):
             original_program_planning.production_runs = updated_programs[
                 "original_program_planning"
             ].get("production_runs", [])
+            print("Original program planning:", original_program_planning)
             await original_program_planning.save()
 
         # Update new program planning if week changed
@@ -105,4 +113,5 @@ class DeliveryDateUpdater(ProductionPlanUpdater):
             new_program_planning.production_runs = updated_programs[
                 "new_program_planning"
             ].get("production_runs", [])
+            print("New program planning:", new_program_planning)
             await new_program_planning.save()
