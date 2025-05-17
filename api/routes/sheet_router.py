@@ -27,7 +27,7 @@ async def get_sheets():
 
 
 @router.get("/getById/{sheet_id}", response_model=Sheet)
-async def get_sheet_by_id(sheet_id: str):
+async def get_sheet_by_id(sheet_id: PydanticObjectId):
     """Define the get_sheet_by_id function"""
     sheet = await SheetService.get_sheet_by_id(sheet_id)
     if not sheet:

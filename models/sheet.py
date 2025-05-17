@@ -18,6 +18,7 @@ class Sheet(Document):
     grams: float
     description: Optional[str] = ""
     boxes: Optional[List[str]] = []  # List of Box objects associated with the sheet
+    speed: int
     status: bool = True
 
     class Settings:
@@ -40,5 +41,6 @@ class Sheet(Document):
                 "boxes": [
                     {"symbol": "box_001"},
                 ],
+                "speed": 80,
             }
         }
