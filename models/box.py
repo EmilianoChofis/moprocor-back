@@ -39,7 +39,7 @@ class Box(Document):
     creases: Crease  # Crease dimensions of the box
     inks: Ink  # Inks used in the box
     weight: Optional[float] = None  # Weight of the box
-    status: str  # Status of the box
+    status: str  # Status of the box (e.g., approved, pending, disabled)
     type: str  # Type of the extra information
     pdf_link: str = ""  # Link to the PDF document of the box
 
@@ -68,7 +68,7 @@ class Box(Document):
                     "r2": 10,
                     "r3": 10,
                 },
-                "status": "approved",
+                "status": "APPROVED",
                 "type": "CRR",
                 "pdf_link": "DEG_CR_CE-10.pdf",
             }

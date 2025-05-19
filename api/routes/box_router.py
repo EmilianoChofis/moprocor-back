@@ -310,13 +310,14 @@ async def update_box(
         )
 
 
-@router.patch("/changeStatus/{box_id}", response_model=Box)
-async def change_status(box_id: PydanticObjectId, box_status: str):
+
+@router.patch("/changeStatus/{symbol}", response_model=Box)
+async def change_status(symbol: str, box_status: str):
     """
     Change the status of a box by its ID.
 
     Args:
-        box_id (PydanticObjectId): The ID of the box to update.
+        symbol (str): The ID of the box to update.
         box_status (str): The new status of the box.
 
     Returns:
@@ -325,7 +326,7 @@ async def change_status(box_id: PydanticObjectId, box_status: str):
         HTTPException: If an error occurs during the status update.
     """
     try:
-        return await BoxService.change_status(box_id, box_status)
+        return await BoxService.change_status(symbol, box_status)
     except HTTPException as e:
         raise e
     except Exception as e:

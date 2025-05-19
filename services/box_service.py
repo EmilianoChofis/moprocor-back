@@ -277,7 +277,7 @@ class BoxService:
         return updated_box
 
     @staticmethod
-    async def change_status(box_id: PydanticObjectId, status: str) -> Optional[Box]:
+    async def change_status(symbol: str, status: str) -> Optional[Box]:
         """
         Change the status of a box.
 
@@ -292,9 +292,15 @@ class BoxService:
             HTTPException: If the box is not found or the status is invalid.
         """
         try:
-            box = await BoxRepository.change_status(box_id, status)
+            box = await BoxRepository.get_by_symbol(symbol)
             if not box:
                 raise HTTPException(status_code=404, detail="Caja no encontrada")
+
+            if status not in ["APPROVED", "PENDING", "DISABLED"]:
+                raise HTTPException(status_code=400, detail="Estado no válido")
+
+            box.status = status
+            await box.save()
             return box
         except ValueError as e:
             raise HTTPException(status_code=400, detail=str(e))

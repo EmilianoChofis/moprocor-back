@@ -17,7 +17,7 @@ class SheetService:
         return await SheetRepository.get_all()
 
     @staticmethod
-    async def get_sheet_by_id(sheet_id: str) -> Sheet:
+    async def get_sheet_by_id(sheet_id: PydanticObjectId) -> Sheet:
         """Get a sheet by its ID."""
         sheet = await SheetRepository.get_by_id(sheet_id)
         if not sheet:
@@ -56,12 +56,16 @@ class SheetService:
         return sheet
 
     @staticmethod
-    async def change_status(sheet_id: PydanticObjectId, status: str) -> Optional[Sheet]:
+    async def change_status(sheet_id: PydanticObjectId) -> Optional[Sheet]:
         """Change the status of a sheet."""
         try:
-            sheet = await SheetRepository.change_status(sheet_id, status)
+            sheet = await SheetRepository.get_by_id(sheet_id)
             if not sheet:
                 raise HTTPException(status_code=404, detail="Sheet not found")
+
+            sheet.status = not sheet.status
+            await sheet.save()
+
             return sheet
         except ValueError as e:
             raise HTTPException(status_code=400, detail=str(e))

@@ -27,7 +27,7 @@ async def get_sheets():
 
 
 @router.get("/getById/{sheet_id}", response_model=Sheet)
-async def get_sheet_by_id(sheet_id: str):
+async def get_sheet_by_id(sheet_id: PydanticObjectId):
     """Define the get_sheet_by_id function"""
     sheet = await SheetService.get_sheet_by_id(sheet_id)
     if not sheet:
@@ -100,12 +100,12 @@ async def update_sheet(sheet_id: PydanticObjectId, update_data: dict):
 
 
 @router.patch("/changeStatus/{sheet_id}", response_model=Sheet)
-async def change_status(sheet_id: PydanticObjectId, sheet_status: str):
+async def change_status(sheet_id: PydanticObjectId):
     """
     Change the status of a sheet by its ID.
     """
     try:
-        return await SheetService.change_status(sheet_id, sheet_status)
+        return await SheetService.change_status(sheet_id)
     except HTTPException as e:
         raise e
     except Exception as e:

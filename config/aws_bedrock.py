@@ -35,7 +35,7 @@ class AWSBedrockService:
         client = cls.get_client()
         body = json.dumps(
             {
-                "messages": [{"role": "user", "content": [prompt]}],
+                "messages": [{"role": "user", "content": [{"text": prompt}]}],
                 "inferenceConfig": {"temperature": 0.4},
             }
         )
