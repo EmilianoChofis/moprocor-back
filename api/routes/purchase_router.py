@@ -20,6 +20,13 @@ class UpdateDeliveryInfo(BaseModel):
     new_delivery_date: datetime = None
     new_quantity: int = None
 
+class Backorder(BaseModel):
+    """Model for backorder information."""
+    arapack_lot: str
+    estimated_delivery_date: datetime = None
+    missing_quantity: int = 0
+    delivery_delay_days: int = 0
+
 @router.get("/getAll", response_model=List[Purchase])
 async def get_purchases():
     """
@@ -343,4 +350,42 @@ async def complete_shipping(arapack_lot: str, index: int):
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to complete shipping: {str(e)}",
+        ) from e
+
+@router.get("/getMonthlyInvoice", response_model=int)
+async def get_monthly_invoice():
+    """
+    Retrieve the monthly invoice.
+
+    Returns:
+        str: The monthly invoice.
+
+    Raises:
+        HTTPException: If an error occurs while retrieving the invoice.
+    """
+    try:
+        return await PurchaseService.get_monthly_invoice()
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to retrieve monthly invoice: {str(e)}",
+        ) from e
+
+@router.get("/getBackorders", response_model=List[Backorder])
+async def get_backorders():
+    """
+    Retrieve backorders.
+
+    Returns:
+        List[Purchase]: A list of backorders.
+
+    Raises:
+        HTTPException: If an error occurs while retrieving the backorders.
+    """
+    try:
+        return await PurchaseService.get_backorders()
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to retrieve backorders: {str(e)}",
         ) from e

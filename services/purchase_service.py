@@ -325,6 +325,9 @@ class PurchaseService:
             )
             purchase.quantity = new_quantity
 
+            # Calculate the new subtotal and total invoice
+            purchase.subtotal = purchase.unit_cost * new_quantity
+            purchase.total_invoice = purchase.subtotal * 1.16  # Assuming a 16% tax rate
 
         # Save the updated purchase
         await purchase.save()
@@ -398,4 +401,57 @@ class PurchaseService:
         # Save the updated purchase
         await purchase.save()
         return purchase
+
+    @staticmethod
+    async def get_monthly_invoice():
+        """
+        Get the monthly invoice for purchases.
+
+        Returns:
+            List[Dict[str, Any]]: A list of dictionaries containing the monthly invoice data.
+        """
+        # Get all purchases
+        purchases = await PurchaseRepository.get_all()
+
+        # Get the current month
+        current_month = datetime.now().month
+
+        # Initialize the invoice data
+        total_monthly_invoice = 0
+
+        # Iterate through each purchase and extract relevant data
+        for purchase in purchases:
+            if purchase.total_invoice and purchase.receipt_date.month == current_month:
+                total_monthly_invoice += purchase.total_invoice
+
+        # Return the monthly invoice data
+        return total_monthly_invoice
+
+    @staticmethod
+    async def get_backorders():
+        """
+        Get the backorders for purchases.
+
+        Returns:
+            List[Dict[str, Any]]: A list of dictionaries containing the backorder data.
+        """
+        # Get all purchases
+        purchases = await PurchaseRepository.get_all()
+
+        # Initialize the backorder data
+        backorders = []
+
+        # Iterate through each purchase and extract relevant data
+        for purchase in purchases:
+            if purchase.estimated_delivery_date < datetime.now():
+                backorder_data = {
+                    "arapack_lot": purchase.arapack_lot,
+                    "estimated_delivery_date": purchase.estimated_delivery_date,
+                    "missing_quantity": purchase.missing_quantity,
+                    "delivery_delay_days": (datetime.now() - purchase.estimated_delivery_date).days,
+                }
+                backorders.append(backorder_data)
+
+        # Return the backorder data
+        return backorders
 
