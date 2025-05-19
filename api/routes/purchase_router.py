@@ -372,3 +372,26 @@ async def get_monthly_kilograms():
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to retrieve monthly kilograms: {str(e)}",
         ) from e
+
+@router.patch("/changeStatus/{arapack_lot}", response_model=Purchase)
+async def change_status(arapack_lot: str, new_status: str):
+    """
+    Change the status of a purchase.
+
+    Args:
+        arapack_lot (str): The arapack lot of the purchase to update.
+        new_status (str): The new status to set for the purchase.
+
+    Returns:
+        Purchase: The updated purchase with the new status.
+
+    Raises:
+        HTTPException: If the purchase is not found or an error occurs during the update.
+    """
+    try:
+        return await PurchaseService.change_status(arapack_lot, new_status)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to change status: {str(e)}",
+        ) from e

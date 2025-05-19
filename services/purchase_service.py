@@ -443,3 +443,28 @@ class PurchaseService:
         # Return the monthly invoice data
         return total_monthly_kilograms
 
+    @staticmethod
+    async def change_status(arapack_lot: str, new_status: str):
+        """
+        Change the status of a purchase.
+
+        Args:
+            arapack_lot (str): The arapack lot of the purchase to update.
+            new_status (str): The new status to set.
+
+        Returns:
+            Purchase: The updated purchase.
+        """
+        # Get the purchase
+        purchase = await PurchaseRepository.get_by_arapack_lot(arapack_lot)
+        if not purchase:
+            raise HTTPException(status_code=404, detail="Purchase not found")
+
+        # Toggle the status
+        purchase.status = new_status
+
+        # Save the updated purchase
+        await purchase.save()
+
+        return purchase
+
