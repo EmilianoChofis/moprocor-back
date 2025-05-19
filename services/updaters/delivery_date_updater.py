@@ -56,12 +56,10 @@ class DeliveryDateUpdater(ProductionPlanUpdater):
         new_week = purchase.get("week_of_year")
 
         if not original_week:
-            print("Delivery date updater: Original week of year is not provided.")
             return
 
         # If the week has changed and new_program is empty, create a new program planning
         if new_week and new_week != original_week and not new_program:
-            print(f"Delivery date updater: Creating new program planning for week {new_week}")
             new_program = {"week_of_year": new_week, "production_runs": []}
             programs["new_program_planning"] = new_program
 
@@ -81,28 +79,30 @@ class DeliveryDateUpdater(ProductionPlanUpdater):
         updated_programs = self.ia_service.parse_response(ai_response)
 
         if not updated_programs:
-            print("Delivery date updater: Failed to updated programs.")
             return
+
+        # Extraer el diccionario "programs" si existe en la respuesta
+        programs_data = updated_programs.get("programs", updated_programs)
 
         # Update original program planning
         original_program_planning = await ProgramPlanningRepository.get_by_week(
             original_week
         )
+
         if (
-            original_program_planning
-            and "original_program_planning" in updated_programs
+                original_program_planning
+                and "original_program_planning" in programs_data
         ):
-            original_program_planning.production_runs = updated_programs[
+            original_program_planning.production_runs = programs_data[
                 "original_program_planning"
             ].get("production_runs", [])
-            print("Original program planning:", original_program_planning)
             await original_program_planning.save()
 
         # Update new program planning if week changed
         if (
-            new_week
-            and new_week != original_week
-            and "new_program_planning" in updated_programs
+                new_week
+                and new_week != original_week
+                and "new_program_planning" in programs_data
         ):
             new_program_planning = await ProgramPlanningRepository.get_by_week(new_week)
             if not new_program_planning:
@@ -110,8 +110,7 @@ class DeliveryDateUpdater(ProductionPlanUpdater):
 
                 new_program_planning = ProgramPlanning(week_of_year=new_week)
 
-            new_program_planning.production_runs = updated_programs[
+            new_program_planning.production_runs = programs_data[
                 "new_program_planning"
             ].get("production_runs", [])
-            print("New program planning:", new_program_planning)
             await new_program_planning.save()

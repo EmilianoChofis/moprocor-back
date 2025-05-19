@@ -259,20 +259,17 @@ class PurchaseService:
         Process a delivery date update with AI in the background.
 
         Args:
-            purchase: The purchase with updated delivery date.
+            purchase: The purchase with an updated delivery date.
             original_week: The original week of the year.
         """
         # Get the original program planning
         original_program = await ProgramPlanningRepository.get_by_week(original_week)
         if not original_program:
-            print("purchase service: Original program planning not found - Breaking")
             return
 
         # Get the new program planning if the week changed
         new_program = None
         if purchase.week_of_year != original_week:
-            print("Original week of the year:", original_week)
-            print("New week of the year:", purchase.week_of_year)
             new_program = await ProgramPlanningRepository.get_by_week(
                 purchase.week_of_year
             )

@@ -192,47 +192,16 @@ class QuantityUpdate(BaseModel):
     new_quantity: int
 
 
-@router.put("/update_quantity/{arapack_lot}", response_model=Purchase)
-async def update_purchase_quantity(
-    arapack_lot: str, update_data: QuantityUpdate, background_tasks: BackgroundTasks
-):
-    """
-    Update the quantity of a purchase and trigger AI processing in the background.
-
-    Args:
-        arapack_lot (str): The arapack lot of the purchase to update.
-        update_data (QuantityUpdate): The new quantity data.
-        background_tasks (BackgroundTasks): FastAPI background tasks for asynchronous processing.
-
-    Returns:
-        Purchase: The updated purchase.
-
-    Raises:
-        HTTPException: If the purchase is not found, or an error occurs during the update.
-    """
-    try:
-        return await PurchaseService.update_purchase_quantity(
-            arapack_lot, update_data.new_quantity, background_tasks
-        )
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to update purchase quantity: {str(e)}",
-        ) from e
-
-
-
-@router.put("/update_delivery_date/{arapack_lot}", response_model=Purchase)
+@router.patch("/update_delivery_date/{arapack_lot}", response_model=Purchase)
 async def update_delivery_date(
-    arapack_lot: str,  background_tasks: BackgroundTasks, new_delivery_date: datetime = None, new_quantity: int = None
+    arapack_lot: str,  update_data: UpdateDeliveryInfo, background_tasks: BackgroundTasks
 ):
     """
     Update the delivery date of a purchase and trigger AI processing in the background.
 
     Args:
         arapack_lot (str): The arapack lot of the purchase to update.
-        new_delivery_date (datetime): The new delivery date.
-        new_quantity (int): The new quantity.
+        update_data (UpdateDeliveryInfo): The new delivery date and quantity data.
         background_tasks (BackgroundTasks): FastAPI background tasks for asynchronous processing.
 
     Returns:
@@ -243,7 +212,7 @@ async def update_delivery_date(
     """
     try:
         return await PurchaseService.update_delivery_date(
-            arapack_lot, new_delivery_date, new_quantity, background_tasks
+            arapack_lot, update_data.new_delivery_date, update_data.new_quantity, background_tasks
         )
     except Exception as e:
         raise HTTPException(
