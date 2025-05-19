@@ -2,22 +2,17 @@
 This module contains the PurchaseService class, which is responsible for interacting with the purchase repository.
 """
 
-import json
 from datetime import datetime
-from typing import List, Dict, Any
+from typing import List
 from fastapi import HTTPException, BackgroundTasks
 from pymongo.errors import DuplicateKeyError
-from starlette.datastructures import UploadFile
 from models.purchase import Purchase, DeliveryDate
-from models.box import Box
-from models.sheet import Sheet
 from repositories.purchase_repository import PurchaseRepository
 from repositories.box_repository import BoxRepository
 from repositories.sheet_repository import SheetRepository
 from repositories.program_planning_repository import ProgramPlanningRepository
 from services.ia_service import IAService
 from services.updaters.register_updater import RegisterUpdater
-from services.updaters.quantity_updater import QuantityUpdater
 from services.updaters.delivery_date_updater import DeliveryDateUpdater
 
 
@@ -29,7 +24,6 @@ class PurchaseService:
 
     # Initialize the updaters
     _register_updater = RegisterUpdater(_ia_service)
-    _quantity_updater = QuantityUpdater(_ia_service)
     _delivery_date_updater = DeliveryDateUpdater(_ia_service)
 
     @staticmethod
@@ -150,61 +144,6 @@ class PurchaseService:
         await PurchaseService._register_updater.update(input_data)
 
     @staticmethod
-    async def update_purchase_quantity(
-        arapack_lot: str, new_quantity: int, background_tasks: BackgroundTasks
-    ) -> Purchase:
-        """
-        Update the quantity of a purchase and trigger AI processing in the background.
-
-        Args:
-            arapack_lot: The arapack lot of the purchase to update.
-            new_quantity: The new quantity.
-            background_tasks: FastAPI background tasks for asynchronous processing.
-
-        Returns:
-            Purchase: The updated purchase.
-        """
-        # Get the purchase
-        purchase = await PurchaseRepository.get_by_arapack_lot(arapack_lot)
-        if not purchase:
-            raise HTTPException(status_code=404, detail="Purchase not found")
-
-        # Update the quantity
-        purchase.quantity = new_quantity
-        await purchase.save()
-
-        # Trigger AI processing in the background
-        background_tasks.add_task(
-            PurchaseService._process_quantity_update_with_ai, purchase
-        )
-
-        return purchase
-
-    @staticmethod
-    async def _process_quantity_update_with_ai(purchase: Purchase):
-        """
-        Process a quantity update with AI in the background.
-
-        Args:
-            purchase: The purchase with updated quantity.
-        """
-        # Get the program planning for the purchase's week
-        program_planning = await ProgramPlanningRepository.get_by_week(
-            purchase.week_of_year
-        )
-        if not program_planning:
-            return
-
-        # Prepare input data for the updater
-        input_data = {
-            "purchase": purchase.dict(),
-            "program_planning": program_planning.dict(),
-        }
-
-        # Call the quantity updater
-        await PurchaseService._quantity_updater.update(input_data)
-
-    @staticmethod
     async def update_delivery_date(
         arapack_lot: str, new_delivery_date: datetime, new_quantity: int, background_tasks: BackgroundTasks
     ) -> Purchase:
@@ -259,20 +198,17 @@ class PurchaseService:
         Process a delivery date update with AI in the background.
 
         Args:
-            purchase: The purchase with updated delivery date.
+            purchase: The purchase with an updated delivery date.
             original_week: The original week of the year.
         """
         # Get the original program planning
         original_program = await ProgramPlanningRepository.get_by_week(original_week)
         if not original_program:
-            print("purchase service: Original program planning not found - Breaking")
             return
 
         # Get the new program planning if the week changed
         new_program = None
         if purchase.week_of_year != original_week:
-            print("Original week of the year:", original_week)
-            print("New week of the year:", purchase.week_of_year)
             new_program = await ProgramPlanningRepository.get_by_week(
                 purchase.week_of_year
             )
