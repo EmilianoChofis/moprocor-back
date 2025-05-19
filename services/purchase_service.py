@@ -173,7 +173,18 @@ class PurchaseService:
 
         # Update the quantity if provided
         if new_quantity:
+            # Update the missing quantity as well
+            purchase.missing_quantity = (
+                    purchase.missing_quantity + (new_quantity - purchase.quantity)
+            )
             purchase.quantity = new_quantity
+
+            # Calculate the new subtotal and total invoice
+            purchase.subtotal = purchase.unit_cost * new_quantity
+            purchase.total_invoice = purchase.subtotal * 1.16  # Assuming a 16% tax rate
+
+            # Calculate the new total kilograms
+            purchase.total_kilograms = purchase.weight * new_quantity
 
         # Calculate the new week of the year
         purchase.week_of_year = new_delivery_date.isocalendar()[1]
