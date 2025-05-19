@@ -186,12 +186,6 @@ async def create_purchase_with_ai(
         ) from e
 
 
-class QuantityUpdate(BaseModel):
-    """Model for quantity update requests."""
-
-    new_quantity: int
-
-
 @router.patch("/update_delivery_date/{arapack_lot}", response_model=Purchase)
 async def update_delivery_date(
     arapack_lot: str,  update_data: UpdateDeliveryInfo, background_tasks: BackgroundTasks
