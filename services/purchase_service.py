@@ -319,6 +319,10 @@ class PurchaseService:
 
         # Update the quantity if provided
         if new_quantity:
+            # Update the missing quantity as well
+            purchase.missing_quantity = (
+                purchase.missing_quantity + (new_quantity - purchase.quantity)
+            )
             purchase.quantity = new_quantity
 
 
