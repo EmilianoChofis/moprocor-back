@@ -24,6 +24,7 @@ class Backorder(BaseModel):
     """Model for backorder information."""
     arapack_lot: str
     estimated_delivery_date: datetime = None
+    quantity: int = 0
     missing_quantity: int = 0
     delivery_delay_days: int = 0
 

@@ -389,6 +389,7 @@ class PurchaseService:
                             backorder_data = {
                                 "arapack_lot": purchase.arapack_lot,
                                 "estimated_delivery_date": purchase.estimated_delivery_date,
+                                "quantity": delivery_date.quantity,
                                 "missing_quantity": purchase.missing_quantity,
                                 "delivery_delay_days": (datetime.now() - purchase.estimated_delivery_date).days,
                             }
@@ -397,6 +398,7 @@ class PurchaseService:
                     backorder_data = {
                         "arapack_lot": purchase.arapack_lot,
                         "estimated_delivery_date": purchase.estimated_delivery_date,
+                        "quantity": purchase.quantity,
                         "missing_quantity": purchase.missing_quantity,
                         "delivery_delay_days": (datetime.now() - purchase.estimated_delivery_date).days,
                     }
