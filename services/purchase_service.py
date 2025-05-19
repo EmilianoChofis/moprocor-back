@@ -265,6 +265,9 @@ class PurchaseService:
             purchase.subtotal = purchase.unit_cost * new_quantity
             purchase.total_invoice = purchase.subtotal * 1.16  # Assuming a 16% tax rate
 
+            # Calculate the new total kilograms
+            purchase.total_kilograms = purchase.weight * new_quantity
+
         # Save the updated purchase
         await purchase.save()
 
@@ -380,14 +383,50 @@ class PurchaseService:
         # Iterate through each purchase and extract relevant data
         for purchase in purchases:
             if purchase.estimated_delivery_date < datetime.now():
-                backorder_data = {
-                    "arapack_lot": purchase.arapack_lot,
-                    "estimated_delivery_date": purchase.estimated_delivery_date,
-                    "missing_quantity": purchase.missing_quantity,
-                    "delivery_delay_days": (datetime.now() - purchase.estimated_delivery_date).days,
-                }
-                backorders.append(backorder_data)
+                if purchase.delivery_dates:
+                    for delivery_date in purchase.delivery_dates:
+                        if delivery_date.finish_shipping_date is None:
+                            backorder_data = {
+                                "arapack_lot": purchase.arapack_lot,
+                                "estimated_delivery_date": purchase.estimated_delivery_date,
+                                "missing_quantity": purchase.missing_quantity,
+                                "delivery_delay_days": (datetime.now() - purchase.estimated_delivery_date).days,
+                            }
+                            backorders.append(backorder_data)
+                else:
+                    backorder_data = {
+                        "arapack_lot": purchase.arapack_lot,
+                        "estimated_delivery_date": purchase.estimated_delivery_date,
+                        "missing_quantity": purchase.missing_quantity,
+                        "delivery_delay_days": (datetime.now() - purchase.estimated_delivery_date).days,
+                    }
+                    backorders.append(backorder_data)
 
         # Return the backorder data
         return backorders
+
+    @staticmethod
+    async def get_monthly_kilograms():
+        """
+        Get the monthly kilograms for purchases.
+
+        Returns:
+            List[Dict[str, Any]]: A list of dictionaries containing the monthly kilograms data.
+        """
+        # Get all purchases
+        purchases = await PurchaseRepository.get_all()
+
+        # Get the current month
+        current_month = datetime.now().month
+
+        # Initialize the invoice data
+        total_monthly_kilograms = 0
+
+        # Iterate through each purchase and extract relevant data
+        for purchase in purchases:
+            if purchase.total_kilograms and purchase.receipt_date.month == current_month:
+                total_monthly_kilograms += purchase.total_kilograms
+
+        # Return the monthly invoice data
+        return total_monthly_kilograms
 

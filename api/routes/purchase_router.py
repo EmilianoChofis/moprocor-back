@@ -315,7 +315,7 @@ async def complete_shipping(arapack_lot: str, index: int):
             detail=f"Failed to complete shipping: {str(e)}",
         ) from e
 
-@router.get("/getMonthlyInvoice", response_model=int)
+@router.get("/getMonthlyInvoice", response_model=float)
 async def get_monthly_invoice():
     """
     Retrieve the monthly invoice.
@@ -351,4 +351,23 @@ async def get_backorders():
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to retrieve backorders: {str(e)}",
+        ) from e
+
+@router.get("/getMonthlyKilograms", response_model=float)
+async def get_monthly_kilograms():
+    """
+    Retrieve the monthly kilograms.
+
+    Returns:
+        float: The monthly kilograms.
+
+    Raises:
+        HTTPException: If an error occurs while retrieving the kilograms.
+    """
+    try:
+        return await PurchaseService.get_monthly_kilograms()
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to retrieve monthly kilograms: {str(e)}",
         ) from e
