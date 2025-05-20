@@ -12,6 +12,7 @@ from repositories.box_repository import BoxRepository
 from repositories.sheet_repository import SheetRepository
 from repositories.program_planning_repository import ProgramPlanningRepository
 from services.ia_service import IAService
+from services.updaters.cancel_updater import CancelUpdater
 from services.updaters.register_updater import RegisterUpdater
 from services.updaters.delivery_date_updater import DeliveryDateUpdater
 
@@ -25,6 +26,7 @@ class PurchaseService:
     # Initialize the updaters
     _register_updater = RegisterUpdater(_ia_service)
     _delivery_date_updater = DeliveryDateUpdater(_ia_service)
+    _cancel_updater = CancelUpdater(_ia_service)
 
     @staticmethod
     async def get_all_purchases():
@@ -41,7 +43,7 @@ class PurchaseService:
 
     @staticmethod
     async def get_filtered_purchases(
-        query: str, page: int, items_per_page: int
+            query: str, page: int, items_per_page: int
     ) -> List[Purchase]:
         """Obtiene las compras con paginación"""
 
@@ -89,7 +91,7 @@ class PurchaseService:
 
     @staticmethod
     async def create_purchase_with_ai(
-        purchase: Purchase, background_tasks: BackgroundTasks
+            purchase: Purchase, background_tasks: BackgroundTasks
     ):
         """
         Create a new purchase and trigger AI processing in the background.
@@ -145,7 +147,7 @@ class PurchaseService:
 
     @staticmethod
     async def update_delivery_date(
-        arapack_lot: str, new_delivery_date: datetime, new_quantity: int, background_tasks: BackgroundTasks
+            arapack_lot: str, new_delivery_date: datetime, new_quantity: int, background_tasks: BackgroundTasks
     ) -> Purchase:
         """
         Update the delivery date of a purchase and trigger AI processing in the background.
@@ -203,7 +205,7 @@ class PurchaseService:
 
     @staticmethod
     async def _process_delivery_date_update_with_ai(
-        purchase: Purchase, original_week: int
+            purchase: Purchase, original_week: int
     ):
         """
         Process a delivery date update with AI in the background.
@@ -268,7 +270,7 @@ class PurchaseService:
         if new_quantity:
             # Update the missing quantity as well
             purchase.missing_quantity = (
-                purchase.missing_quantity + (new_quantity - purchase.quantity)
+                    purchase.missing_quantity + (new_quantity - purchase.quantity)
             )
             purchase.quantity = new_quantity
 
@@ -285,7 +287,8 @@ class PurchaseService:
         return purchase
 
     @staticmethod
-    async def create_shipping(arapack_lot: str, initial_shipping_date: datetime, quantity: int, comment: str, finish_shipping_date: datetime = None):
+    async def create_shipping(arapack_lot: str, initial_shipping_date: datetime, quantity: int, comment: str,
+                              finish_shipping_date: datetime = None):
         """
         Create a shipping for a purchase.
 
@@ -444,7 +447,7 @@ class PurchaseService:
         return total_monthly_kilograms
 
     @staticmethod
-    async def change_status(arapack_lot: str, new_status: str):
+    async def change_status(arapack_lot: str, new_status: str, background_tasks: BackgroundTasks):
         """
         Change the status of a purchase.
 
@@ -463,8 +466,39 @@ class PurchaseService:
         # Toggle the status
         purchase.status = new_status
 
+        if purchase.status == "CANCELED":
+            background_tasks.add_task(
+                PurchaseService._delete_process_with_ai,
+                purchase
+            )
+
         # Save the updated purchase
         await purchase.save()
 
         return purchase
 
+    @staticmethod
+    async def _delete_process_with_ai(purchase: Purchase):
+        """
+        Process a purchase deletion with AI in the background.
+
+        Args:
+            purchase: The purchase to be deleted.
+        """
+        # Get the original program planning
+        original_program = await ProgramPlanningRepository.get_by_week(
+            purchase.week_of_year
+        )
+        if not original_program:
+            return
+
+        # Prepare input data for the updater
+        input_data = {
+            "purchase": purchase.model_dump(),
+            "programs": {
+                "original_program_planning": original_program.model_dump(),
+            },
+        }
+
+        # Call the delivery date updater
+        await PurchaseService._cancel_updater.update(input_data)
