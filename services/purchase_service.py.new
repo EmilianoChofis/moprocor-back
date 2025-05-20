@@ -1,0 +1,29 @@
+"""
+This module contains the PurchaseService class, which is responsible for interacting with the purchase repository.
+"""
+
+from datetime import datetime
+from typing import List
+from fastapi import HTTPException, BackgroundTasks
+from pymongo.errors import DuplicateKeyError
+from models.purchase import Purchase, DeliveryDate
+from repositories.purchase_repository import PurchaseRepository
+from repositories.box_repository import BoxRepository
+from repositories.sheet_repository import SheetRepository
+from repositories.program_planning_repository import ProgramPlanningRepository
+from services.ia_service import IAService
+from services.updaters.register_updater import RegisterUpdater
+from services.updaters.delivery_date_updater import DeliveryDateUpdater
+from services.updaters.cancel_updater import CancelUpdater
+
+
+class PurchaseService:
+    """Class for Purchase service."""
+
+    # Initialize the IAService
+    _ia_service = IAService()
+
+    # Initialize the updaters
+    _register_updater = RegisterUpdater(_ia_service)
+    _delivery_date_updater = DeliveryDateUpdater(_ia_service)
+    _cancel_updater = CancelUpdater(_ia_service)
