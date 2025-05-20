@@ -11,7 +11,8 @@ from services.purchase_service import PurchaseService
 
 # Create an instance of APIRouter to define the routes for the purchase module
 router = APIRouter()
-ITEMS_PER_PAGE = 10  # Default number of items per page for pagination
+ITEMS_PER_PAGE = 15  # Default number of items per page for pagination
+
 
 class UpdateDeliveryInfo(BaseModel):
     """Model for updating delivery information.
@@ -20,6 +21,7 @@ class UpdateDeliveryInfo(BaseModel):
     new_delivery_date: datetime = None
     new_quantity: int = None
 
+
 class Backorder(BaseModel):
     """Model for backorder information."""
     arapack_lot: str
@@ -27,6 +29,7 @@ class Backorder(BaseModel):
     quantity: int = 0
     missing_quantity: int = 0
     delivery_delay_days: int = 0
+
 
 @router.get("/getAll", response_model=List[Purchase])
 async def get_purchases():
@@ -85,8 +88,8 @@ async def get_purchase_by_id(arapack_lot: str):
 
 @router.get("/getFilteredPurchases", response_model=List[Purchase])
 async def get_filtered_purchases(
-    query: str = Query("", description="Filtro de búsqueda"),
-    page: int = Query(1, description="Número de página"),
+        query: str = Query("", description="Filtro de búsqueda"),
+        page: int = Query(1, description="Número de página"),
 ):
     """
     Retrieve filtered purchases based on a search query and pagination.
@@ -170,7 +173,7 @@ async def create_purchase(purchase: Purchase):
     "/create_with_ai", response_model=Purchase, status_code=status.HTTP_201_CREATED
 )
 async def create_purchase_with_ai(
-    purchase: Purchase, background_tasks: BackgroundTasks
+        purchase: Purchase, background_tasks: BackgroundTasks
 ):
     """
     Create a new purchase and trigger AI processing in the background.
@@ -196,7 +199,7 @@ async def create_purchase_with_ai(
 
 @router.patch("/update_delivery_date/{arapack_lot}", response_model=Purchase)
 async def update_delivery_date(
-    arapack_lot: str,  update_data: UpdateDeliveryInfo, background_tasks: BackgroundTasks
+        arapack_lot: str, update_data: UpdateDeliveryInfo, background_tasks: BackgroundTasks
 ):
     """
     Update the delivery date of a purchase and trigger AI processing in the background.
@@ -242,9 +245,10 @@ async def get_null_delivery_dates():
             detail=f"Failed to retrieve purchases with null delivery dates: {str(e)}",
         ) from e
 
+
 @router.patch("/updateDeliveryInfo/{arapack_lot}", response_model=Purchase)
 async def update_delivery_info(
-    arapack_lot: str, update_data: UpdateDeliveryInfo
+        arapack_lot: str, update_data: UpdateDeliveryInfo
 ):
     """
     Update the delivery information of a purchase and trigger AI processing in the background.
@@ -269,6 +273,7 @@ async def update_delivery_info(
             detail=f"Failed to update delivery info: {str(e)}",
         ) from e
 
+
 @router.patch("/createShipping/{arapack_lot}", response_model=Purchase)
 async def create_shipping(arapack_lot: str, shipping: DeliveryDate):
     """
@@ -285,12 +290,14 @@ async def create_shipping(arapack_lot: str, shipping: DeliveryDate):
         HTTPException: If the purchase is not found or an error occurs during the update.
     """
     try:
-        return await PurchaseService.create_shipping(arapack_lot, shipping.initial_shipping_date, shipping.quantity, shipping.comment, shipping.finish_shipping_date)
+        return await PurchaseService.create_shipping(arapack_lot, shipping.initial_shipping_date, shipping.quantity,
+                                                     shipping.comment, shipping.finish_shipping_date)
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to create shipping: {str(e)}",
         ) from e
+
 
 @router.patch("/completeShipping/{arapack_lot}", response_model=Purchase)
 async def complete_shipping(arapack_lot: str, index: int):
@@ -316,6 +323,7 @@ async def complete_shipping(arapack_lot: str, index: int):
             detail=f"Failed to complete shipping: {str(e)}",
         ) from e
 
+
 @router.get("/getMonthlyInvoice", response_model=float)
 async def get_monthly_invoice():
     """
@@ -334,6 +342,7 @@ async def get_monthly_invoice():
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to retrieve monthly invoice: {str(e)}",
         ) from e
+
 
 @router.get("/getBackorders", response_model=List[Backorder])
 async def get_backorders():
@@ -354,6 +363,7 @@ async def get_backorders():
             detail=f"Failed to retrieve backorders: {str(e)}",
         ) from e
 
+
 @router.get("/getMonthlyKilograms", response_model=float)
 async def get_monthly_kilograms():
     """
@@ -373,14 +383,16 @@ async def get_monthly_kilograms():
             detail=f"Failed to retrieve monthly kilograms: {str(e)}",
         ) from e
 
+
 @router.patch("/changeStatus/{arapack_lot}", response_model=Purchase)
-async def change_status(arapack_lot: str, new_status: str):
+async def change_status(arapack_lot: str, new_status: str, background_tasks: BackgroundTasks):
     """
     Change the status of a purchase.
 
     Args:
         arapack_lot (str): The arapack lot of the purchase to update.
         new_status (str): The new status to set for the purchase.
+        background_tasks (BackgroundTasks): FastAPI background tasks for asynchronous processing.
 
     Returns:
         Purchase: The updated purchase with the new status.
@@ -389,7 +401,7 @@ async def change_status(arapack_lot: str, new_status: str):
         HTTPException: If the purchase is not found or an error occurs during the update.
     """
     try:
-        return await PurchaseService.change_status(arapack_lot, new_status)
+        return await PurchaseService.change_status(arapack_lot, new_status, background_tasks)
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
