@@ -146,5 +146,6 @@ class BoxRepository:
                 {"flute": {"$regex": query, "$options": "i"}},
                 {"client": {"$regex": query, "$options": "i"}},
                 {"status": {"$regex": query, "$options": "i"}},
+                {"ect": {"$regex": query, "$options": "i"}},
             ]
         }

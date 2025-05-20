@@ -11,7 +11,7 @@ from services.purchase_service import PurchaseService
 
 # Create an instance of APIRouter to define the routes for the purchase module
 router = APIRouter()
-ITEMS_PER_PAGE = 10  # Default number of items per page for pagination
+ITEMS_PER_PAGE = 15  # Default number of items per page for pagination
 
 
 class UpdateDeliveryInfo(BaseModel):
