@@ -12,6 +12,7 @@ from repositories.box_repository import BoxRepository
 from repositories.sheet_repository import SheetRepository
 from repositories.program_planning_repository import ProgramPlanningRepository
 from services.ia_service import IAService
+from services.updaters.cancel_updater import CancelUpdater
 from services.updaters.register_updater import RegisterUpdater
 from services.updaters.delivery_date_updater import DeliveryDateUpdater
 
@@ -25,6 +26,7 @@ class PurchaseService:
     # Initialize the updaters
     _register_updater = RegisterUpdater(_ia_service)
     _delivery_date_updater = DeliveryDateUpdater(_ia_service)
+    _cancel_updater = CancelUpdater(_ia_service)
 
     @staticmethod
     async def get_all_purchases():
@@ -145,7 +147,10 @@ class PurchaseService:
 
     @staticmethod
     async def update_delivery_date(
-        arapack_lot: str, new_delivery_date: datetime, new_quantity: int, background_tasks: BackgroundTasks
+        arapack_lot: str,
+        new_delivery_date: datetime,
+        new_quantity: int,
+        background_tasks: BackgroundTasks,
     ) -> Purchase:
         """
         Update the delivery date of a purchase and trigger AI processing in the background.
@@ -173,7 +178,18 @@ class PurchaseService:
 
         # Update the quantity if provided
         if new_quantity:
+            # Update the missing quantity as well
+            purchase.missing_quantity = purchase.missing_quantity + (
+                new_quantity - purchase.quantity
+            )
             purchase.quantity = new_quantity
+
+            # Calculate the new subtotal and total invoice
+            purchase.subtotal = purchase.unit_cost * new_quantity
+            purchase.total_invoice = purchase.subtotal * 1.16  # Assuming a 16% tax rate
+
+            # Calculate the new total kilograms
+            purchase.total_kilograms = purchase.weight * new_quantity
 
         # Calculate the new week of the year
         purchase.week_of_year = new_delivery_date.isocalendar()[1]
@@ -231,47 +247,13 @@ class PurchaseService:
         return await PurchaseRepository.get_null_delivery_dates()
 
     @staticmethod
-    async def update_delivery_info(arapack_lot: str, new_delivery_date: datetime, new_quantity: int):
-        """
-        Update the delivery information of a purchase. if not contains new_delivery_date or new_quantity, update only the one that is not None.
-
-        Args:
-            arapack_lot (str): The arapack lot of the purchase to update.
-            new_delivery_date (datetime): The new delivery date.
-            new_quantity (int): The new quantity.
-
-        Returns:
-            Purchase: The updated purchase.
-        """
-
-        # Get the purchase
-        purchase = await PurchaseRepository.get_by_arapack_lot(arapack_lot)
-        if not purchase:
-            raise HTTPException(status_code=404, detail="Purchase not found")
-
-        # Update the delivery date if provided
-        if new_delivery_date:
-            purchase.estimated_delivery_date = new_delivery_date
-
-        # Update the quantity if provided
-        if new_quantity:
-            # Update the missing quantity as well
-            purchase.missing_quantity = (
-                purchase.missing_quantity + (new_quantity - purchase.quantity)
-            )
-            purchase.quantity = new_quantity
-
-            # Calculate the new subtotal and total invoice
-            purchase.subtotal = purchase.unit_cost * new_quantity
-            purchase.total_invoice = purchase.subtotal * 1.16  # Assuming a 16% tax rate
-
-        # Save the updated purchase
-        await purchase.save()
-
-        return purchase
-
-    @staticmethod
-    async def create_shipping(arapack_lot: str, initial_shipping_date: datetime, quantity: int, comment: str, finish_shipping_date: datetime = None):
+    async def create_shipping(
+        arapack_lot: str,
+        initial_shipping_date: datetime,
+        quantity: int,
+        comment: str,
+        finish_shipping_date: datetime = None,
+    ):
         """
         Create a shipping for a purchase.
 
@@ -380,14 +362,115 @@ class PurchaseService:
         # Iterate through each purchase and extract relevant data
         for purchase in purchases:
             if purchase.estimated_delivery_date < datetime.now():
-                backorder_data = {
-                    "arapack_lot": purchase.arapack_lot,
-                    "estimated_delivery_date": purchase.estimated_delivery_date,
-                    "missing_quantity": purchase.missing_quantity,
-                    "delivery_delay_days": (datetime.now() - purchase.estimated_delivery_date).days,
-                }
-                backorders.append(backorder_data)
+                if purchase.delivery_dates:
+                    for delivery_date in purchase.delivery_dates:
+                        if delivery_date.finish_shipping_date is None:
+                            backorder_data = {
+                                "arapack_lot": purchase.arapack_lot,
+                                "estimated_delivery_date": purchase.estimated_delivery_date,
+                                "quantity": purchase.quantity,
+                                "missing_quantity": purchase.missing_quantity,
+                                "delivery_delay_days": (
+                                    datetime.now() - purchase.estimated_delivery_date
+                                ).days,
+                            }
+                            backorders.append(backorder_data)
+                else:
+                    backorder_data = {
+                        "arapack_lot": purchase.arapack_lot,
+                        "estimated_delivery_date": purchase.estimated_delivery_date,
+                        "quantity": purchase.quantity,
+                        "missing_quantity": purchase.missing_quantity,
+                        "delivery_delay_days": (
+                            datetime.now() - purchase.estimated_delivery_date
+                        ).days,
+                    }
+                    backorders.append(backorder_data)
 
         # Return the backorder data
         return backorders
 
+    @staticmethod
+    async def get_monthly_kilograms():
+        """
+        Get the monthly kilograms for purchases.
+
+        Returns:
+            List[Dict[str, Any]]: A list of dictionaries containing the monthly kilograms data.
+        """
+        # Get all purchases
+        purchases = await PurchaseRepository.get_all()
+
+        # Get the current month
+        current_month = datetime.now().month
+
+        # Initialize the invoice data
+        total_monthly_kilograms = 0
+
+        # Iterate through each purchase and extract relevant data
+        for purchase in purchases:
+            if (
+                purchase.total_kilograms
+                and purchase.receipt_date.month == current_month
+            ):
+                total_monthly_kilograms += purchase.total_kilograms
+
+        # Return the monthly invoice data
+        return total_monthly_kilograms
+
+    @staticmethod
+    async def change_status(
+        arapack_lot: str, new_status: str, background_tasks: BackgroundTasks
+    ):
+        """
+        Change the status of a purchase.
+
+        Args:
+            arapack_lot (str): The arapack lot of the purchase to update.
+            new_status (str): The new status to set.
+            background_tasks: FastAPI background tasks for asynchronous processing.
+
+        Returns:
+            Purchase: The updated purchase.
+        """
+        # Get the purchase
+        purchase = await PurchaseRepository.get_by_arapack_lot(arapack_lot)
+        if not purchase:
+            raise HTTPException(status_code=404, detail="Purchase not found")
+
+        # Toggle the status
+        purchase.status = new_status
+
+        if purchase.status == "CANCELED":
+            background_tasks.add_task(PurchaseService._delete_process_with_ai, purchase)
+
+        # Save the updated purchase
+        await purchase.save()
+
+        return purchase
+
+    @staticmethod
+    async def _delete_process_with_ai(purchase: Purchase):
+        """
+        Process a purchase deletion with AI in the background.
+
+        Args:
+            purchase: The purchase to be deleted.
+        """
+        # Get the original program planning
+        original_program = await ProgramPlanningRepository.get_by_week(
+            purchase.week_of_year
+        )
+        if not original_program:
+            return
+
+        # Prepare input data for the updater
+        input_data = {
+            "purchase": purchase.model_dump(),
+            "programs": {
+                "original_program_planning": original_program.model_dump(),
+            },
+        }
+
+        # Call the delivery date updater
+        await PurchaseService._cancel_updater.update(input_data)

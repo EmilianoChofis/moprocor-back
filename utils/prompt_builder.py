@@ -47,15 +47,19 @@ class PromptBuilder:
         # Get the output format
         output_format = self.instructions.get("output_format", {})
 
-        if action_type == "update_info":
-            # Handle the specific case for update_info_instructions
-            output_format = self.instructions.get("update_info_output_format", {})
-
         # Combine instructions, data, and output format
         prompt = f"{base_instructions}\n\n{specific_instruction}\n\n"
         prompt += f"Here is the data to process:\n{json.dumps(data, default=str, indent=2)}\n\n"
         prompt += "Please provide your response as a valid JSON object with the updated production plan.\n\n"
-        prompt += f"Output format:\n{json.dumps(output_format, indent=2)}"
-
+        prompt += (
+            f"Output format for production runs (if there is not provided an output format for programs I "
+            f"expect this format as final output):\n{json.dumps(output_format, indent=2)}"
+        )
+        if action_type == "update_info":
+            # Handle the specific case for update_info_instructions
+            update_info_output_format = self.instructions.get(
+                "update_info_output_format", {}
+            )
+            prompt += f"\n\nOutput format for programs:\n{json.dumps(update_info_output_format, indent=2)}"
 
         return prompt

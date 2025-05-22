@@ -15,7 +15,7 @@ from services.box_service import (
 
 # Initialize the API router for box-related endpoints
 router = APIRouter()
-ITEMS_PER_PAGE = 10  # Default number of items per page for pagination
+ITEMS_PER_PAGE = 15  # Default number of items per page for pagination
 
 
 @router.get("/getAll", response_model=List[Box])
@@ -308,7 +308,6 @@ async def update_box(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Error al actualizar la caja: {str(e)}",
         )
-
 
 
 @router.patch("/changeStatus/{symbol}", response_model=Box)

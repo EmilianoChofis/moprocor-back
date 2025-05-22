@@ -8,10 +8,12 @@ from pydantic import BaseModel
 
 class DeliveryDate(BaseModel):
     """DeliveryDate model representing a delivery date."""
+
     initial_shipping_date: datetime
     quantity: int
     comment: str
     finish_shipping_date: Optional[datetime] = None
+
 
 class Purchase(Document):
     """Purchase model representing a purchase document in MongoDB."""

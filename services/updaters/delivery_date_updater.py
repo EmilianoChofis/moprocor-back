@@ -89,10 +89,7 @@ class DeliveryDateUpdater(ProductionPlanUpdater):
             original_week
         )
 
-        if (
-                original_program_planning
-                and "original_program_planning" in programs_data
-        ):
+        if original_program_planning and "original_program_planning" in programs_data:
             original_program_planning.production_runs = programs_data[
                 "original_program_planning"
             ].get("production_runs", [])
@@ -100,9 +97,9 @@ class DeliveryDateUpdater(ProductionPlanUpdater):
 
         # Update new program planning if week changed
         if (
-                new_week
-                and new_week != original_week
-                and "new_program_planning" in programs_data
+            new_week
+            and new_week != original_week
+            and "new_program_planning" in programs_data
         ):
             new_program_planning = await ProgramPlanningRepository.get_by_week(new_week)
             if not new_program_planning:
