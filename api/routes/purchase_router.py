@@ -18,12 +18,14 @@ class UpdateDeliveryInfo(BaseModel):
     """Model for updating delivery information.
     attributes optionals
     """
+
     new_delivery_date: datetime = None
     new_quantity: int = None
 
 
 class Backorder(BaseModel):
     """Model for backorder information."""
+
     arapack_lot: str
     estimated_delivery_date: datetime = None
     quantity: int = 0
@@ -88,8 +90,8 @@ async def get_purchase_by_id(arapack_lot: str):
 
 @router.get("/getFilteredPurchases", response_model=List[Purchase])
 async def get_filtered_purchases(
-        query: str = Query("", description="Filtro de búsqueda"),
-        page: int = Query(1, description="Número de página"),
+    query: str = Query("", description="Filtro de búsqueda"),
+    page: int = Query(1, description="Número de página"),
 ):
     """
     Retrieve filtered purchases based on a search query and pagination.
@@ -146,34 +148,11 @@ async def get_pages(query: str = Query("", description="Filtro de búsqueda")):
         ) from e
 
 
-@router.post("/create", response_model=Purchase, status_code=status.HTTP_201_CREATED)
-async def create_purchase(purchase: Purchase):
-    """
-    Create a new purchase.
-
-    Args:
-        purchase (Purchase): The purchase data to be created.
-
-    Returns:
-        Purchase: The created purchase.
-
-    Raises:
-        HTTPException: If an error occurs while creating the purchase.
-    """
-    try:
-        return await PurchaseService.create_purchase(purchase)
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to create purchase: {str(e)}",
-        ) from e
-
-
 @router.post(
     "/create_with_ai", response_model=Purchase, status_code=status.HTTP_201_CREATED
 )
 async def create_purchase_with_ai(
-        purchase: Purchase, background_tasks: BackgroundTasks
+    purchase: Purchase, background_tasks: BackgroundTasks
 ):
     """
     Create a new purchase and trigger AI processing in the background.
@@ -199,7 +178,7 @@ async def create_purchase_with_ai(
 
 @router.patch("/update_delivery_date/{arapack_lot}", response_model=Purchase)
 async def update_delivery_date(
-        arapack_lot: str, update_data: UpdateDeliveryInfo, background_tasks: BackgroundTasks
+    arapack_lot: str, update_data: UpdateDeliveryInfo, background_tasks: BackgroundTasks
 ):
     """
     Update the delivery date of a purchase and trigger AI processing in the background.
@@ -217,7 +196,10 @@ async def update_delivery_date(
     """
     try:
         return await PurchaseService.update_delivery_date(
-            arapack_lot, update_data.new_delivery_date, update_data.new_quantity, background_tasks
+            arapack_lot,
+            update_data.new_delivery_date,
+            update_data.new_quantity,
+            background_tasks,
         )
     except Exception as e:
         raise HTTPException(
@@ -246,34 +228,6 @@ async def get_null_delivery_dates():
         ) from e
 
 
-@router.patch("/updateDeliveryInfo/{arapack_lot}", response_model=Purchase)
-async def update_delivery_info(
-        arapack_lot: str, update_data: UpdateDeliveryInfo
-):
-    """
-    Update the delivery information of a purchase and trigger AI processing in the background.
-
-    Args:
-        arapack_lot (str): The arapack lot of the purchase to update.
-        update_data (DeliveryDateUpdate): The new delivery date data.
-
-    Returns:
-        Purchase: The updated purchase.
-
-    Raises:
-        HTTPException: If the purchase is not found or an error occurs during the update.
-    """
-    try:
-        return await PurchaseService.update_delivery_info(
-            arapack_lot, update_data.new_delivery_date, update_data.new_quantity
-        )
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to update delivery info: {str(e)}",
-        ) from e
-
-
 @router.patch("/createShipping/{arapack_lot}", response_model=Purchase)
 async def create_shipping(arapack_lot: str, shipping: DeliveryDate):
     """
@@ -290,8 +244,13 @@ async def create_shipping(arapack_lot: str, shipping: DeliveryDate):
         HTTPException: If the purchase is not found or an error occurs during the update.
     """
     try:
-        return await PurchaseService.create_shipping(arapack_lot, shipping.initial_shipping_date, shipping.quantity,
-                                                     shipping.comment, shipping.finish_shipping_date)
+        return await PurchaseService.create_shipping(
+            arapack_lot,
+            shipping.initial_shipping_date,
+            shipping.quantity,
+            shipping.comment,
+            shipping.finish_shipping_date,
+        )
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -385,7 +344,9 @@ async def get_monthly_kilograms():
 
 
 @router.patch("/changeStatus/{arapack_lot}", response_model=Purchase)
-async def change_status(arapack_lot: str, new_status: str, background_tasks: BackgroundTasks):
+async def change_status(
+    arapack_lot: str, new_status: str, background_tasks: BackgroundTasks
+):
     """
     Change the status of a purchase.
 
@@ -401,7 +362,9 @@ async def change_status(arapack_lot: str, new_status: str, background_tasks: Bac
         HTTPException: If the purchase is not found or an error occurs during the update.
     """
     try:
-        return await PurchaseService.change_status(arapack_lot, new_status, background_tasks)
+        return await PurchaseService.change_status(
+            arapack_lot, new_status, background_tasks
+        )
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

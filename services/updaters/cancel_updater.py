@@ -68,7 +68,9 @@ class CancelUpdater(ProductionPlanUpdater):
             return
 
         # Update program planning with AI response
-        program_planning_obj.production_runs = updated_program.get("production_runs", [])
+        program_planning_obj.production_runs = updated_program.get(
+            "production_runs", []
+        )
 
         # Save the updated program planning
         await program_planning_obj.save()

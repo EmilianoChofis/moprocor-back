@@ -43,7 +43,7 @@ class PurchaseService:
 
     @staticmethod
     async def get_filtered_purchases(
-            query: str, page: int, items_per_page: int
+        query: str, page: int, items_per_page: int
     ) -> List[Purchase]:
         """Obtiene las compras con paginación"""
 
@@ -91,7 +91,7 @@ class PurchaseService:
 
     @staticmethod
     async def create_purchase_with_ai(
-            purchase: Purchase, background_tasks: BackgroundTasks
+        purchase: Purchase, background_tasks: BackgroundTasks
     ):
         """
         Create a new purchase and trigger AI processing in the background.
@@ -147,7 +147,10 @@ class PurchaseService:
 
     @staticmethod
     async def update_delivery_date(
-            arapack_lot: str, new_delivery_date: datetime, new_quantity: int, background_tasks: BackgroundTasks
+        arapack_lot: str,
+        new_delivery_date: datetime,
+        new_quantity: int,
+        background_tasks: BackgroundTasks,
     ) -> Purchase:
         """
         Update the delivery date of a purchase and trigger AI processing in the background.
@@ -176,8 +179,8 @@ class PurchaseService:
         # Update the quantity if provided
         if new_quantity:
             # Update the missing quantity as well
-            purchase.missing_quantity = (
-                    purchase.missing_quantity + (new_quantity - purchase.quantity)
+            purchase.missing_quantity = purchase.missing_quantity + (
+                new_quantity - purchase.quantity
             )
             purchase.quantity = new_quantity
 
@@ -205,7 +208,7 @@ class PurchaseService:
 
     @staticmethod
     async def _process_delivery_date_update_with_ai(
-            purchase: Purchase, original_week: int
+        purchase: Purchase, original_week: int
     ):
         """
         Process a delivery date update with AI in the background.
@@ -244,51 +247,13 @@ class PurchaseService:
         return await PurchaseRepository.get_null_delivery_dates()
 
     @staticmethod
-    async def update_delivery_info(arapack_lot: str, new_delivery_date: datetime, new_quantity: int):
-        """
-        Update the delivery information of a purchase. if not contains new_delivery_date or new_quantity, update only the one that is not None.
-
-        Args:
-            arapack_lot (str): The arapack lot of the purchase to update.
-            new_delivery_date (datetime): The new delivery date.
-            new_quantity (int): The new quantity.
-
-        Returns:
-            Purchase: The updated purchase.
-        """
-
-        # Get the purchase
-        purchase = await PurchaseRepository.get_by_arapack_lot(arapack_lot)
-        if not purchase:
-            raise HTTPException(status_code=404, detail="Purchase not found")
-
-        # Update the delivery date if provided
-        if new_delivery_date:
-            purchase.estimated_delivery_date = new_delivery_date
-
-        # Update the quantity if provided
-        if new_quantity:
-            # Update the missing quantity as well
-            purchase.missing_quantity = (
-                    purchase.missing_quantity + (new_quantity - purchase.quantity)
-            )
-            purchase.quantity = new_quantity
-
-            # Calculate the new subtotal and total invoice
-            purchase.subtotal = purchase.unit_cost * new_quantity
-            purchase.total_invoice = purchase.subtotal * 1.16  # Assuming a 16% tax rate
-
-            # Calculate the new total kilograms
-            purchase.total_kilograms = purchase.weight * new_quantity
-
-        # Save the updated purchase
-        await purchase.save()
-
-        return purchase
-
-    @staticmethod
-    async def create_shipping(arapack_lot: str, initial_shipping_date: datetime, quantity: int, comment: str,
-                              finish_shipping_date: datetime = None):
+    async def create_shipping(
+        arapack_lot: str,
+        initial_shipping_date: datetime,
+        quantity: int,
+        comment: str,
+        finish_shipping_date: datetime = None,
+    ):
         """
         Create a shipping for a purchase.
 
@@ -405,7 +370,9 @@ class PurchaseService:
                                 "estimated_delivery_date": purchase.estimated_delivery_date,
                                 "quantity": purchase.quantity,
                                 "missing_quantity": purchase.missing_quantity,
-                                "delivery_delay_days": (datetime.now() - purchase.estimated_delivery_date).days,
+                                "delivery_delay_days": (
+                                    datetime.now() - purchase.estimated_delivery_date
+                                ).days,
                             }
                             backorders.append(backorder_data)
                 else:
@@ -414,7 +381,9 @@ class PurchaseService:
                         "estimated_delivery_date": purchase.estimated_delivery_date,
                         "quantity": purchase.quantity,
                         "missing_quantity": purchase.missing_quantity,
-                        "delivery_delay_days": (datetime.now() - purchase.estimated_delivery_date).days,
+                        "delivery_delay_days": (
+                            datetime.now() - purchase.estimated_delivery_date
+                        ).days,
                     }
                     backorders.append(backorder_data)
 
@@ -440,20 +409,26 @@ class PurchaseService:
 
         # Iterate through each purchase and extract relevant data
         for purchase in purchases:
-            if purchase.total_kilograms and purchase.receipt_date.month == current_month:
+            if (
+                purchase.total_kilograms
+                and purchase.receipt_date.month == current_month
+            ):
                 total_monthly_kilograms += purchase.total_kilograms
 
         # Return the monthly invoice data
         return total_monthly_kilograms
 
     @staticmethod
-    async def change_status(arapack_lot: str, new_status: str, background_tasks: BackgroundTasks):
+    async def change_status(
+        arapack_lot: str, new_status: str, background_tasks: BackgroundTasks
+    ):
         """
         Change the status of a purchase.
 
         Args:
             arapack_lot (str): The arapack lot of the purchase to update.
             new_status (str): The new status to set.
+            background_tasks: FastAPI background tasks for asynchronous processing.
 
         Returns:
             Purchase: The updated purchase.
@@ -467,10 +442,7 @@ class PurchaseService:
         purchase.status = new_status
 
         if purchase.status == "CANCELED":
-            background_tasks.add_task(
-                PurchaseService._delete_process_with_ai,
-                purchase
-            )
+            background_tasks.add_task(PurchaseService._delete_process_with_ai, purchase)
 
         # Save the updated purchase
         await purchase.save()

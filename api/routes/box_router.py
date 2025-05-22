@@ -310,7 +310,6 @@ async def update_box(
         )
 
 
-
 @router.patch("/changeStatus/{symbol}", response_model=Box)
 async def change_status(symbol: str, box_status: str):
     """

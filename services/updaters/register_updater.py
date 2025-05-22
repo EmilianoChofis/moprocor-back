@@ -58,7 +58,12 @@ class RegisterUpdater(ProductionPlanUpdater):
         # Generate prompt for AI
         prompt = self.ia_service.build_prompt(
             action_type="register",
-            data={"purchase": purchase, "box": box, "sheets": sheets, "program_planning": program_planning},
+            data={
+                "purchase": purchase,
+                "box": box,
+                "sheets": sheets,
+                "program_planning": program_planning,
+            },
         )
         print("Prompt for AI:", prompt)
         # Call AI service

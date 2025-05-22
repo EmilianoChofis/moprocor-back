@@ -6,7 +6,7 @@ import shutil
 import dotenv
 
 # Import the required libraries
-from typing import List, Optional, Dict, Any, Coroutine, Mapping
+from typing import List, Optional, Dict, Any, Mapping
 
 from beanie import PydanticObjectId
 from fastapi import HTTPException, UploadFile
@@ -102,20 +102,6 @@ class BoxService:
             )
 
         return await BoxRepository.create(box)
-
-    @staticmethod
-    async def delete_box(symbol: str) -> bool:
-        """
-        Delete a box by its symbol.
-
-        Args:
-            symbol (str): The symbol of the box to delete.
-
-        Returns:
-            bool: True if the box was successfully deleted, False otherwise.
-        """
-        # Implementation for deleting a box
-        pass
 
     @staticmethod
     async def get_filtered_boxes(
@@ -282,7 +268,7 @@ class BoxService:
         Change the status of a box.
 
         Args:
-            box_id (PydanticObjectId): The ID of the box to update.
+            symbol (str): The symbol of the box to update.
             status (str): The new status to set.
 
         Returns:
