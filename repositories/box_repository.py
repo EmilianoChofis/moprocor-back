@@ -130,22 +130,6 @@ class BoxRepository:
         return await Box.get(box_id)
 
     @staticmethod
-    async def change_status(box_id: PydanticObjectId, status: str) -> Optional[Box]:
-        """
-        Change the status of a box.
-
-        :param box_id: The ID of the box to update.
-        :type box_id: PydanticObjectId
-        :param status: The new status for the box.
-        :type status: str
-        :return: The updated Box document, or None if not found.
-        :rtype: Optional[Box]
-        """
-        if status not in ["APPROVED", "REVIEW", "DISUSE"]:
-            raise ValueError("Invalid status value")
-        return await BoxRepository.update_box(box_id, {"status": status})
-
-    @staticmethod
     def _create_search_filter(query: str) -> dict:
         """
         Create a search filter for MongoDB queries.
@@ -162,5 +146,6 @@ class BoxRepository:
                 {"flute": {"$regex": query, "$options": "i"}},
                 {"client": {"$regex": query, "$options": "i"}},
                 {"status": {"$regex": query, "$options": "i"}},
+                {"ect": {"$regex": query, "$options": "i"}},
             ]
         }

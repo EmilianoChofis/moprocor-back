@@ -3,7 +3,15 @@
 from typing import Optional, List
 from datetime import datetime
 from beanie import Document, Indexed
+from pydantic import BaseModel
 
+
+class DeliveryDate(BaseModel):
+    """DeliveryDate model representing a delivery date."""
+    initial_shipping_date: datetime
+    quantity: int
+    comment: str
+    finish_shipping_date: Optional[datetime] = None
 
 class Purchase(Document):
     """Purchase model representing a purchase document in MongoDB."""
@@ -26,16 +34,12 @@ class Purchase(Document):
     total_invoice: float
     weight: Optional[float] = 0.0
     total_kilograms: float
-    delivered_quantity: Optional[int] = 0
-    initial_shipping_date: Optional[datetime] = None
-    final_shipping_date: Optional[datetime] = None
-    delivery_dates: Optional[List[datetime]] = []
+    delivery_dates: Optional[List[DeliveryDate]] = []
     missing_quantity: Optional[int] = 0
     status: str
     comments: Optional[str] = ""
     pending_kilograms: Optional[float] = 0.0
     delivery_delay_days: Optional[int] = 0
-    real_delivery_period: Optional[int] = 0
     created_at: datetime = datetime.now()
     week_of_year: Optional[int] = None
 
@@ -69,14 +73,18 @@ class Purchase(Document):
                 "weight": 0.222,
                 "total_kilograms": 2220.00,
                 "delivered_quantity": 0,
-                "initial_shipping_date": None,
-                "final_shipping_date": None,
-                "delivery_dates": None,
+                "delivery_dates": [
+                    {
+                        "initial_shipping_date": "2025-01-08T00:00:00",
+                        "quantity": 10000,
+                        "comment": "PRUEBA",
+                        "finish_shipping_date": None,
+                    }
+                ],
                 "missing_quantity": 10000,
                 "status": "ABIERTO",
                 "comments": None,
                 "pending_kilograms": 2220.00,
                 "delivery_delay_days": -45664,
-                "real_delivery_period": 0,
             }
         }
