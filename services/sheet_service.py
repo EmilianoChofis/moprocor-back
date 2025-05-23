@@ -69,3 +69,20 @@ class SheetService:
             return sheet
         except ValueError as e:
             raise HTTPException(status_code=400, detail=str(e))
+
+    @staticmethod
+    async def update_available_meters(
+        sheet_id: PydanticObjectId, meters: int
+    ) -> Optional[Sheet]:
+        """Update the available meters of a sheet."""
+        try:
+            sheet = await SheetRepository.get_by_id(sheet_id)
+            if not sheet:
+                raise HTTPException(status_code=404, detail="Sheet not found")
+
+            sheet.available_meters = meters
+            await sheet.save()
+
+            return sheet
+        except ValueError as e:
+            raise HTTPException(status_code=400, detail=str(e))
