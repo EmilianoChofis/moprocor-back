@@ -113,3 +113,19 @@ async def change_status(sheet_id: PydanticObjectId):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to change sheet status: {str(e)}",
         )
+
+@router.patch("/updateAvailableMeters/{sheet_id}", response_model=Sheet)
+async def update_available_meters(sheet_id: PydanticObjectId, meters: int):
+
+    """
+    Update the available meters of a sheet by its ID.
+    """
+    try:
+        return await SheetService.update_available_meters(sheet_id, meters)
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to update available meters: {str(e)}",
+        )

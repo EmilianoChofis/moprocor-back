@@ -20,6 +20,7 @@ class Sheet(Document):
     boxes: Optional[List[str]] = []  # List of Box objects associated with the sheet
     speed: int
     status: bool = True
+    available_meters: Optional[int] = 0
 
     class Settings:
         """Settings for the Sheet model."""
@@ -42,5 +43,7 @@ class Sheet(Document):
                     {"symbol": "box_001"},
                 ],
                 "speed": 80,
+                "status": True,
+                "available_meters": 0
             }
         }

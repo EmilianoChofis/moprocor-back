@@ -16,6 +16,7 @@ from models.box import Box
 from models.program_planning import ProgramPlanning
 from models.purchase import Purchase
 from models.sheet import Sheet
+from models.selection import BoxWildcardList, SheetsSelection
 
 
 dotenv.load_dotenv()
@@ -37,7 +38,7 @@ async def init_db():
 
         db = client[MONGODB_DB_NAME]
         await init_beanie(
-            database=db, document_models=[Box, Sheet, Purchase, ProgramPlanning]
+            database=db, document_models=[Box, Sheet, Purchase, ProgramPlanning, BoxWildcardList, SheetsSelection]
         )
         logger.info("Database initialization complete.")
     except Exception as e:
