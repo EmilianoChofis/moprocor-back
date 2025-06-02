@@ -15,6 +15,7 @@ from api.routes.box_router import router as box_router
 from api.routes.sheet_router import router as sheet_router
 from api.routes.purchase_router import router as purchase_router
 from api.routes.program_planning_router import router as program_planning_router
+from api.routes.selection_router import router as selection_router
 
 
 @asynccontextmanager
@@ -78,6 +79,9 @@ def create_application() -> FastAPI:
     )
     application.include_router(
         router=program_planning_router, prefix="/program", tags=["Program Planning"]
+    )
+    application.include_router(
+        router=selection_router, prefix="/selections", tags=["Selections"]
     )
     return application
 

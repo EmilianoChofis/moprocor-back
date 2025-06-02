@@ -116,6 +116,7 @@ async def change_status(sheet_id: PydanticObjectId):
 
 @router.patch("/updateAvailableMeters/{sheet_id}", response_model=Sheet)
 async def update_available_meters(sheet_id: PydanticObjectId, meters: int):
+
     """
     Update the available meters of a sheet by its ID.
     """
