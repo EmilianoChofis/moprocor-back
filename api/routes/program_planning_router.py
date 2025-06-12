@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, status
 
-from models.program_planning import ProgramPlanning
+from models.program_planning import ProgramPlanning, ProductionRun
 from services.program_planning_service import ProgramPlanningService
 
 router = APIRouter()
@@ -21,3 +21,4 @@ async def get_production_runs_by_week(week: int):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Error al carga programa: {str(e)}",
         ) from e
+

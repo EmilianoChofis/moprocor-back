@@ -9,11 +9,7 @@ from beanie import PydanticObjectId
 from models.selection import SheetsSelection, BoxWildcardList
 from services.selection_service import SelectionService
 
-router = APIRouter(
-    prefix="/api/selections",
-    tags=["selections"],
-    responses={404: {"description": "Not found"}},
-)
+router = APIRouter()
 
 selection_service = SelectionService()
 

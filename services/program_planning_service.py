@@ -1,6 +1,6 @@
 from typing import List
 
-from models.program_planning import ProgramPlanning
+from models.program_planning import ProgramPlanning, ProductionRun
 from repositories.program_planning_repository import ProgramPlanningRepository
 
 
@@ -15,3 +15,4 @@ class ProgramPlanningService:
         :rtype: List[ProgramPlanning]
         """
         return await ProgramPlanningRepository.get_by_week(week)
+

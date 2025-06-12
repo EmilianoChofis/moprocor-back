@@ -1,6 +1,7 @@
 from typing import List
 
 from models.program_planning import ProgramPlanning
+from models.program_planning import ProductionRun
 
 
 class ProgramPlanningRepository:

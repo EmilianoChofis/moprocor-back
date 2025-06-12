@@ -23,6 +23,8 @@ class PurchaseService:
     # Initialize the IAService
     _ia_service = IAService()
 
+
+
     # Initialize the updaters
     _register_updater = RegisterUpdater(_ia_service)
     _delivery_date_updater = DeliveryDateUpdater(_ia_service)
