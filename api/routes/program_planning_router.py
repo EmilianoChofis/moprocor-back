@@ -22,3 +22,16 @@ async def get_production_runs_by_week(week: int):
             detail=f"Error al carga programa: {str(e)}",
         ) from e
 
+
+@router.post("/create/production_run", response_model=ProductionRun)
+async def create_production_run(production_run: ProductionRun):
+    try:
+        created_production_run = await ProgramPlanningService.create_production_run(
+            production_run
+        )
+        return created_production_run
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error al crear la producción: {str(e)}",
+        ) from e

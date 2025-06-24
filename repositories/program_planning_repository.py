@@ -19,3 +19,14 @@ class ProgramPlanningRepository:
         :rtype: List[ProgramPlanning]
         """
         return await ProgramPlanning.find_one({"week_of_year": week})
+
+    @staticmethod
+    async def create_production_run(production_run: ProductionRun) -> ProductionRun:
+        """
+        Create a new production run.
+        :param production_run: The production run data to create.
+        :type production_run: ProductionRun
+        :return: The created production run.
+        :rtype: ProductionRun
+        """
+        return await ProductionRun.create(production_run)

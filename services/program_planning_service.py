@@ -16,3 +16,13 @@ class ProgramPlanningService:
         """
         return await ProgramPlanningRepository.get_by_week(week)
 
+    @staticmethod
+    async def create_production_run(production_run: ProductionRun) -> ProductionRun:
+        """
+        Create a new production run.
+        :param production_run: The production run data to create.
+        :type production_run: ProductionRun
+        :return: The created production run.
+        :rtype: ProductionRun
+        """
+        return await ProgramPlanningRepository.create_production_run(production_run)
