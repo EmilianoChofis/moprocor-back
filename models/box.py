@@ -2,7 +2,7 @@
 Box model for MongoDB.
 """
 
-from typing import Optional
+from typing import Optional, Literal
 from pydantic import BaseModel
 from beanie import Document, Indexed
 
@@ -39,7 +39,7 @@ class Box(Document):
     creases: Crease  # Crease dimensions of the box
     inks: Ink  # Inks used in the box
     weight: Optional[float] = None  # Weight of the box
-    status: str  # Status of the box (e.g., approved, pending, disabled)
+    status: Literal["APPROVED", "OBSOLETE", "PENDING"] = "PENDING"  # Status of the box
     type: str  # Type of the extra information
     pdf_link: str = ""  # Link to the PDF document of the box
 
