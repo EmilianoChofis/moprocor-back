@@ -50,7 +50,6 @@ class BoxWildcardRepository:
         """
         return await BoxWildcardList.find_one()
 
-
     @staticmethod
     async def update_wildcard_list(box_symbols: List[str]) -> BoxWildcardList:
         """

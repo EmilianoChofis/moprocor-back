@@ -2,7 +2,7 @@
 API routes for managing Sheet selections and Box wildcard lists.
 """
 
-from typing import List, Optional
+from typing import List, Optional, Dict
 from fastapi import APIRouter, HTTPException
 from beanie import PydanticObjectId
 
@@ -37,7 +37,6 @@ async def create_sheet_selection(sheet_ids: List[PydanticObjectId]):
         raise HTTPException(status_code=400, detail=str(e))
 
 
-
 @router.get("/boxes/wildcards/current", response_model=Optional[BoxWildcardList])
 async def get_current_box_wildcards():
     """
@@ -61,3 +60,16 @@ async def update_box_wildcards(box_symbols: List[str]):
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
+@router.get("/filter/{symbol}", response_model=Dict[str, list])
+async def filter_by_box_compatibility(symbol: str):
+    """
+    Filter box wildcards and sheet selections based on box compatibility.
+
+    :param symbol: Symbol of the box to check compatibility with
+    :return: Dictionary containing valid box wildcards and sheet selections
+    """
+    try:
+        return await selection_service.filter_by_box_compatibility(symbol)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
