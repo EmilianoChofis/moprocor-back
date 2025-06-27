@@ -318,6 +318,13 @@ class PurchaseService:
         # Complete the shipping
         purchase.delivery_dates[index].finish_shipping_date = datetime.now()
 
+        for delivery_date in purchase.delivery_dates:
+            #checks if all delivery dates have a finish shipping date
+            if delivery_date.finish_shipping_date is None:
+                break
+            else:
+                purchase.status = "COMPLETADO"
+
         # Save the updated purchase
         await purchase.save()
         return purchase
