@@ -2,13 +2,16 @@
 Service classes for managing Sheet selections and Box wildcard lists.
 """
 
-from typing import List, Optional
+from typing import List, Optional, Dict
 from beanie import PydanticObjectId
 
 from models.selection import SheetsSelection, BoxWildcardList
 from models.sheet import Sheet
 from models.box import Box
-from repositories.selection_repository import SheetsSelectionRepository, BoxWildcardRepository
+from repositories.selection_repository import (
+    SheetsSelectionRepository,
+    BoxWildcardRepository,
+)
 
 
 class SelectionService:
@@ -58,7 +61,6 @@ class SelectionService:
         selection = SheetsSelection(sheet_ids=sheet_ids)
         return await self.sheets_repo.update_selection(selection)
 
-
     async def get_current_box_wildcards(self) -> Optional[BoxWildcardList]:
         """
         Get the current box wildcard list with validation.
@@ -78,9 +80,7 @@ class SelectionService:
 
         return wildcard_list
 
-    async def update_box_wildcards(
-        self, box_symbols: List[str]
-    ) -> BoxWildcardList:
+    async def update_box_wildcards(self, box_symbols: List[str]) -> BoxWildcardList:
         """
         Update the box wildcard list after validating the boxes exist.
 
@@ -97,3 +97,54 @@ class SelectionService:
                 raise ValueError(f"Box with symbol {box_symbol} not found")
 
         return await self.box_repo.update_wildcard_list(box_symbols)
+
+    async def filter_by_box_compatibility(self, symbol: str) -> Dict[str, list]:
+        """
+        Filter box wildcards and sheet selections based on box compatibility.
+
+        :param symbol: Symbol of the box to check compatibility with
+        :type symbol: str
+        :return: Dictionary containing valid box wildcards and sheet selections
+        :rtype: Dict[str, list]
+        :raises ValueError: If box with given symbol is not found
+        """
+        # Get the box by symbol
+        box = await Box.find_one(Box.symbol == symbol)
+        if not box:
+            raise ValueError(f"Box with symbol {symbol} not found")
+
+        # Get current box wildcards and sheet selections
+        box_wildcards = await self.get_current_box_wildcards()
+        sheet_selection = await self.get_current_sheet_selection()
+
+        # Initialize result lists
+        valid_box_wildcards = []
+        valid_sheet_selections = []
+
+        # Filter box wildcards by ECT
+        if box_wildcards:
+            for box_symbol in box_wildcards.box_symbols:
+                wildcard_box = await Box.find_one(Box.symbol == box_symbol)
+                if wildcard_box and wildcard_box.ect == box.ect:
+                    valid_box_wildcards.append(box_symbol)
+
+        # Filter sheet selections
+        if sheet_selection:
+            for sheet_id in sheet_selection.sheet_ids:
+                sheet = await Sheet.get(sheet_id)
+                if not sheet:
+                    continue
+
+                # Check if box is already associated
+                if symbol in sheet.boxes:
+                    valid_sheet_selections.append(sheet_id)
+                    continue
+
+                # Check ECT compatibility and width constraint
+                if (box.ect in sheet.ect) and (box.width + 4 <= sheet.roll_width):
+                    valid_sheet_selections.append(sheet_id)
+
+        return {
+            "valid_box_wildcards": valid_box_wildcards,
+            "valid_sheet_selections": [str(sheet_id) for sheet_id in valid_sheet_selections]
+        }
