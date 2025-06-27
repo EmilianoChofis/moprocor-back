@@ -88,7 +88,7 @@ async def get_purchase_by_id(arapack_lot: str):
         ) from e
 
 
-@router.get("/getFilteredPurchases", response_model=List[Purchase])
+@router.get("/getFiltteredPurchases", response_model=List[Purchase])
 async def get_filtered_purchases(
     query: str = Query("", description="Filtro de búsqueda"),
     page: int = Query(1, description="Número de página"),
@@ -122,6 +122,26 @@ async def get_filtered_purchases(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Error al cargar las ordenes filtradas: {str(e)}",
+        ) from e
+
+
+@router.get("/getFilterPurchasesByStatus", response_model=List[Purchase])
+async def get_filtered_purchases_by_status():
+    """
+    Retrieve purchases filtered by specific statuses (SN and EN PROCESO).
+
+    Returns:
+        List[Purchase]: A list of filtered purchases.
+
+    Raises:
+        HTTPException: If an error occurs while retrieving the filtered purchases.
+    """
+    try:
+        return await PurchaseService.get_filtered_purchases_by_status()
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error al cargar las ordenes filtradas por estado: {str(e)}",
         ) from e
 
 

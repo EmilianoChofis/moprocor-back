@@ -23,8 +23,6 @@ class PurchaseService:
     # Initialize the IAService
     _ia_service = IAService()
 
-
-
     # Initialize the updaters
     _register_updater = RegisterUpdater(_ia_service)
     _delivery_date_updater = DeliveryDateUpdater(_ia_service)
@@ -56,6 +54,11 @@ class PurchaseService:
         return await PurchaseRepository.get_filtered_purchases(
             query, offset, items_per_page
         )
+
+    @staticmethod
+    async def get_filtered_purchases_by_status():
+        """Get filtered purchases by status."""
+        return await PurchaseRepository.get_filtered_purchases_by_status()
 
     @staticmethod
     async def get_pages(query: str, items_per_page: int) -> int:

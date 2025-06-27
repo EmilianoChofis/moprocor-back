@@ -95,3 +95,12 @@ class PurchaseRepository:
         :rtype: List[Purchase]
         """
         return await Purchase.find({"estimated_delivery_date": None}).to_list()
+
+    @staticmethod
+    async def get_filtered_purchases_by_status() -> List[Purchase]:
+        """
+        Get purchases filtered by specific statuses (SN and EN PROCESO).
+        :return: List of Purchase documents with status SN or EN PROCESO.
+        :rtype: List[Purchase]
+        """
+        return await Purchase.find({"production_status": {"$in": ["PENDIENTE", "PARCIAL"]}}).to_list()
