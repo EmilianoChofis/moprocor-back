@@ -39,7 +39,7 @@ class Purchase(Document):
     delivery_dates: Optional[List[DeliveryDate]] = []
     missing_quantity: Optional[int] = 0
     status: Literal["ABIERTO", "PARCIAL", "COMPLETADO", "CANCELADO"] = "ABIERTO"
-    production_status: Optional[Literal["SN","EN PROCESO", "PROCESADO"]] = "SN"
+    production_status: Literal["SN","EN PROCESO", "PROCESADO"] = "SN"
     comments: Optional[str] = ""
     pending_kilograms: Optional[float] = 0.0
     delivery_delay_days: Optional[int] = 0
