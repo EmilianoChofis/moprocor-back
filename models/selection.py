@@ -15,10 +15,12 @@ class SheetsSelection(Document):
 
     class Settings:
         """Settings for the SheetsSelection model."""
+
         name = "sheets_selections"
 
     class Config:
         """Configuration for the SheetsSelection model."""
+
         json_schema_extra = {
             "example": {
                 "sheet_ids": ["507f1f77bcf86cd799439011"],
@@ -33,10 +35,12 @@ class BoxWildcardList(Document):
 
     class Settings:
         """Settings for the BoxWildcardList model."""
+
         name = "box_wildcards"
 
     class Config:
         """Configuration for the BoxWildcardList model."""
+
         json_schema_extra = {
             "example": {
                 "box_symbols": ["DEGASA 04"],

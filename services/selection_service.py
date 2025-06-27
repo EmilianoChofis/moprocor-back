@@ -22,24 +22,31 @@ class SelectionService:
         self.sheets_repo = SheetsSelectionRepository()
         self.box_repo = BoxWildcardRepository()
 
-    async def get_current_sheet_selection(self) -> Optional[SheetsSelection]:
+    async def get_current_sheet_selection(self) -> Optional[List]:
         """
-        Get the current sheet selection with validation.
+        Get the current sheet selection with validation and full sheet data.
 
-        :return: The current valid sheet selection or None.
-        :rtype: Optional[SheetsSelection]
+        :return: Dictionary containing sheet_ids and full sheet data or None.
+        :rtype: Optional[Dict]
         """
         selection = await self.sheets_repo.get_current_selection()
         if not selection:
             return None
 
-        # Validate that all sheets still exist
-        for sheet_id in selection.sheet_ids:
-            if not await Sheet.get(sheet_id):
-                # Remove invalid IDs from the selection
-                selection.sheet_ids.remove(sheet_id)
+        valid_sheet_ids = []
+        sheet_data = []
 
-        return selection
+        # Validate that all sheets still exist and collect their data
+        for sheet_id in selection.sheet_ids:
+            sheet = await Sheet.get(sheet_id)
+            if sheet:
+                valid_sheet_ids.append(sheet_id)
+                sheet_data.append(sheet)
+
+        # Update the selection object with valid IDs
+        selection.sheet_ids = valid_sheet_ids
+
+        return sheet_data
 
     async def update_sheet_selection(
         self, sheet_ids: List[PydanticObjectId]
@@ -104,7 +111,7 @@ class SelectionService:
 
         :param symbol: Symbol of the box to check compatibility with
         :type symbol: str
-        :return: Dictionary containing valid box wildcards and sheet selections
+        :return: Dictionary containing valid box wildcards and sheet data
         :rtype: Dict[str, list]
         :raises ValueError: If box with given symbol is not found
         """
@@ -119,7 +126,7 @@ class SelectionService:
 
         # Initialize result lists
         valid_box_wildcards = []
-        valid_sheet_selections = []
+        valid_sheets = []
 
         # Filter box wildcards by ECT
         if box_wildcards:
@@ -128,23 +135,19 @@ class SelectionService:
                 if wildcard_box and wildcard_box.ect == box.ect:
                     valid_box_wildcards.append(box_symbol)
 
-        # Filter sheet selections
-        if sheet_selection:
-            for sheet_id in sheet_selection.sheet_ids:
-                sheet = await Sheet.get(sheet_id)
-                if not sheet:
-                    continue
-
+        # Filter sheet selections and get full sheet data
+        if sheet_selection and sheet_selection.get("sheets"):
+            for sheet in sheet_selection["sheets"]:
                 # Check if box is already associated
                 if symbol in sheet.boxes:
-                    valid_sheet_selections.append(sheet_id)
+                    valid_sheets.append(sheet)
                     continue
 
                 # Check ECT compatibility and width constraint
                 if (box.ect in sheet.ect) and (box.width + 4 <= sheet.roll_width):
-                    valid_sheet_selections.append(sheet_id)
+                    valid_sheets.append(sheet)
 
         return {
             "valid_box_wildcards": valid_box_wildcards,
-            "valid_sheet_selections": [str(sheet_id) for sheet_id in valid_sheet_selections]
+            "valid_sheets": valid_sheets
         }

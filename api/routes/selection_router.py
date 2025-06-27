@@ -14,7 +14,7 @@ router = APIRouter()
 selection_service = SelectionService()
 
 
-@router.get("/sheets/current", response_model=Optional[SheetsSelection])
+@router.get("/sheets/current", response_model=Optional[List])
 async def get_current_sheet_selection():
     """
     Get the current sheet selection.
