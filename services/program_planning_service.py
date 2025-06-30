@@ -55,22 +55,46 @@ class ProgramPlanningService:
     @staticmethod
     async def update_production_run(run_id: PydanticObjectId, production_run: ProductionRun) -> ProductionRun:
         """
-        Update an existing production run.
-        :param production_run: The production run data to update.
+        Update an existing production run and adjust scheduling of subsequent runs.
+        
+        :param run_id: The ID of the production run to update
+        :type run_id: PydanticObjectId
+        :param production_run: The production run data to update
         :type production_run: ProductionRun
-        :return: The updated production run.
+        :return: The updated production run
         :rtype: ProductionRun
         """
-        return await ProgramPlanningRepository.update_production_run(run_id, production_run)
+        # First update the run
+        updated_run = await ProgramPlanningRepository.update_production_run(run_id, production_run)
+        
+        # Then adjust scheduling for subsequent runs
+        await ProductionRun.adjust_scheduling(str(run_id), operation="update")
+        
+        return updated_run
 
     @staticmethod
     async def delete_production_run(run_id: PydanticObjectId) -> bool:
         """
-        Delete a production run by its ID.
-        :param run_id: The ID of the production run to delete.
+        Delete a production run by its ID and adjust scheduling of subsequent runs.
+        
+        :param run_id: The ID of the production run to delete
         :type run_id: PydanticObjectId
-        :return: True if deletion was successful, False otherwise.
+        :return: True if deletion was successful, False otherwise
         :rtype: bool
         :raises ValueError: If production run not found
         """
-        return await ProgramPlanningRepository.delete_production_run(run_id)
+        # Get the run's date before deletion
+        run = await ProductionRun.get(run_id)
+        if not run:
+            raise ValueError(f"Production run with ID {run_id} not found")
+            
+        target_date = run.scheduled_date
+        
+        # Delete the run
+        success = await ProgramPlanningRepository.delete_production_run(run_id)
+        
+        if success:
+            # Adjust scheduling for subsequent runs
+            await ProductionRun.adjust_scheduling(str(run_id), operation="delete", target_date=target_date)
+            
+        return success
