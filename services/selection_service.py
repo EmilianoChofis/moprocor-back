@@ -128,11 +128,15 @@ class SelectionService:
         valid_box_wildcards = []
         valid_sheets = []
 
-        # Filter box wildcards by ECT
+        # Filter box wildcards by ECT, liner, treatment and flute
         if box_wildcards:
             for box_symbol in box_wildcards.box_symbols:
                 wildcard_box = await Box.find_one(Box.symbol == box_symbol)
-                if wildcard_box and wildcard_box.ect == box.ect:
+                if (wildcard_box and 
+                    wildcard_box.ect == box.ect and
+                    wildcard_box.liner == box.liner and
+                    wildcard_box.treatment == box.treatment and
+                    wildcard_box.flute == box.flute):
                     valid_box_wildcards.append(box_symbol)
 
         # Filter sheet selections and get full sheet data
