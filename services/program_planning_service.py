@@ -21,13 +21,36 @@ class ProgramPlanningService:
     @staticmethod
     async def create_production_run(production_run: ProductionRun) -> ProductionRun:
         """
-        Create a new production run.
+        Create a new production run and associate it with the corresponding ProgramPlanning for its week.
+        If no ProgramPlanning exists for that week, a new one will be created.
+        
         :param production_run: The production run data to create.
         :type production_run: ProductionRun
         :return: The created production run.
         :rtype: ProductionRun
         """
-        return await ProgramPlanningRepository.create_production_run(production_run)
+        # Calculate the week of year from the scheduled_date
+        week_of_year = production_run.scheduled_date.isocalendar()[1]
+        
+        # Create the production run first
+        created_run = await ProgramPlanningRepository.create_production_run(production_run)
+        
+        # Check if a program planning exists for this week
+        program_planning = await ProgramPlanningRepository.get_by_week(week_of_year)
+        
+        if program_planning:
+            # Add the new production run to the existing program planning
+            program_planning.production_runs.append(created_run)
+            await program_planning.save()
+        else:
+            # Create a new program planning for this week with the production run
+            program_planning = ProgramPlanning(
+                production_runs=[created_run],
+                week_of_year=week_of_year
+            )
+            await program_planning.save()
+            
+        return created_run
 
     @staticmethod
     async def update_production_run(run_id: PydanticObjectId, production_run: ProductionRun) -> ProductionRun:
