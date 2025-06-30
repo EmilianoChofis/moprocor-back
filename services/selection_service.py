@@ -136,8 +136,8 @@ class SelectionService:
                     valid_box_wildcards.append(box_symbol)
 
         # Filter sheet selections and get full sheet data
-        if sheet_selection and sheet_selection.get("sheets"):
-            for sheet in sheet_selection["sheets"]:
+        if sheet_selection:  # sheet_selection is already a list of Sheet objects
+            for sheet in sheet_selection:
                 # Check if box is already associated
                 if symbol in sheet.boxes:
                     valid_sheets.append(sheet)
