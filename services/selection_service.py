@@ -137,7 +137,7 @@ class SelectionService:
                     wildcard_box.liner == box.liner and
                     wildcard_box.treatment == box.treatment and
                     wildcard_box.flute == box.flute):
-                    valid_box_wildcards.append(box_symbol)
+                    valid_box_wildcards.append(wildcard_box)
 
         # Filter sheet selections and get full sheet data
         if sheet_selection:  # sheet_selection is already a list of Sheet objects
