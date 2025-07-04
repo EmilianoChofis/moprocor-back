@@ -2,13 +2,16 @@
 Service classes for managing Sheet selections and Box wildcard lists.
 """
 
-from typing import List, Optional
+from typing import List, Optional, Dict
 from beanie import PydanticObjectId
 
 from models.selection import SheetsSelection, BoxWildcardList
 from models.sheet import Sheet
 from models.box import Box
-from repositories.selection_repository import SheetsSelectionRepository, BoxWildcardRepository
+from repositories.selection_repository import (
+    SheetsSelectionRepository,
+    BoxWildcardRepository,
+)
 
 
 class SelectionService:
@@ -19,24 +22,31 @@ class SelectionService:
         self.sheets_repo = SheetsSelectionRepository()
         self.box_repo = BoxWildcardRepository()
 
-    async def get_current_sheet_selection(self) -> Optional[SheetsSelection]:
+    async def get_current_sheet_selection(self) -> Optional[List]:
         """
-        Get the current sheet selection with validation.
+        Get the current sheet selection with validation and full sheet data.
 
-        :return: The current valid sheet selection or None.
-        :rtype: Optional[SheetsSelection]
+        :return: Dictionary containing sheet_ids and full sheet data or None.
+        :rtype: Optional[Dict]
         """
         selection = await self.sheets_repo.get_current_selection()
         if not selection:
             return None
 
-        # Validate that all sheets still exist
-        for sheet_id in selection.sheet_ids:
-            if not await Sheet.get(sheet_id):
-                # Remove invalid IDs from the selection
-                selection.sheet_ids.remove(sheet_id)
+        valid_sheet_ids = []
+        sheet_data = []
 
-        return selection
+        # Validate that all sheets still exist and collect their data
+        for sheet_id in selection.sheet_ids:
+            sheet = await Sheet.get(sheet_id)
+            if sheet:
+                valid_sheet_ids.append(sheet_id)
+                sheet_data.append(sheet)
+
+        # Update the selection object with valid IDs
+        selection.sheet_ids = valid_sheet_ids
+
+        return sheet_data
 
     async def update_sheet_selection(
         self, sheet_ids: List[PydanticObjectId]
@@ -58,7 +68,6 @@ class SelectionService:
         selection = SheetsSelection(sheet_ids=sheet_ids)
         return await self.sheets_repo.update_selection(selection)
 
-
     async def get_current_box_wildcards(self) -> Optional[BoxWildcardList]:
         """
         Get the current box wildcard list with validation.
@@ -78,9 +87,7 @@ class SelectionService:
 
         return wildcard_list
 
-    async def update_box_wildcards(
-        self, box_symbols: List[str]
-    ) -> BoxWildcardList:
+    async def update_box_wildcards(self, box_symbols: List[str]) -> BoxWildcardList:
         """
         Update the box wildcard list after validating the boxes exist.
 
@@ -97,3 +104,54 @@ class SelectionService:
                 raise ValueError(f"Box with symbol {box_symbol} not found")
 
         return await self.box_repo.update_wildcard_list(box_symbols)
+
+    async def filter_by_box_compatibility(self, symbol: str) -> Dict[str, list]:
+        """
+        Filter box wildcards and sheet selections based on box compatibility.
+
+        :param symbol: Symbol of the box to check compatibility with
+        :type symbol: str
+        :return: Dictionary containing valid box wildcards and sheet data
+        :rtype: Dict[str, list]
+        :raises ValueError: If box with given symbol is not found
+        """
+        # Get the box by symbol
+        box = await Box.find_one(Box.symbol == symbol)
+        if not box:
+            raise ValueError(f"Box with symbol {symbol} not found")
+
+        # Get current box wildcards and sheet selections
+        box_wildcards = await self.get_current_box_wildcards()
+        sheet_selection = await self.get_current_sheet_selection()
+
+        # Initialize result lists
+        valid_box_wildcards = []
+        valid_sheets = []
+
+        # Filter box wildcards by ECT, liner, treatment and flute
+        if box_wildcards:
+            for box_symbol in box_wildcards.box_symbols:
+                wildcard_box = await Box.find_one(Box.symbol == box_symbol)
+                if (wildcard_box and 
+                    wildcard_box.ect == box.ect and
+                    wildcard_box.liner == box.liner and
+                    wildcard_box.treatment == box.treatment and
+                    wildcard_box.flute == box.flute):
+                    valid_box_wildcards.append(wildcard_box)
+
+        # Filter sheet selections and get full sheet data
+        if sheet_selection:  # sheet_selection is already a list of Sheet objects
+            for sheet in sheet_selection:
+                # Check if box is already associated
+                if symbol in sheet.boxes:
+                    valid_sheets.append(sheet)
+                    continue
+
+                # Check ECT compatibility and width constraint
+                if (box.ect in sheet.ect) and (box.width + 4 <= sheet.roll_width):
+                    valid_sheets.append(sheet)
+
+        return {
+            "valid_box_wildcards": valid_box_wildcards,
+            "valid_sheets": valid_sheets
+        }

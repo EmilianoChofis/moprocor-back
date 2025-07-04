@@ -1,6 +1,6 @@
 """Purchase model definition."""
 
-from typing import Optional, List
+from typing import Optional, List, Literal
 from datetime import datetime
 from beanie import Document, Indexed
 from pydantic import BaseModel
@@ -38,7 +38,8 @@ class Purchase(Document):
     total_kilograms: float
     delivery_dates: Optional[List[DeliveryDate]] = []
     missing_quantity: Optional[int] = 0
-    status: str
+    status: Literal["ABIERTO", "PARCIAL", "COMPLETADO", "CANCELADO"] = "ABIERTO"
+    production_status: Literal["PENDIENTE","PARCIAL", "COMPLETO", "PRODUCIDO"] = "PENDIENTE"
     comments: Optional[str] = ""
     pending_kilograms: Optional[float] = 0.0
     delivery_delay_days: Optional[int] = 0

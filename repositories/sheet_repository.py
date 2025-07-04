@@ -2,7 +2,7 @@
 Sheet repository for interacting with the sheets collection in MongoDB.
 """
 
-from typing import List, Optional, Dict
+from typing import List, Optional
 
 from beanie import PydanticObjectId
 from bson import ObjectId
@@ -50,7 +50,7 @@ class SheetRepository:
     @staticmethod
     async def get_filtered_sheets(
         query: str, offset: int, limit: int
-    ) -> Dict[str, list[Sheet]]:
+    ) -> List[Sheet]:
         """Obtiene todas las hojas con paginación y total"""
 
         # Filtro de búsqueda

@@ -13,7 +13,7 @@ from config.logging import logger
 
 # Import the required models
 from models.box import Box
-from models.program_planning import ProgramPlanning
+from models.program_planning import ProgramPlanning, ProductionRun
 from models.purchase import Purchase
 from models.sheet import Sheet
 from models.selection import BoxWildcardList, SheetsSelection
@@ -38,7 +38,7 @@ async def init_db():
 
         db = client[MONGODB_DB_NAME]
         await init_beanie(
-            database=db, document_models=[Box, Sheet, Purchase, ProgramPlanning, BoxWildcardList, SheetsSelection]
+            database=db, document_models=[Box, Sheet, Purchase, ProgramPlanning, ProductionRun, BoxWildcardList, SheetsSelection]
         )
         logger.info("Database initialization complete.")
     except Exception as e:

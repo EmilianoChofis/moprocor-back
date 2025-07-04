@@ -56,6 +56,11 @@ class PurchaseService:
         )
 
     @staticmethod
+    async def get_filtered_purchases_by_status():
+        """Get filtered purchases by status."""
+        return await PurchaseRepository.get_filtered_purchases_by_status()
+
+    @staticmethod
     async def get_pages(query: str, items_per_page: int) -> int:
         """Obtiene el total de páginas"""
         total_items = await PurchaseRepository.get_total_count(query)
@@ -315,6 +320,13 @@ class PurchaseService:
 
         # Complete the shipping
         purchase.delivery_dates[index].finish_shipping_date = datetime.now()
+
+        for delivery_date in purchase.delivery_dates:
+            #checks if all delivery dates have a finish shipping date
+            if delivery_date.finish_shipping_date is None:
+                break
+            else:
+                purchase.status = "COMPLETADO"
 
         # Save the updated purchase
         await purchase.save()
